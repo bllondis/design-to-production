@@ -1,21 +1,23 @@
 :root {
-  --ink: #111315 !important;
-  --ink-2: #5f6469 !important;
-  --ink-3: #777c81 !important;
-  --bg: #f7f6f1 !important;
-  --bg-2: #ecebe5 !important;
-  --accent: #1d57ff !important;
-  --accent-soft: rgba(29, 87, 255, 0.08) !important;
-  --line: rgba(17, 19, 21, 0.14) !important;
+  --ink: #050607 !important;
+  --ink-2: #555b5f !important;
+  --ink-3: #777d80 !important;
+  --bg: #f4f5f0 !important;
+  --bg-2: #e7e9e3 !important;
+  --accent: #466fff !important;
+  --accent-soft: rgba(70, 111, 255, 0.1) !important;
+  --line: rgba(5, 6, 7, 0.22) !important;
 }
 
 html {
   scroll-padding-top: 4rem;
-  background: var(--bg);
+  background: #050607;
 }
 
 body {
-  background: var(--bg) !important;
+  background:
+    linear-gradient(to right, rgba(244, 245, 240, 0.08) 1px, transparent 1px) 0 0 / 8.333vw 100%,
+    #050607 !important;
   color: var(--ink) !important;
 }
 
@@ -34,8 +36,11 @@ button:focus-visible,
 .nav {
   position: sticky !important;
   top: 0;
-  background: var(--bg) !important;
-  border-bottom: 1px solid var(--line) !important;
+  z-index: 30 !important;
+  margin: 0 clamp(0.75rem, 2vw, 2rem) !important;
+  background: rgba(5, 6, 7, 0.94) !important;
+  border: 1px solid rgba(244, 245, 240, 0.42) !important;
+  border-top: 0 !important;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
 }
@@ -43,41 +48,75 @@ button:focus-visible,
 .nav-inner {
   width: 100%;
   max-width: none !important;
-  height: 3.5rem !important;
-  padding: 0 clamp(1rem, 2.6vw, 2.5rem) !important;
+  height: 4rem !important;
+  padding: 0 1.2rem !important;
 }
 
 .nav-home,
 .nav-meta,
 .nav .back {
-  color: var(--ink) !important;
+  color: #d8dbd4 !important;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace !important;
-  font-size: 0.62rem !important;
+  font-size: 0.59rem !important;
   font-weight: 400 !important;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .nav-brand,
 .nav-title {
-  font-size: 0.85rem !important;
+  color: #f4f5f0 !important;
+  font-size: 0.82rem !important;
+  font-weight: 400 !important;
   letter-spacing: 0 !important;
 }
 
 .nav-brand span {
-  color: var(--ink-3) !important;
+  color: #9ca1a4 !important;
+}
+
+main {
+  margin: 0 clamp(0.75rem, 2vw, 2rem);
+  border-right: 1px solid rgba(244, 245, 240, 0.42);
+  border-left: 1px solid rgba(244, 245, 240, 0.42);
 }
 
 .hero {
-  padding: clamp(5.5rem, 10vw, 9rem) 0 clamp(4.5rem, 8vw, 7rem) !important;
+  position: relative;
+  margin: 0 !important;
+  padding: clamp(6rem, 11vw, 10rem) clamp(1.5rem, 5vw, 5rem) clamp(5rem, 9vw, 8rem) !important;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(244, 245, 240, 0.42) !important;
+  background:
+    linear-gradient(rgba(244, 245, 240, 0.1) 1px, transparent 1px) 0 0 / 100% 4.6rem,
+    linear-gradient(90deg, rgba(244, 245, 240, 0.1) 1px, transparent 1px) 0 0 / 8.333% 100%,
+    #050607 !important;
+  color: #f4f5f0 !important;
   text-align: left !important;
-  border-bottom: 1px solid var(--line);
+}
+
+.hero::after {
+  position: absolute;
+  right: -3%;
+  bottom: -20%;
+  width: min(45rem, 65vw);
+  aspect-ratio: 1;
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 9px, rgba(124, 162, 255, 0.22) 10px),
+    repeating-linear-gradient(90deg, transparent 0 9px, rgba(244, 245, 240, 0.08) 10px);
+  content: "";
+  opacity: 0.72;
+  transform: rotate(-8deg);
+  pointer-events: none;
 }
 
 .hero .wrap,
 .hero > .shell {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 1180px !important;
+  margin-left: 0 !important;
 }
 
 .hero .eyebrow,
@@ -92,37 +131,39 @@ section .kicker,
 .path-label,
 .level small {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace !important;
-  letter-spacing: 0.05em !important;
+  letter-spacing: 0.06em !important;
   text-transform: uppercase;
 }
 
 .hero .eyebrow,
 .hero .kicker {
-  margin-bottom: 1.1rem !important;
-  color: var(--accent) !important;
-  font-size: 0.7rem !important;
+  margin-bottom: 1.2rem !important;
+  color: #a8baff !important;
+  font-size: 0.65rem !important;
 }
 
 .hero h1 {
-  max-width: 12ch !important;
+  max-width: 11.5ch !important;
   margin: 0 !important;
-  font-size: clamp(3.9rem, 8.8vw, 8rem) !important;
-  font-weight: 500 !important;
+  color: #f4f5f0 !important;
+  font-size: clamp(3.8rem, 8.5vw, 8rem) !important;
+  font-weight: 400 !important;
   letter-spacing: -0.065em !important;
-  line-height: 0.9 !important;
+  line-height: 0.89 !important;
   text-align: left !important;
 }
 
 .hero h1 em {
-  color: var(--accent) !important;
+  color: #a8baff !important;
+  font-style: normal !important;
 }
 
 .hero-sub,
 .hero-deck {
   max-width: 710px !important;
   margin: 2rem 0 0 !important;
-  color: var(--ink-2) !important;
-  font-size: clamp(1.08rem, 1.8vw, 1.35rem) !important;
+  color: #b8bcb8 !important;
+  font-size: clamp(1.06rem, 1.7vw, 1.3rem) !important;
   line-height: 1.5 !important;
   text-align: left !important;
 }
@@ -133,19 +174,19 @@ section .kicker,
 }
 
 .chips {
-  gap: 0.6rem 1.25rem !important;
+  gap: 0.65rem 1.25rem !important;
   margin-top: 2rem !important;
 }
 
 .chip,
 .chip.accent,
-.tag {
+.hero .tag {
   padding: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
-  color: var(--ink-2) !important;
-  font-size: 0.64rem !important;
+  color: #aeb3b0 !important;
+  font-size: 0.6rem !important;
   font-weight: 400 !important;
 }
 
@@ -154,21 +195,32 @@ section .kicker,
   height: auto !important;
   border-radius: 0 !important;
   background: transparent !important;
-  color: var(--accent);
-  content: "•" !important;
+  color: #a8baff;
+  content: "+" !important;
 }
 
 .hero-context {
   max-width: 710px !important;
   margin: 2rem 0 0 !important;
   padding-top: 1rem !important;
+  border-top-color: rgba(244, 245, 240, 0.2) !important;
+  color: #8e9491 !important;
   text-align: left;
+}
+
+main > section {
+  border-bottom: 1px solid var(--line) !important;
+  background: var(--bg) !important;
+}
+
+main > section.alt {
+  background: var(--bg-2) !important;
 }
 
 section h2,
 .stats-head h2 {
-  font-weight: 500 !important;
-  letter-spacing: -0.045em !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.05em !important;
 }
 
 .shot img,
@@ -179,7 +231,7 @@ section h2,
 .parity-card img,
 .product-card img {
   border: 1px solid var(--line) !important;
-  border-radius: 0.35rem !important;
+  border-radius: 0 !important;
   box-shadow: none !important;
 }
 
@@ -202,9 +254,11 @@ section h2,
   .state-row,
   .product-card,
   .result-card,
-  .spec-card
+  .spec-card,
+  .step,
+  .spec
 ) {
-  border-radius: 0.35rem !important;
+  border-radius: 0 !important;
   box-shadow: none !important;
 }
 
@@ -214,19 +268,22 @@ section h2,
 }
 
 footer {
-  width: 100%;
+  width: auto !important;
   max-width: none !important;
-  padding: 1.5rem clamp(1rem, 2.6vw, 2.5rem) !important;
-  border-top: 1px solid var(--line) !important;
-  color: var(--ink-3) !important;
+  margin: 0 clamp(0.75rem, 2vw, 2rem) clamp(0.75rem, 2vw, 2rem) !important;
+  padding: 1.5rem !important;
+  border: 1px solid rgba(244, 245, 240, 0.42) !important;
+  border-top: 0 !important;
+  background: #050607 !important;
+  color: #9ca1a4 !important;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-  font-size: 0.62rem !important;
-  letter-spacing: 0.04em;
+  font-size: 0.59rem !important;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 footer a {
-  color: var(--ink) !important;
+  color: #f4f5f0 !important;
   font-weight: 400 !important;
 }
 
@@ -235,20 +292,21 @@ footer a {
 }
 
 .floating-demo-link {
-  border-radius: 0.2rem !important;
-  background: var(--ink) !important;
-  color: white !important;
+  border: 1px solid rgba(244, 245, 240, 0.42) !important;
+  border-radius: 0 !important;
+  background: #050607 !important;
+  color: #f4f5f0 !important;
   box-shadow: none !important;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace !important;
-  font-size: 0.65rem !important;
+  font-size: 0.6rem !important;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 @media (max-width: 760px) {
   .nav-inner {
-    height: 3.25rem !important;
-    padding: 0 1rem !important;
+    height: 3.5rem !important;
+    padding: 0 0.85rem !important;
     grid-template-columns: 1fr auto !important;
   }
 
@@ -266,11 +324,11 @@ footer a {
   }
 
   .hero {
-    padding-top: 5.5rem !important;
+    padding: 5.5rem 1.25rem 4rem !important;
   }
 
   .hero h1 {
-    font-size: clamp(3.3rem, 16vw, 5.8rem) !important;
+    font-size: clamp(3.2rem, 15.5vw, 5.6rem) !important;
   }
 
   footer {

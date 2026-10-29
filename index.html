@@ -7,7 +7,7 @@
       name="description"
       content="Tetiana Dovgalenko is a Product Designer and Design Engineer working across complex B2B software, AI-assisted products, and design systems."
     />
-    <meta name="theme-color" content="#f2f1ec" />
+    <meta name="theme-color" content="#050607" />
     <meta property="og:title" content="Tetiana Dovgalenko | Product Designer and Design Engineer" />
     <meta
       property="og:description"
@@ -34,8 +34,8 @@
       href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600&amp;display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="styles.css?v=2" />
+    <script src="script.js?v=2" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -56,11 +56,16 @@
     <main id="main">
       <section class="hero" id="top" aria-labelledby="hero-title">
         <canvas class="system-field" data-system-field aria-hidden="true"></canvas>
+        <div class="field-grid" aria-hidden="true"></div>
         <div class="field-legend" aria-hidden="true">
           <span>FIELD / 01</span>
           <span data-field-status>SIGNALS / 32</span>
           <span>STATE / STRUCTURING</span>
         </div>
+        <button class="field-toggle" type="button" data-field-toggle aria-pressed="false">
+          <span data-field-toggle-label>Pause signal</span>
+          <span aria-hidden="true">[ II ]</span>
+        </button>
         <div class="hero-copy">
           <p class="mono-label">Product Designer / Design Engineer</p>
           <h1 id="hero-title">I design calm interfaces for complex systems.</h1>
