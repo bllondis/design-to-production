@@ -1,0 +1,330 @@
+---
+title: Review your workday instead of reconstructing it.
+client: Timeflow
+kicker: Case study / AI-assisted product
+order: 2
+summary:
+  - An AI-assisted timesheet concept built around existing work signals, source transparency, and human confirmation. I designed and built the product end-to-end, including a working Google Calendar integration.
+meta:
+  - 2026 · 4-week build
+  - Product Designer · Design Engineer
+  - Solo project
+  - Concept → deployed
+  - React + TypeScript
+actions:
+  - { label: Open the live product, href: "https://timeflow-assistant-main.vercel.app/", external: true }
+cover:
+  src: /assets/timeflow-review.jpg
+  focus: "0.62 0.35"
+  caption: Timeflow / AI draft review
+character: /assets/pixel-waffle.jpg
+---
+
+<Section label="Problem to solve" title="From manual recall to review and confirmation">
+  Timesheet entry often asks people to reconstruct work after it has already happened. The product hypothesis was
+  simple: much of that context already exists across calendars and work tools. Instead of asking users to remember
+  everything, Timeflow could assemble available signals into something they review and confirm.
+</Section>
+
+<Section label="Core positioning" title="Designing the trust layer for AI-assisted timesheets">
+  Timeflow is designed around AI-assisted reconstruction of work activity. The deployed MVP already proves the signal
+  and integration layer with real Google Calendar data, OAuth, database infrastructure, and source-attributed entries.
+  The next technical layer is LLM-assisted structuring and classification.
+</Section>
+
+<Section label="Research & strategy" title="Finding the real signal">
+  The exploration converged on three product-shaping hypotheses: reconstructing a day creates unnecessary memory work;
+  automation can easily feel like surveillance; and trust requires control, source transparency, and review before
+  submission.
+</Section>
+
+<Terms
+  emphasis="detail"
+  columns={3}
+  items={[
+    {
+      term: "01 · Memory",
+      detail: "The core friction is reconstructing work after the fact, not a lack of motivation.",
+    },
+    {
+      term: "02 · Privacy",
+      detail: "Passive signals only help if people understand and control what the product can access.",
+    },
+    {
+      term: "03 · Trust",
+      detail: "Source, uncertainty, editing, and explicit confirmation must stay visible in the interaction.",
+    },
+  ]}
+/>
+
+<Research
+  src="/work/timeflow/problem-space-analysis.png"
+  alt="Problem space analysis"
+  width={1436}
+  height={1580}
+  label="01 · Research"
+  title="Problem space analysis"
+  text="The problem map connected employee recall work with business needs, sharpening the design goal: reduce memory effort without creating more pressure."
+/>
+
+<Research
+  src="/work/timeflow/research-plan-methods.jpg"
+  alt="Research plan & methods"
+  width={1500}
+  height={1424}
+  label="02 · Research"
+  title="Research plan & methods"
+  text="A research plan mapped each method to a specific product question, keeping the work focused on decisions rather than deliverables."
+  flip
+/>
+
+<Research
+  src="/work/timeflow/competitive-analysis.jpg"
+  alt="Competitive analysis"
+  width={1500}
+  height={468}
+  label="03 · Research"
+  title="Competitive analysis"
+  text="A scan of ten time-tracking products exposed recurring patterns and a gap for transparent, review-first interaction."
+/>
+
+<More summary="View supporting research artifacts">
+  <Research
+    src="/work/timeflow/ux-literature-review.jpg"
+    alt="UX literature review"
+    width={1500}
+    height={1193}
+    label="04 · Research"
+    title="UX literature review"
+    text="Ten key articles from UX Collective, NN/g and Smashing distilled into core insights and their direct relevance to time tracking."
+    flip
+  />
+  <Research
+    src="/work/timeflow/synthesized-patterns.jpg"
+    alt="Synthesized patterns"
+    width={1500}
+    height={1243}
+    label="05 · Research"
+    title="Synthesized patterns"
+    text="Six recurring market patterns - AI categorization, macOS-first niching, wellness framing, frictionless entry, dark-vs-glass aesthetics."
+  />
+  <Research
+    src="/work/timeflow/product-hypotheses.jpg"
+    alt="Product hypotheses"
+    width={1500}
+    height={716}
+    label="06 · Research"
+    title="Product hypotheses"
+    text="Two sharp bets: an anti-surveillance tracker for remote teams, and one built for ADHD / neurodivergent professionals."
+    flip
+  />
+  <Research
+    src="/work/timeflow/jobs-to-be-done.jpg"
+    alt="Jobs-To-Be-Done"
+    width={1500}
+    height={1500}
+    label="07 · Research"
+    title="Jobs-To-Be-Done"
+    text="Four recurring jobs mapped the situations, desired progress, and obstacles around late logging, concurrent work, and team oversight."
+  />
+  <Research
+    src="/work/timeflow/insights-how-might-we.jpg"
+    alt="Insights & How-Might-We"
+    width={1500}
+    height={1523}
+    label="08 · Research"
+    title="Insights & How-Might-We"
+    text="Four research insights reframed into HMW questions - the lead one: logging is a memory problem, not a motivation problem."
+    flip
+  />
+</More>
+
+<Section label="Product architecture" title="How the product is intended to work">
+  The concept separates signal collection from interpretation and keeps a person in control of the final record. That
+  distinction is central to both the architecture and the experience.
+</Section>
+
+<Steps
+  items={[
+    { label: "Work signals", title: "Calendar", detail: "Real events today; future connected tools later." },
+    { label: "Normalise", title: "Activity signals", detail: "Events become consistent, source-attributed records." },
+    {
+      label: "Structure",
+      title: "AI layer",
+      detail: "Next: an LLM groups and classifies signals into proposed work entries.",
+    },
+    { label: "Review", title: "User in control", detail: "See source and confidence, then edit or remove." },
+    { label: "Submit", title: "Human confirmed", detail: "Only reviewed entries become the timesheet." },
+  ]}
+/>
+
+<Terms
+  emphasis="detail"
+  columns={2}
+  items={[
+    {
+      term: "Working today",
+      detail: "Google Calendar ingestion, OAuth, database infrastructure, dashboard, and source attribution.",
+    },
+    {
+      term: "Next layer",
+      detail: "LLM-assisted grouping and classification that turns signals into reviewable suggestions.",
+    },
+  ]}
+/>
+
+<Subhead title="Trust before automation.">
+  The product should never ask people to blindly accept a generated work record.
+</Subhead>
+
+<Checks
+  items={[
+    { title: "Show the source", detail: "People can see which signal an entry came from." },
+    {
+      title: "Separate signal from inference",
+      detail: "The interface distinguishes observed activity from what the system proposes.",
+    },
+    {
+      title: "Communicate confidence",
+      detail: "Future AI suggestions are designed to show uncertainty rather than perform certainty.",
+    },
+    {
+      title: "Keep everything editable",
+      detail: "Users can change or remove proposed entries before anything is submitted.",
+    },
+    { title: "Require human confirmation", detail: "Submission stays an explicit user action." },
+  ]}
+/>
+
+<Section label="Daily confirmation · The core screen" title="Review your day - don't log it">
+  The core interaction reverses the traditional timesheet model. Instead of starting with an empty form, the user starts
+  with a reviewable draft assembled from available work signals. Each entry preserves its source and is designed to
+  support confidence information, so the user can verify, edit, and submit rather than reconstruct the day from memory.
+</Section>
+
+<Tags items={["Source attribution", "Confidence as a design principle", "Human confirmation"]} />
+
+<Video
+  src="/work/timeflow/review-your-day.mp4"
+  poster="/work/timeflow/review-your-day-don-t-log-it.jpg"
+  label="Review your day - don't log it"
+/>
+
+<Section
+  label="Data & privacy · Trust is the product"
+  title="How do you automate work tracking without making it feel like surveillance?"
+>
+  The privacy concept makes connected sources and permissions part of the product surface. People should be able to
+  understand which signals Timeflow can access, turn integrations on or off, and review every proposed entry before
+  submission. The working MVP proves the Google Calendar connection and source visibility. The broader permissions model
+  and additional integrations shown here are product direction.
+</Section>
+
+<Tags items={["User-controlled access", "Visible sources", "Review before submit"]} />
+
+<Shot
+  src="/work/timeflow/you-choose-exactly-what-the-ai-can-see.jpg"
+  alt="You choose exactly what the AI can see"
+  width={1500}
+  height={902}
+/>
+
+<Note label="Demo note">
+  Connected-account controls are disabled in the public demo; this screen documents the intended permission model.
+</Note>
+
+<Section label="Design system" title="Warm precision. Not another dashboard.">
+  A parchment background, Urbanist typography, and a restrained hierarchy keep the product warm without losing
+  precision. Teal carries time values, orange is reserved for attention, and the manager experience stays deliberately
+  calm.
+</Section>
+
+<Checks
+  items={[
+    {
+      title: "Warm foundation",
+      tag: "#F5F2EC",
+      detail: "Parchment and Urbanist soften a workflow that can otherwise feel administrative.",
+    },
+    {
+      title: "Restrained colour hierarchy",
+      detail:
+        "Teal communicates time; orange appears only where attention is needed. A colour audit reduced competing emphasis in the manager view.",
+    },
+    {
+      title: "Calm oversight",
+      detail:
+        "Status and heatmap treatments use a consistent pastel language so administration feels clear rather than punitive.",
+    },
+  ]}
+/>
+
+<Video src="/work/timeflow/design-system-walkthrough.mp4" label="Design system walkthrough" />
+
+<Section label="From Figma frames to live product" title="Designed and built end-to-end">
+  I designed and built Timeflow from concept to deployed application. The working MVP includes authentication, database infrastructure, and a real Google Calendar integration: OAuth 2.0, token storage, live event retrieval, and source-attributed entries inside the product.
+
+The next step is adding the LLM layer that turns those signals into structured timesheet suggestions.
+
+</Section>
+
+<Tags items={["React + TypeScript", "Supabase", "Google Calendar API", "OAuth 2.0", "Vercel"]} />
+
+<Subhead title="Stack" />
+
+<Terms
+  emphasis="detail"
+  columns={4}
+  items={[
+    { term: "Design", detail: "Figma" },
+    { term: "Product", detail: "React + TypeScript · Tailwind · shadcn" },
+    { term: "Infrastructure", detail: "Supabase · Google Calendar API · OAuth 2.0 · Vercel" },
+    { term: "Development workflow", detail: "GitHub + AI-assisted coding" },
+  ]}
+/>
+
+<Section label="Where it got complicated" title="Three problems worth keeping">
+  Building Timeflow end-to-end as a solo designer-developer surfaced a different kind of problem-solving than working in
+  a team. Three moments shaped the product most.
+</Section>
+
+<Cards columns={3}>
+  <Card title="The OAuth 404 chain">
+    After successful Google authorization, the callback kept returning 404. **The redirect URIs were correct.** The real
+    cause was a missing UNIQUE constraint on the integrations table, which made the Supabase upsert fail silently.
+    Diagnosed by reading raw Auth logs, not guessing.
+  </Card>
+  <Card title="Color overload discovery">
+    A screenshot review of the Manager View revealed **six simultaneous orange elements** competing for attention. A
+    systematic audit cut it back to the three sanctioned uses. Everything else moved to neutral so the hierarchy felt
+    calm again.
+  </Card>
+  <Card title="Trust vs. automation">
+    The central product tension was how to make future AI suggestions useful without encouraging blind acceptance.
+    **Source attribution, confidence, and explicit user confirmation** became core interaction principles.
+  </Card>
+</Cards>
+
+<Section label="Results" title="Working product. Real data.">
+  In four weeks, Timeflow moved from concept to a deployed working MVP. The application includes authentication, database infrastructure, and an end-to-end Google Calendar integration. Real Calendar events can be retrieved and surfaced inside the product with source attribution.
+
+This validates the signal and infrastructure layer needed for the larger product vision. The next milestone is adding AI-assisted structuring so those signals can become reviewable timesheet suggestions.
+
+[View the live demo version ↗](https://timeflow-assistant-main.vercel.app/)
+
+</Section>
+
+<Section label="Learnings" title="What this taught me" />
+
+<Cards columns={3}>
+  <Card title="Trust is an interaction problem">
+    AI products need provenance, uncertainty, and user control — not just generated output.
+  </Card>
+  <Card title="Integrations are product work">
+    OAuth, permissions, data availability, and failure states directly shape the experience.
+  </Card>
+  <Card title="Building changed how I design">
+    Working with the database, APIs, and production code helped me make design decisions with a clearer understanding of
+    technical constraints.
+  </Card>
+</Cards>

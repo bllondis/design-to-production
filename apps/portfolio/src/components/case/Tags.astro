@@ -1,0 +1,24 @@
+---
+import FrameRow from "../layout/FrameRow.astro";
+import { TagList } from "@tetiana/ui";
+
+const { items } = Astro.props as { items: string[] };
+---
+
+<FrameRow>
+  <div class="tags">
+    <TagList items={items} />
+  </div>
+</FrameRow>
+
+<style>
+  .tags {
+    padding: var(--space-l) var(--space-inset-inline);
+  }
+
+  @media (max-width: 680px) {
+    .tags {
+      padding: var(--space-l) var(--space-m);
+    }
+  }
+</style>

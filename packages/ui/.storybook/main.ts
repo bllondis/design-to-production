@@ -6,7 +6,10 @@ const config: StorybookConfig = {
   framework: "@storybook/react-vite",
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(ts|tsx)"],
   addons: ["@storybook/addon-docs", "@storybook/addon-a11y"],
-  staticDirs: [{ from: "../../../apps/portfolio/public/assets", to: "/assets" }],
+  staticDirs: [
+    { from: "../../../apps/portfolio/public/assets", to: "/assets" },
+    { from: "../../../apps/portfolio/public/work", to: "/work" },
+  ],
   core: { disableTelemetry: true },
   // Only those images are needed; don't let Vite copy a public folder of its own.
   viteFinal: (viteConfig) => ({ ...viteConfig, publicDir: false }),

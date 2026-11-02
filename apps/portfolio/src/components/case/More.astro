@@ -1,0 +1,65 @@
+---
+/** More: secondary material folded away behind a summary line; its rows appear when opened. */
+interface Props {
+  summary: string;
+}
+
+const { summary } = Astro.props;
+---
+
+<details class="more">
+  <summary class="more-summary">
+    <span class="more-inner text-label-l">
+      <span>{summary}</span>
+      <span class="more-icon" aria-hidden="true">
+        +
+      </span>
+    </span>
+  </summary>
+  <slot />
+</details>
+
+<style>
+  .more-summary {
+    display: grid;
+    grid-template-columns: var(--gutter) minmax(0, 1fr) var(--gutter);
+    border-top: 1px solid var(--color-border-default);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .more-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .more-inner {
+    display: flex;
+    grid-column: 2;
+    justify-content: space-between;
+    padding: var(--space-l) var(--space-inset-inline);
+    color: var(--color-text-secondary);
+    transition:
+      background var(--motion-duration-hover) var(--motion-easing-standard),
+      color var(--motion-duration-hover) var(--motion-easing-standard);
+  }
+
+  .more-summary:hover .more-inner {
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+  }
+
+  .more-icon {
+    font-family: var(--font-family-pixel);
+    transition: transform var(--motion-duration-swing) var(--motion-easing-swing);
+  }
+
+  .more[open] .more-icon {
+    transform: rotate(45deg);
+  }
+
+  @media (max-width: 680px) {
+    .more-inner {
+      padding: var(--space-l) var(--space-m);
+    }
+  }
+</style>

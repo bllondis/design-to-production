@@ -1,0 +1,64 @@
+---
+/** Contrast: two short opposing lines that sum up a trade-off. */
+import FrameRow from "../layout/FrameRow.astro";
+
+interface Props {
+  left: string;
+  right: string;
+}
+
+const { left, right } = Astro.props;
+---
+
+<FrameRow>
+  <p class="contrast">
+    <span>{left}</span>
+    <span>{right}</span>
+  </p>
+</FrameRow>
+
+<style>
+  .contrast {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0;
+    font-size: var(--font-size-heading-2);
+    letter-spacing: var(--font-tracking-heading);
+    line-height: var(--font-line-height-compact);
+  }
+
+  span {
+    padding: var(--space-xl) var(--space-inset-inline);
+  }
+
+  span:first-child {
+    border-right: 1px solid var(--color-border-default);
+  }
+
+  span::before {
+    display: block;
+    margin-bottom: var(--space-s);
+    color: var(--color-accent-default);
+    font-family: var(--font-family-pixel);
+    content: "+";
+  }
+
+  span:last-child::before {
+    content: "−";
+  }
+
+  @media (max-width: 680px) {
+    .contrast {
+      grid-template-columns: 1fr;
+    }
+
+    span {
+      padding: var(--space-l) var(--space-m);
+    }
+
+    span:first-child {
+      border-right: 0;
+      border-bottom: 1px solid var(--color-border-default);
+    }
+  }
+</style>

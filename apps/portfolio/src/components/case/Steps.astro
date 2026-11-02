@@ -1,0 +1,10 @@
+---
+import FrameRow from "../layout/FrameRow.astro";
+import { StepList, type Step } from "@tetiana/ui";
+
+const { items } = Astro.props as { items: Step[] };
+---
+
+<FrameRow>
+  <StepList items={items} />
+</FrameRow>

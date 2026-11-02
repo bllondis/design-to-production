@@ -1,0 +1,130 @@
+---
+/** CaseHero: title, summary and context for a case, its cover as an AsciiVisual, and the headline numbers. */
+import FrameRow from "../layout/FrameRow.astro";
+import { AsciiVisual, Button, Heading, PixelDoor, StatRow, TagList, type Stat } from "@tetiana/ui";
+
+interface Props {
+  title: string;
+  kicker: string;
+  summary: string[];
+  meta: string[];
+  note?: string;
+  stats?: Stat[];
+  actions?: Array<{ label: string; href: string; external?: boolean }>;
+  cover: { src: string; focus?: string; caption?: string };
+  character: string;
+}
+
+const { title, kicker, summary, meta, note, stats, actions, cover, character } = Astro.props;
+---
+
+<FrameRow as="header" divider="none">
+  <div slot="gutter">
+    <PixelDoor client:visible character={character} />
+  </div>
+  <div class="hero">
+    <div class="hero-copy">
+      <p class="hero-kicker text-label-l">{kicker}</p>
+      <Heading client:load as="h1" id="case-title" size="display-4" measure={18} text={title} />
+      <div class="hero-summary">
+        {summary.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+      <TagList items={meta} />
+      {note && <p class="hero-note">{note}</p>}
+      {actions && (
+        <div class="hero-actions">
+          {actions.map((action, index) => (
+            <Button href={action.href} external={action.external} variant={index === 0 ? "light" : "text"}>
+              {action.label}
+            </Button>
+          ))}
+        </div>
+      )}
+    </div>
+    <div class="hero-visual">
+      <AsciiVisual client:visible src={cover.src} focus={cover.focus} caption={cover.caption} />
+    </div>
+  </div>
+</FrameRow>
+{stats && (
+  <FrameRow>
+    <StatRow items={stats} />
+  </FrameRow>
+)}
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    min-height: clamp(36rem, 52vw, 46rem);
+  }
+
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    padding: var(--space-inset) var(--space-inset-inline);
+  }
+
+  .hero-kicker {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .hero-summary {
+    max-width: 40rem;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-l);
+    line-height: var(--font-line-height-relaxed);
+  }
+
+  .hero-summary p {
+    margin: 0;
+  }
+
+  .hero-summary p + p {
+    margin-top: var(--space-s);
+  }
+
+  .hero-note {
+    max-width: 40rem;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: var(--font-line-height-relaxed);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-l) var(--space-xl);
+  }
+
+  .hero-visual {
+    position: relative;
+    min-width: 0;
+    border-left: 1px solid var(--color-border-default);
+  }
+
+  @media (max-width: 980px) {
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .hero-visual {
+      aspect-ratio: 4 / 3;
+      border-top: 1px solid var(--color-border-default);
+      border-left: 0;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .hero-copy {
+      padding: var(--space-2xl) var(--space-m);
+    }
+  }
+</style>

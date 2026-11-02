@@ -1,0 +1,52 @@
+---
+/** Principle: the one sentence a case is built around, set large on the inverse band. */
+import FrameRow from "../layout/FrameRow.astro";
+import { Heading } from "@tetiana/ui";
+
+interface Props {
+  label?: string;
+  text: string;
+}
+
+const { label = "Central design principle", text } = Astro.props;
+---
+
+<div class="principle">
+  <FrameRow divider="both">
+    <figure class="band">
+      <figcaption class="text-label-l">{label}</figcaption>
+      <blockquote>
+        <Heading client:visible as="h2" size="display-3" tone="inverse" measure={16} text={text} />
+      </blockquote>
+    </figure>
+  </FrameRow>
+</div>
+
+<style>
+  .principle {
+    margin-top: var(--space-section);
+  }
+
+  .band {
+    display: grid;
+    gap: var(--space-2xl);
+    margin: 0;
+    padding: clamp(3rem, 6vw, 5.5rem) var(--space-inset-inline);
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+  }
+
+  figcaption {
+    color: var(--color-text-inverse-muted);
+  }
+
+  blockquote {
+    margin: 0;
+  }
+
+  @media (max-width: 680px) {
+    .band {
+      padding: var(--space-2xl) var(--space-m);
+    }
+  }
+</style>

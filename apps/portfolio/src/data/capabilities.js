@@ -15,9 +15,9 @@ export const chapters = [
         statement: "One product language, from Figma to production.",
         body: "I turn repeated product patterns into reusable foundations, components, and implementation rules, then review the built interface for design-code parity.",
         proof: "Proof / TED Design System, Figma to React",
-        action: { label: "See it in the design system", href: "/Cases/ted-design-system.html" },
+        action: { label: "See it in the design system", href: "/work/ted-design-system/" },
         visual: {
-          src: "/Cases/design-system-assets/react-manager-heatmap.png",
+          src: "/work/ted/react-manager-heatmap.png",
           focus: "0.62 0.45",
           caption: "TED / React heatmap",
         },
@@ -37,7 +37,7 @@ export const chapters = [
         statement: "From product hypothesis to a deployed, working product.",
         body: "I use AI and code as part of the design process: model the workflow, test behaviour in a functional prototype, connect real services, and ship a focused MVP.",
         proof: "Proof / Timeflow, a live AI product",
-        action: { label: "See it in Timeflow", href: "/Cases/timeflow.html" },
+        action: { label: "See it in Timeflow", href: "/work/timeflow/" },
         secondary: { label: "Open live product", href: "https://timeflow-assistant-main.vercel.app/" },
         visual: { src: "/assets/timeflow-review.jpg", focus: "0.62 0.35", caption: "Timeflow / AI draft review" },
         character: "/assets/pixel-waffle.jpg",
@@ -65,7 +65,7 @@ export const chapters = [
         statement: "Making complex systems understandable from day one.",
         body: "I translate domain rules into information architecture, role-aware workflows, and guidance that helps people complete high-stakes tasks with confidence.",
         proof: "Proof / DocuStream, 100+ document types, 6 roles",
-        action: { label: "See it in DocuStream", href: "/Cases/docustream.html" },
+        action: { label: "See it in DocuStream", href: "/work/docustream/" },
         visual: {
           src: "/assets/docustream-dashboard.jpg",
           focus: "0.6 0.45",
@@ -87,7 +87,7 @@ export const chapters = [
         statement: "New behaviour, in a language people already know.",
         body: "I add capability to established products without disrupting the mental models, component language, and operating scale people already rely on.",
         proof: "Proof / BookIT, 200K+ users, 1,200+ locations",
-        action: { label: "See it in BookIT", href: "/bookit.updated.html" },
+        action: { label: "See it in BookIT", href: "/work/bookit/" },
         visual: { src: "/assets/bookit-floorplan.jpg", focus: "0.6 0.55", caption: "BookIT / Floorplan editor" },
         character: "/assets/pixel-girl.jpg",
         skills: [

@@ -19,14 +19,39 @@ test("capability headings read as plain text to assistive tech", async ({ page }
   }
 });
 
-test("proof links point at the case studies", async ({ page }) => {
+test("proof links open the case studies", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("link", { name: "See it in DocuStream" })).toHaveAttribute(
-    "href",
-    "/Cases/docustream.html",
-  );
-  const response = await page.request.get("/Cases/docustream.html");
-  expect(response.ok()).toBe(true);
+  const link = page.getByRole("link", { name: "See it in DocuStream" });
+  await expect(link).toHaveAttribute("href", "/work/docustream/");
+  await link.click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/high-stakes legal filing/);
+});
+
+for (const slug of ["ted-design-system", "timeflow", "docustream", "bookit"]) {
+  test(`${slug} case renders its hero and sections`, async ({ page }) => {
+    await page.goto(`/work/${slug}/`);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    expect(await page.getByRole("heading", { level: 2 }).count()).toBeGreaterThan(3);
+  });
+}
+
+test("old case URLs forward to the new pages", async ({ page }) => {
+  await page.goto("/Cases/timeflow.html");
+  await expect(page).toHaveURL(/\/work\/timeflow\/$/);
+  await page.goto("/bookit.updated.html");
+  await expect(page).toHaveURL(/\/work\/bookit\/$/);
+});
+
+test("case screenshots open full screen", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === "mobile", "Covered on desktop; the viewer is the same component.");
+  await page.goto("/work/docustream/");
+  const shot = page.getByAltText("Filing detail - Details panel");
+  await shot.scrollIntoViewIfNeeded();
+  await shot.click();
+  const viewer = page.getByRole("dialog");
+  await expect(viewer).toHaveAccessibleName(/Filing detail - Details panel/);
+  await page.keyboard.press("Escape");
+  await expect(viewer).toBeHidden();
 });
 
 test("the page never scrolls sideways", async ({ page }) => {

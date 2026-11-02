@@ -1,0 +1,37 @@
+.figure {
+  margin: 0;
+}
+
+.inset {
+  padding: var(--space-xl) var(--space-inset-inline);
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-raised);
+}
+
+.zoomable {
+  cursor: zoom-in;
+  transition: border-color var(--motion-duration-hover) var(--motion-easing-standard);
+}
+
+.zoomable:hover {
+  border-color: var(--color-border-default);
+}
+
+.caption {
+  max-width: 60ch;
+  margin-top: var(--space-s);
+  color: var(--color-text-muted);
+  line-height: var(--font-line-height-relaxed);
+  text-transform: none;
+}
+
+@media (max-width: 680px) {
+  .inset {
+    padding: var(--space-l) var(--space-m);
+  }
+}

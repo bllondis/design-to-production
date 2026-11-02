@@ -1,0 +1,10 @@
+---
+import FrameRow from "../layout/FrameRow.astro";
+import { StatRow, type Stat } from "@tetiana/ui";
+
+const { items } = Astro.props as { items: Stat[] };
+---
+
+<FrameRow>
+  <StatRow items={items} />
+</FrameRow>

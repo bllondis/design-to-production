@@ -1,0 +1,130 @@
+---
+title: Extending a global ERP without breaking its mental model
+client: BookIT
+kicker: Case study / Enterprise ERP
+order: 4
+summary:
+  - BookIT is a large-scale workplace platform with an established admin experience, Design System and interaction language. I designed new Office setup capabilities that had to introduce genuinely new workflows while still feeling native to the product.
+meta:
+  - Jul 2024 – Feb 2025
+  - UX/UI Designer
+  - Enterprise platform
+  - NDA · screens adapted for portfolio
+note: This case shows six representative admin screens from a broader Office setup workstream, including Spaces, Floorplan editor and Events. BookIT also includes a user-facing booking experience and a comprehensive admin console.
+stats:
+  - { value: "200", suffix: "K+", label: Active platform users }
+  - { value: "1,200", suffix: "+", label: Office locations }
+  - { value: "40", suffix: "+", label: Countries }
+  - { value: "85", suffix: "K", label: Reservations processed every day }
+cover:
+  src: /assets/bookit-floorplan.jpg
+  focus: "0.6 0.55"
+  caption: BookIT / Floorplan editor
+character: /assets/pixel-girl.jpg
+---
+
+<Section label="The problem" title="New capability. Existing mental model.">
+  BookIT was already a mature product with established navigation, components and admin workflows. The challenge was not
+  to invent a new interface language. It was to add capabilities the existing model did not yet support - including
+  richer space management, spatial editing and event administration - without making them feel bolted on.
+</Section>
+
+<Section label="Approach" title="Does it solve the workflow - and still behave like BookIT?">
+  I worked from client requirements with business analysts, translating operational logic into workflows that fit BookIT’s established navigation architecture and interaction language. I reused the existing Design System and component library wherever possible, introducing new interaction behaviour only where the existing system could not support the workflow.
+
+Every new interaction had to answer two questions: does this solve the new workflow, and does it still behave like BookIT? That constraint guided the information hierarchy, interaction patterns and use of existing components across the workstream.
+
+</Section>
+
+<Section label="Decision 01 · Spaces" title="Scale without inventing a new admin pattern">
+  Large space inventories needed clearer retrieval and administration without replacing the table-based model admins
+  already knew. I prioritised the fields needed for scanning and bulk work, aligned the hierarchy with the existing
+  Office setup navigation, and carried the product’s shared space taxonomy through the experience. The 205 entries shown
+  here provide context for this example, not a platform-wide metric.
+</Section>
+
+<Shot
+  src="/work/bookit/space-list-navigation-structure-data-table.jpg"
+  alt="Space list - navigation structure & data table"
+  width={1280}
+  height={876}
+/>
+
+<Section label="Decision 01 · Supporting view" title="Filter without losing table context">
+  The expanded filter state stays beside the space list so admins can refine a dense inventory without losing sight of
+  the records they are acting on. Building, floor, type, capacity and status follow the same taxonomy as the table;
+  active selections remain visible after the panel closes, preserving state across the admin workflow.
+</Section>
+
+<Shot
+  src="/work/bookit/space-list-expanded-filter-panel.jpg"
+  alt="Space list - expanded filter panel"
+  width={1280}
+  height={1713}
+/>
+
+<Section label="Decision 02 · Floorplan editor" title="Introduce spatial interaction without breaking the system">
+  The floorplan editor introduced a new interaction model into a product built primarily around tables and forms. Admins
+  needed to understand spaces not only as records, but as physical objects related to a real floor plan. The challenge
+  was to add map-like selection and placement while preserving BookIT’s familiar hierarchy, controls and editing
+  behaviour. The interaction model was new, but the controls were not. Existing BookIT components and visual conventions
+  were reused wherever possible, helping the floorplan editor feel like an extension of the product rather than a
+  separate tool.
+</Section>
+
+<Shot src="/work/bookit/floorplan-editor-main-view.png" alt="Floorplan editor - main view" width={1280} height={800} />
+
+<Section label="Decision 02 · Supporting pattern" title="Manage density inside the editing context">
+  As floor plans became denser, admins needed control over visual layers without leaving the editing context. Display
+  settings use familiar Design System controls and provide feedback directly on the plan, extending the spatial model
+  without introducing a separate configuration experience.
+</Section>
+
+<Shot
+  src="/work/bookit/floorplan-editor-display-settings.png"
+  alt="Floorplan editor - display settings"
+  width={1280}
+  height={800}
+/>
+
+<Section label="Decision 02 · Core interaction" title="Keep the object and its context visible at the same time">
+  Navigating to a separate page to edit a visible space would break the relationship between the record and its physical
+  location. Instead, selecting a space highlights it on the floor plan and opens the corresponding detail panel
+  in-context. Admins can edit its properties with existing Design System controls while the location remains visible
+  throughout.
+</Section>
+
+<Shot
+  src="/work/bookit/floorplan-editor-space-detail.png"
+  alt="Floorplan editor - space detail"
+  width={1280}
+  height={800}
+/>
+
+<Section label="Decision 03 · Events" title="Extend the admin workflow without fragmenting it">
+  Event administration introduced a different type of workflow - audience management rather than physical-space
+  configuration. The challenge was to support attendance overview, audience lists, invitation and removal actions,
+  search and filtering through the same interaction language, rather than creating a separate mini-product.
+</Section>
+
+<Shot src="/work/bookit/events-audience-management.jpg" alt="Events - audience management" width={1280} height={1064} />
+
+<Section label="Outcome" title="New operational work, one product language">
+  The work extended BookIT’s existing admin model into new types of operational work - richer space management, spatial floorplan editing and event administration - without introducing a separate interaction language.
+
+Across the workstream, new capabilities reused the platform’s established navigation, components and behavioural patterns while adding interaction models the existing product had not previously needed.
+
+</Section>
+
+<Section label="Learnings" title="What this project reinforced" />
+
+<Cards columns={2}>
+  <Card title="Integration is harder than invention">
+    Designing inside a mature product means every new pattern carries a compatibility cost. The strongest solution is
+    often not the most novel one, but the one that adds capability without forcing users to relearn the system.
+  </Card>
+  <Card title="Preserve the context the task depends on">
+    The floorplan editor reinforced a simple rule: when location is part of the decision, the interface should not
+    separate the object from its spatial context.
+  </Card>
+</Cards>

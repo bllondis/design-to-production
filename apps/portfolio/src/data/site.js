@@ -37,10 +37,10 @@ export const footerColumns = [
   {
     title: "Cases",
     links: [
-      { label: "TED Design System", href: "/Cases/ted-design-system.html" },
-      { label: "Timeflow", href: "/Cases/timeflow.html" },
-      { label: "DocuStream", href: "/Cases/docustream.html" },
-      { label: "BookIT", href: "/bookit.updated.html" },
+      { label: "TED Design System", href: "/work/ted-design-system/" },
+      { label: "Timeflow", href: "/work/timeflow/" },
+      { label: "DocuStream", href: "/work/docustream/" },
+      { label: "BookIT", href: "/work/bookit/" },
     ],
   },
   {

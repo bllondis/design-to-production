@@ -1,0 +1,211 @@
+---
+title: Designing confidence into high-stakes legal filing
+client: DocuStream
+kicker: Case study / Enterprise legal-tech
+order: 3
+summary:
+  - DocuStream is a greenfield enterprise platform for managing UCC filings across US jurisdictions — a regulated process where users need to understand what information is required, where a filing stands, and what actions are possible next.
+  - As the UX/UI Designer, I helped shape the product experience from the ground up, translating legal and business requirements into clear workflows, system states and reusable interaction patterns.
+meta:
+  - Greenfield product
+  - UX/UI Designer · Product design scope
+  - 2025–2026
+  - Enterprise SaaS / Legal-tech
+  - Shipped to production
+note: Screens and data have been adapted for portfolio use to protect confidential information. The workflow structure, interaction logic and design decisions shown here reflect the production work.
+stats:
+  - { value: "100", suffix: "+", label: Legal document types and forms }
+  - { value: "7", suffix: "+", label: Lifecycle states }
+  - { value: "6", label: User roles }
+cover:
+  src: /work/docustream/dashboard-portfolio-overview.jpg
+  focus: "0.6 0.45"
+  caption: DocuStream / Filings dashboard
+character: /assets/pixel-beet.jpg?v=2
+---
+
+<Section label="Problem" title="A product model for regulated filing work">
+  DocuStream was a greenfield product. We had legal rules, business requirements, client requests and established filing
+  processes — but no product interaction model yet.
+</Section>
+
+<Section label="Approach" title="Translate requirements into interaction rules">
+  I worked with the Design Lead, PM/BA, engineers and client-side filing specialists to translate those inputs into
+  interaction rules: what information was required, what changed by jurisdiction or filing state, what needed
+  explanation, and which actions should become available next.
+</Section>
+
+<Principle text="Reveal complexity when it becomes actionable." />
+
+<Section label="Filing creation" title="One filing system, two levels of guidance">
+  The product intentionally supports two parallel filing paths instead of forcing every user through the same workflow.
+</Section>
+
+<Cards columns={2}>
+  <Card
+    label="Guided Wizard"
+    title="Structure when confidence needs support"
+    items={[
+      "Debtors → Secured Parties → Collateral → Other → County fields",
+      "Contextual instructions",
+      "Progressive disclosure",
+      "Persistent filing context",
+      "Conditional fields",
+      "Save as draft",
+    ]}
+  >
+    For users who benefit from additional structure and guidance.
+  </Card>
+  <Card
+    label="In-form"
+    title="Direct access for filing expertise"
+    items={[
+      "Direct form access",
+      "Enter all filing data in one continuous form",
+      "See the complete filing structure at once",
+      "Review how the information will appear in the document",
+    ]}
+  >
+    A more direct filing path for experienced filing specialists who already understand the filing structure.
+  </Card>
+</Cards>
+
+<Contrast left="More guidance where confidence was needed." right="Less friction where expertise already existed." />
+
+<Shot
+  src="/work/docustream/new-filing-step-1-debtors.jpg"
+  alt="New filing - step 1: Debtors"
+  width={1133}
+  height={724}
+  caption="The Guided Wizard turns a complex filing into five reviewable stages while keeping filing context available throughout."
+/>
+
+<Section label="Guided Wizard · Supporting pattern" title="Guidance without leaving the task">
+  Filing rules often need explanation at the exact moment information is entered. The contextual instructions panel
+  keeps guidance beside the active filing step, so users can reference legal information without losing form state or
+  orientation.
+</Section>
+
+<Shot
+  src="/work/docustream/new-filing-contextual-instructions-panel.jpg"
+  alt="New filing - contextual instructions panel"
+  width={1133}
+  height={729}
+  caption="Contextual instructions use the same overlay language as other secondary information in the product."
+/>
+
+<Section label="Lifecycle design" title="Status is a behaviour system, not a badge">
+  A filing continues long after submission. Its state determines what information matters, what needs attention and
+  which actions become available.
+</Section>
+
+<Cards columns={3}>
+  <Card label="Portfolio" title="Where does each filing stand?">
+    Status keeps a large body of work scannable.
+  </Card>
+  <Card label="Document" title="What is happening with this filing?">
+    Metadata, dates and warnings explain the current record.
+  </Card>
+  <Card label="Action" title="What can I do next?">
+    Available operations respond to the filing state.
+  </Card>
+</Cards>
+
+<Shots
+  items={[
+    {
+      src: "/work/docustream/my-filings-status-driven-list-view.jpg",
+      alt: "My filings - status-driven list view",
+      caption: "Portfolio — status, jurisdiction, ownership and dates make filings comparable.",
+    },
+    {
+      src: "/work/docustream/filing-detail-document-view-with-tab-navigation.jpg",
+      alt: "Filing detail - document view with tab navigation",
+      caption: "Document — the filing record keeps legal content and persistent context together.",
+    },
+    {
+      src: "/work/docustream/filing-detail-complete-state-with-warning-banner.jpg",
+      alt: "Filing detail - Complete state with warning banner",
+      caption:
+        "State change — completion updates the relevant metadata and introduces a jurisdiction-specific warning without changing the underlying structure.",
+    },
+  ]}
+/>
+
+<Section label="Progressive disclosure" title="Keep specialist actions available without keeping them visible">
+  Specialist operations are essential in context but irrelevant most of the time. Contextual menus, side panels and
+  focused modals keep these actions available without turning the document view into a control panel.
+</Section>
+
+<Shots
+  items={[
+    {
+      src: "/work/docustream/filing-detail-actions-dropdown.jpg",
+      alt: "Filing detail - Actions dropdown",
+      caption: "Contextual actions expose state-dependent filing operations, including UCC3 and UCC5.",
+    },
+    {
+      src: "/work/docustream/filing-detail-details-panel.jpg",
+      alt: "Filing detail - Details panel",
+      caption: "A side panel reveals official filing details while preserving the document as the primary context.",
+    },
+    {
+      src: "/work/docustream/evidence-cover-letter-modal.jpg",
+      alt: "Evidence cover letter - modal",
+      caption: "A focused modal gives generated filing evidence a dedicated reading context.",
+    },
+  ]}
+/>
+
+<Section label="Edge-case thinking" title="In regulated software, edge cases are part of the product">
+  The main flow was only one part of the system. Exceptions, deadlines and jurisdiction rules needed the same
+  interaction logic as the everyday path.
+</Section>
+
+<Terms
+  items={[
+    { term: "Jurisdiction-specific fields", detail: "Conditional requirements" },
+    { term: "Lapse deadlines", detail: "Time-sensitive visibility" },
+    { term: "Paper file requests", detail: "Alternate workflow path" },
+    { term: "Multi-page addenda", detail: "Scalable document structure" },
+    { term: "Conditional fields", detail: "Progressive disclosure" },
+    { term: "Jurisdiction caveats", detail: "Context-specific guidance" },
+    { term: "UCC3 / UCC5", detail: "State-dependent follow-on filing" },
+    { term: "Post-submission actions", detail: "Lifecycle-aware availability" },
+  ]}
+/>
+
+<Section label="Portfolio operations" title="From individual filings to portfolio operations">
+  Clear individual workflows were only one part of the product. Teams also needed visibility across filings, owners,
+  statuses and deadlines.
+</Section>
+
+<Tags items={["Filing status", "Submission volume", "Assignee workload", "Lapse tracking"]} />
+
+<Shot
+  src="/work/docustream/dashboard-portfolio-overview.jpg"
+  alt="Dashboard - portfolio overview"
+  width={1278}
+  height={932}
+  caption="The dashboard connects individual filing work to the wider operational picture."
+/>
+
+<Section label="Outcome" title="All workflows shown in this case shipped to production.">
+  DocuStream established a consistent product model for creating, managing and acting on UCC filings across different levels of user expertise, filing states and jurisdiction-specific requirements.
+
+The same interaction patterns provided a foundation for additional forms and workflows as the product expanded.
+
+</Section>
+
+<Section label="Reflection" title="What I took forward" />
+
+<Cards columns={2}>
+  <Card title="Domain knowledge is design material">
+    In specialised products, understanding the rules changes the quality of every interaction decision — from labels and
+    validation to warnings, actions and workflow structure.
+  </Card>
+  <Card title="Model the system before the screens">
+    If I approached the project again, I would formalise states, conditional rules, warnings and available actions even
+    earlier as a shared artifact for design, product and engineering.
+  </Card>
+</Cards>

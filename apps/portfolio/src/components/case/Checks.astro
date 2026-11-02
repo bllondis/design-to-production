@@ -1,0 +1,10 @@
+---
+import FrameRow from "../layout/FrameRow.astro";
+import { Checklist, type ChecklistItem } from "@tetiana/ui";
+
+const { items, marker } = Astro.props as { items: ChecklistItem[]; marker?: "check" | "number" };
+---
+
+<FrameRow>
+  <Checklist items={items} marker={marker} />
+</FrameRow>

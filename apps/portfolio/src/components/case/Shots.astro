@@ -1,0 +1,43 @@
+---
+/**
+ * Shots: a sequence of screenshots that tell one story, e.g. the same record across states.
+ * Two or three across on wide screens, stacked on narrow ones.
+ */
+import FrameRow from "../layout/FrameRow.astro";
+import { Figure } from "@tetiana/ui";
+
+interface Props {
+  items: Array<{ src: string; alt: string; caption?: string; width?: number; height?: number }>;
+}
+
+const { items } = Astro.props;
+---
+
+<FrameRow>
+  <div class="shots" style={`--shot-columns: ${Math.min(items.length, 3)}`}>
+    {items.map((item) => (
+      <Figure {...item} layout="wide" />
+    ))}
+  </div>
+</FrameRow>
+
+<style>
+  .shots {
+    display: grid;
+    grid-template-columns: repeat(var(--shot-columns), minmax(0, 1fr));
+    gap: var(--space-xl);
+    padding: var(--space-xl) var(--space-inset-inline);
+  }
+
+  @media (max-width: 980px) {
+    .shots {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .shots {
+      padding: var(--space-l) var(--space-m);
+    }
+  }
+</style>

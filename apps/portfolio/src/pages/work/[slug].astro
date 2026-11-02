@@ -1,0 +1,89 @@
+---
+import { getCollection, render } from "astro:content";
+import { InfoCard, Lightbox } from "@tetiana/ui";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Frame from "../../components/layout/Frame.astro";
+import SiteFooter from "../../components/sections/SiteFooter.astro";
+import SiteHeader from "../../components/sections/SiteHeader.astro";
+import CaseHero from "../../components/case/CaseHero.astro";
+import CaseNext from "../../components/case/CaseNext.astro";
+import Cards from "../../components/case/Cards.astro";
+import Checks from "../../components/case/Checks.astro";
+import More from "../../components/case/More.astro";
+import Note from "../../components/case/Note.astro";
+import Research from "../../components/case/Research.astro";
+import Stats from "../../components/case/Stats.astro";
+import Steps from "../../components/case/Steps.astro";
+import Subhead from "../../components/case/Subhead.astro";
+import Video from "../../components/case/Video.astro";
+import Contrast from "../../components/case/Contrast.astro";
+import Principle from "../../components/case/Principle.astro";
+import Section from "../../components/case/Section.astro";
+import Shot from "../../components/case/Shot.astro";
+import Shots from "../../components/case/Shots.astro";
+import Tags from "../../components/case/Tags.astro";
+import Terms from "../../components/case/Terms.astro";
+
+export async function getStaticPaths() {
+  const cases = (await getCollection("cases")).sort((a, b) => a.data.order - b.data.order);
+  return cases.map((entry, index) => ({
+    params: { slug: entry.id },
+    props: { entry, next: cases[(index + 1) % cases.length] },
+  }));
+}
+
+const { entry, next } = Astro.props;
+const { Content } = await render(entry);
+const { data } = entry;
+
+// Components available inside every case MDX file without imports.
+const components = {
+  Section,
+  Subhead,
+  Shot,
+  Shots,
+  Video,
+  Research,
+  More,
+  Cards,
+  Card: InfoCard,
+  Principle,
+  Contrast,
+  Terms,
+  Tags,
+  Stats,
+  Steps,
+  Checks,
+  Note,
+};
+---
+
+<BaseLayout
+  title={`${data.client} case study | Tetiana Dovgalenko`}
+  description={data.summary[0]}
+  path={`/work/${entry.id}/`}
+>
+  <SiteHeader />
+  <main id="main" class="case">
+    <Frame aria-labelledby="case-title">
+      <CaseHero {...data} />
+      <Content components={components} />
+      {next.id !== entry.id && (
+        <CaseNext next={{ title: next.data.title, client: next.data.client, href: `/work/${next.id}/` }} />
+      )}
+      {next.id === entry.id && <div class="case-end" />}
+    </Frame>
+  </main>
+  <SiteFooter />
+  <Lightbox client:idle />
+</BaseLayout>
+
+<style>
+  .case {
+    padding-top: calc(var(--layout-header-height) + 2 * var(--space-page));
+  }
+
+  .case-end {
+    height: var(--space-section);
+  }
+</style>

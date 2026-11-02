@@ -1,3 +1,4 @@
+import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import { defineConfig } from "astro/config";
 
@@ -6,7 +7,7 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   site: "https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site",
   outDir: "../../dist/client",
-  integrations: [react()],
+  integrations: [react(), mdx()],
   devToolbar: { enabled: false },
   // The design system ships TypeScript and CSS modules as source, so Vite compiles it for the server render too.
   vite: { ssr: { noExternal: ["@tetiana/ui"] } },

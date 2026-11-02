@@ -238,7 +238,7 @@ const sections = [
         <Specimen
           name="Button"
           file="@tetiana/ui · Button"
-          usage={`<Button href="/Cases/timeflow.html">See it in Timeflow</Button>\n<Button href="mailto:…" variant="dark" size="s">Get in touch</Button>\n<Button href="https://…" variant="text" external>Open live product</Button>`}
+          usage={`<Button href="/work/timeflow/">See it in Timeflow</Button>\n<Button href="mailto:…" variant="dark" size="s">Get in touch</Button>\n<Button href="https://…" variant="text" external>Open live product</Button>`}
         >
           <ul slot="notes">
             <li>
@@ -425,6 +425,16 @@ const sections = [
                 <dd>
                   Door + title + statement, copy with proof Button, AsciiVisual, SkillGrid. Content comes from{" "}
                   <code>src/data/capabilities.js</code>; <code>flip</code> alternates.
+                </dd>
+              </div>
+              <div>
+                <dt>Case pages</dt>
+                <dd>
+                  Each case is an MDX file in <code>src/content/cases</code>. Frontmatter feeds CaseHero (title,
+                  summary, tags, StatRow, AsciiVisual cover, PixelDoor); the body composes Section, Shot, Shots, Video,
+                  Research, More, Cards, Principle, Contrast, Terms, Tags, Steps, Checks and Note. Built on Figure,
+                  Lightbox, StatRow, InfoCard, TermGrid, TagList, Clip, StepList, Checklist and MediaRow from
+                  @tetiana/ui.
                 </dd>
               </div>
               <div>

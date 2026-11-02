@@ -10,8 +10,9 @@ live at `/system` on the site and in Storybook (`npm run storybook`); this file 
 - `packages/ui` (`@tetiana/ui`): React + TypeScript components. Each lives in `src/components/<Name>/` with its CSS
   module, story and test; animation engines are in `src/lib/`. `src/styles/global.css` is the base layer.
 - `apps/portfolio`: the Astro site. Pages in `src/pages`, layout and sections as `.astro` components, content in
-  `src/data`, static files in `public/`. Case study pages in `public/Cases/` and `public/bookit.updated.html` are
-  standalone HTML and not yet on the system.
+  `src/data`, static files in `public/`. Case studies are MDX in `src/content/cases/`, rendered by
+  `src/pages/work/[slug].astro` from the case components in `src/components/case/`; their images live in
+  `public/work/<case>/`. The old URLs under `public/Cases/` and `public/bookit.updated.html` only forward to `/work/…`.
 
 The app imports the system only through the package names (`@tetiana/ui`, `@tetiana/ui/styles.css`,
 `@tetiana/tokens/...`). The packages never import from the app.
@@ -26,7 +27,8 @@ The app imports the system only through the package names (`@tetiana/ui`, `@teti
 3. **Headings go through `Heading`.** Pick `as` for the outline and `size` for the look; keep `pixel` on for display
    titles on dark surfaces and off for long editorial headlines.
 4. **Content lives in data.** Capability blocks come from `apps/portfolio/src/data/capabilities.js`; navigation and
-   contact details from `apps/portfolio/src/data/site.js`. Adding a capability is a data change, not new markup.
+   contact details from `apps/portfolio/src/data/site.js`; case studies are MDX files. Adding a capability or a case
+   is a content change, not new markup — compose existing case components before inventing new ones.
 5. **Hydrate only what moves.** Static components render without a client directive. Interactive ones
    (`PixelDoor`, `Heading` with pixels, `AsciiVisual`, `SignalField`) use `client:visible`, or `client:load` above the fold.
 6. **Respect reduced motion.** Every animation must stop under `prefers-reduced-motion`; canvases draw a still frame.

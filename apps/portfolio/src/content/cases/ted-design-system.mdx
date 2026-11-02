@@ -1,0 +1,372 @@
+---
+title: Designing one product language across Figma and React
+client: TED Design System
+kicker: Case study / Design system
+order: 1
+summary:
+  - A system of product decisions behind Timeflow, designed in Figma and carried into a working React and TypeScript product. I worked across design and implementation so hierarchy, states and interaction patterns kept the same meaning in both environments.
+meta:
+  - 2026 · 4-week build
+  - Product Designer · Design Engineer
+  - Solo project
+  - Figma + React / TypeScript
+  - Working MVP
+cover:
+  src: /work/ted/react-manager-heatmap.png
+  focus: "0.62 0.45"
+  caption: TED / React heatmap
+character: /assets/pixel-cat.jpg
+---
+
+<Shots
+  items={[
+    {
+      src: "/work/ted/figma-dashboard.jpg",
+      alt: "Timeflow employee dashboard in Figma",
+      width: 1500,
+      height: 959,
+      caption: "Figma frame — Employee dashboard",
+    },
+    {
+      src: "/work/ted/react-dashboard.png",
+      alt: "Implemented Timeflow employee dashboard",
+      width: 1280,
+      height: 820,
+      caption: "Implemented product — React and TypeScript",
+    },
+  ]}
+/>
+
+<Note label="Parity">
+  The same review flow, hierarchy, status language and primary action appear in both environments.
+</Note>
+
+<Terms
+  columns={4}
+  items={[
+    { term: "Foundations", detail: "Colour roles, Urbanist typography and restrained hierarchy" },
+    { term: "Components", detail: "Controls, statuses and repeated interaction patterns" },
+    { term: "Code", detail: "React, TypeScript, Tailwind and shadcn" },
+    { term: "Product use", detail: "Employee, manager, approvals and privacy workflows" },
+  ]}
+/>
+
+<Note label="Evidence boundary">
+  This case uses two Figma product frames, an implemented product walkthrough and the existing Timeflow case in this
+  repository. No Storybook, formal token source, component source or system documentation was available, so none is
+  represented here.
+</Note>
+
+<Section label="The problem" title="Consistency had to survive implementation">
+  Timeflow needed one product language across a daily review flow, manager views, approvals, integrations and privacy
+  controls. A shared Figma file was not enough. The same hierarchy and state meanings had to survive implementation and
+  repeated use across different workflows.
+</Section>
+
+<Principle label="Principle" text="Design and code are two interfaces to the same product language." />
+
+<Section label="System architecture" title="One decision, reused through the stack">
+  The architecture connected visual foundations, Figma frames, repeated interface patterns and the rendered React
+  product. The value came from keeping decisions stable as the environment changed.
+</Section>
+
+<Steps
+  items={[
+    {
+      label: "Product decisions",
+      title: "Trust, review and attention hierarchy",
+      detail: "The product rules that need to remain consistent",
+    },
+    {
+      label: "Foundations",
+      title: "Urbanist, parchment, restrained colour roles",
+      detail: "The verified visual language described in the Timeflow case",
+    },
+    {
+      label: "Design environment",
+      title: "Figma product frames",
+      detail: "Hierarchy, repeated controls and workflow states",
+    },
+    {
+      label: "Implementation",
+      title: "React + TypeScript · Tailwind · shadcn",
+      detail: "The confirmed implementation stack",
+    },
+    {
+      label: "Product UI",
+      title: "Employee and manager workflows",
+      detail: "The system tested in rendered product use",
+    },
+  ]}
+/>
+
+<Note>
+  The available evidence does not show an automated token pipeline. This diagram therefore shows the verified decision
+  path rather than inventing one.
+</Note>
+
+<Section label="Foundations" title="Name the role each visual decision plays">
+  The foundations were defined by purpose. Parchment softened an administrative workflow. Teal carried time and
+  completion. Orange was reserved for attention. Neutral structure kept manager views calm.
+</Section>
+
+<Cards columns={2}>
+  <Card
+    label="Foundations"
+    title="Colour roles"
+    items={[
+      "Parchment · #F5F2EC — Warm product foundation",
+      "Teal — Time values and completion",
+      "Orange — Attention and exceptions",
+      "Neutrals — Structure, cards and quiet controls",
+    ]}
+  />
+  <Card
+    label="Foundations"
+    title="Typography and hierarchy"
+    items={[
+      "Large headings: orient the user to a task or workflow.",
+      "Compact labels: carry dates, status and source information.",
+      "Rounded surfaces: group related work without heavy chrome.",
+      "Low-contrast borders: separate dense content without adding visual noise.",
+    ]}
+  >
+    **Warm precision.** Urbanist keeps large headings direct while compact metadata stays readable.
+  </Card>
+</Cards>
+
+<Note>
+  The repository does not contain raw or semantic token definitions. The board names verified visual roles instead of
+  assigning unsupported token names.
+</Note>
+
+<Section label="Component model" title="A component is a behaviour contract, not a drawing">
+  Status is a small pattern with system-level consequences. The rendered screens reuse labels, colour roles and
+  placement to communicate confidence, submission state and exceptions without requiring a new visual treatment for each
+  workflow.
+</Section>
+
+<Subhead title="Observed status language">
+  The wording changes with the workflow. The role of the pattern stays stable: identify state, connect it to a record
+  and make the next action understandable.
+</Subhead>
+
+<Tags items={["High confidence", "Sent to review", "Pending", "Partial"]} />
+
+<Subhead title="Behaviour contract" />
+
+<Checks
+  items={[
+    {
+      title: "Meaning is explicit",
+      detail: "Labels such as High confidence, Pending and Missing carry the state in words.",
+    },
+    {
+      title: "Emphasis follows urgency",
+      detail: "Orange is used where attention is required, while completion and informational states remain quieter.",
+    },
+    { title: "Context remains visible", detail: "Status sits beside the row, time value or action it describes." },
+  ]}
+/>
+
+<Section label="System at product scale" title="The system has to survive real product complexity">
+  The manager heatmap combines daily states, team-level totals and exception handling. The same status language has to
+  work in a dense overview and in a focused attention view without changing meaning.
+</Section>
+
+<Shots
+  items={[
+    {
+      src: "/work/ted/react-manager-heatmap.png",
+      alt: "Implemented Timeflow manager heatmap with daily status cells",
+      width: 1280,
+      height: 820,
+      caption: "Overview: repeated day cells make team status comparable across a week.",
+    },
+    {
+      src: "/work/ted/react-attention.png",
+      alt: "Implemented Timeflow needs attention view",
+      width: 1280,
+      height: 820,
+      caption: "Focused state: the same exceptions become actionable records with reminders.",
+    },
+  ]}
+/>
+
+<Section label="Design → Code" title="Same component decisions. Two environments.">
+  The strongest evidence is not a library inventory. It is the relationship between a Figma frame and the rendered React
+  product.
+</Section>
+
+<Shots
+  items={[
+    {
+      src: "/work/ted/figma-dashboard.jpg",
+      alt: "Figma frame of the Timeflow employee dashboard",
+      width: 1500,
+      height: 959,
+      caption: "Figma — Employee dashboard",
+    },
+    {
+      src: "/work/ted/react-dashboard.png",
+      alt: "React implementation of the Timeflow employee dashboard",
+      width: 1280,
+      height: 820,
+      caption: "React product — Rendered implementation",
+    },
+  ]}
+/>
+
+<Note label="Behavioural parity">
+  The goal was behavioural parity. The same names, states and product decisions needed to mean the same thing in both
+  environments.
+</Note>
+
+<Terms
+  columns={3}
+  items={[
+    { term: "AI draft banner", detail: "→ Review entry point with the same action hierarchy" },
+    { term: "High confidence / Sent to review", detail: "→ The same labels beside each work entry" },
+    { term: "Confirm day", detail: "→ The same primary action at the end of review" },
+  ]}
+/>
+
+<Subhead title="Parity also had to hold outside the core dashboard" />
+
+<Shots
+  items={[
+    {
+      src: "/work/ted/figma-integrations.jpg",
+      alt: "Figma frame of Timeflow integrations and permission states",
+      width: 1500,
+      height: 902,
+      caption: "Figma — Integrations",
+    },
+    {
+      src: "/work/ted/react-integrations.png",
+      alt: "React implementation of Timeflow integrations",
+      width: 1280,
+      height: 820,
+      caption: "React product — Integrations",
+    },
+  ]}
+/>
+
+<Note>
+  Authentic component source was not present in this portfolio repository. This section therefore uses rendered
+  implementation evidence rather than a decorative code sample.
+</Note>
+
+<Section label="Where it got complicated" title="Attention colour stopped communicating attention">
+  The existing Timeflow case records a screenshot audit of the manager view. Six orange elements were competing at the
+  same time, so the colour no longer identified the items that needed action.
+</Section>
+
+<Stats items={[{ value: "6", label: "Simultaneous orange elements found in the manager view" }]} />
+
+<Cards columns={1}>
+  <Card label="Visual audit" title="Reduce competition, preserve meaning">
+    The audit reduced orange to three sanctioned uses. Other emphasis moved to neutral treatments so warning and attention states could carry a distinct role again.
+
+    This was a system decision, not a local colour adjustment. The same rule had to remain understandable across summaries, heatmap states, badges and attention cards.
+
+  </Card>
+</Cards>
+
+<Section label="Behaviour" title="States belong to the system too">
+  The product evidence shows a repeated state vocabulary across daily work, manager oversight and approvals. Colour
+  supports the state, while labels, values, legends and placement carry meaning in context.
+</Section>
+
+<Terms
+  columns={4}
+  items={[
+    {
+      term: "Full day / High confidence",
+      detail: "Completion and confidence use text beside the value or record.",
+    },
+    { term: "Partial", detail: "A distinct label and heatmap legend identify incomplete time." },
+    {
+      term: "Missing / Needs attention",
+      detail: "Exception language is paired with an action such as Send reminder.",
+    },
+    { term: "Pending", detail: "Approval state appears directly beside the related submission." },
+  ]}
+/>
+
+<Note>
+  The repository does not include an accessibility audit or WCAG report, so this case makes no compliance claim. It
+  documents only the states and cues visible in the verified product evidence.
+</Note>
+
+<Section label="In product" title="The system only matters when it survives real product use">
+  The same hierarchy, surfaces, controls and state language appear in workflows with different operational demands.
+  Approvals concentrates review actions. Privacy settings makes control and collection boundaries visible.
+</Section>
+
+<Shots
+  items={[
+    {
+      src: "/work/ted/react-approvals.png",
+      alt: "Implemented Timeflow approvals screen",
+      width: 1280,
+      height: 820,
+      caption: "Approvals — Repeated rows, pending states and a clear batch action support manager review.",
+    },
+    {
+      src: "/work/ted/react-privacy.png",
+      alt: "Implemented Timeflow data and privacy settings",
+      width: 1280,
+      height: 820,
+      caption: "Data and privacy — Labels, time controls and on or off states make collection choices explicit.",
+    },
+  ]}
+/>
+
+<Subhead title="Implemented product walkthrough" />
+
+<Video
+  src="/work/timeflow/design-system-walkthrough.mp4"
+  poster="/work/ted/react-manager-heatmap.png"
+  label="Timeflow implemented product walkthrough"
+  mode="walkthrough"
+  caption="An authentic walkthrough of the working Timeflow interface. Playback is user-controlled and does not autoplay."
+/>
+
+<Section label="Outcome" title="A shared product language across design and implementation">
+  Timeflow moved from Figma frames to a deployed working MVP using React, TypeScript, Tailwind and shadcn. The same product decisions appear across employee review, manager oversight, approvals, integrations and privacy settings.
+
+The result is evidenced through repeated behaviour in the product, not through an isolated component inventory.
+
+</Section>
+
+<Checks
+  marker="number"
+  items={[
+    {
+      title: "Implemented in React and TypeScript",
+      detail: "The confirmed product stack also includes Tailwind and shadcn.",
+    },
+    {
+      title: "Used across distinct product surfaces",
+      detail: "Employee, manager, approval, integration and privacy workflows share the same language.",
+    },
+    {
+      title: "Connected to a working product",
+      detail:
+        "The existing case verifies a deployed MVP with authentication, database infrastructure and Google Calendar integration.",
+    },
+  ]}
+/>
+
+<Section label="Reflection" title="What this work reinforced" />
+
+<Cards columns={2}>
+  <Card title="A design system is a product, not a library">
+    Components are one layer. The harder work is deciding how hierarchy, state and attention keep their meaning as
+    workflows change.
+  </Card>
+  <Card title="Parity matters more than pixel matching">
+    Figma and React do not need identical mechanics. They need to represent the same product decisions and behaviour.
+  </Card>
+</Cards>

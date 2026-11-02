@@ -1,0 +1,10 @@
+---
+import FrameRow from "../layout/FrameRow.astro";
+import { TermGrid, type TermGridProps } from "@tetiana/ui";
+
+const props = Astro.props as TermGridProps;
+---
+
+<FrameRow>
+  <TermGrid {...props} />
+</FrameRow>

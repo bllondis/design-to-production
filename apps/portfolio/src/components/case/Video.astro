@@ -1,0 +1,11 @@
+---
+/** Video: a product clip row. Ambient clips play while on screen; walkthroughs wait for the viewer. */
+import FrameRow from "../layout/FrameRow.astro";
+import { Clip, type ClipProps } from "@tetiana/ui";
+
+const props = Astro.props as ClipProps;
+---
+
+<FrameRow>
+  <Clip client:visible {...props} />
+</FrameRow>
