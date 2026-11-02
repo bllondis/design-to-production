@@ -1,0 +1,154 @@
+---
+/**
+ * CapabilityBlock: one capability — title and statement, a short case for it with a link to
+ * the proof project, the project rendered as an AsciiVisual, and the skills it involves.
+ *
+ * flip  put the visual on the left; the home page alternates this so blocks zig-zag
+ */
+import FrameRow from "../layout/FrameRow.astro";
+import { AsciiVisual, Button, Heading, PixelDoor, SkillGrid } from "@tetiana/ui";
+
+interface Props {
+  id: string;
+  title: string;
+  statement: string;
+  body: string;
+  proof: string;
+  action: { label: string; href: string };
+  secondary?: { label: string; href: string };
+  visual: { src: string; focus?: string; caption?: string };
+  character: string;
+  skills: string[];
+  flip?: boolean;
+}
+
+const { id, title, statement, body, proof, action, secondary, visual, character, skills, flip = false } = Astro.props;
+const titleId = `${id}-title`;
+---
+
+<article class:list={["capability", { "capability--flip": flip }]} aria-labelledby={titleId}>
+  <FrameRow as="header">
+    <div slot="gutter">
+      <PixelDoor client:visible character={character} offset={flip} />
+    </div>
+    <div class="capability-head">
+      <Heading client:visible as="h3" id={titleId} size="display-4" measure={16} text={title} />
+      <p class="capability-statement">{statement}</p>
+    </div>
+  </FrameRow>
+  <FrameRow>
+    <div class="capability-body">
+      <div class="capability-copy">
+        <p>{body}</p>
+        <div>
+          <p class="capability-proof text-label-m">{proof}</p>
+          <Button href={action.href}>{action.label}</Button>
+          {secondary && (
+            <div class="capability-secondary">
+              <Button href={secondary.href} variant="text" external>
+                {secondary.label}
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+      <div class="capability-visual">
+        <AsciiVisual client:visible src={visual.src} focus={visual.focus} caption={visual.caption} />
+      </div>
+    </div>
+  </FrameRow>
+  <FrameRow>
+    <SkillGrid items={skills} />
+  </FrameRow>
+</article>
+
+<style>
+  .capability {
+    margin-top: var(--space-section);
+  }
+
+  .capability-head {
+    display: flex;
+    min-height: clamp(14rem, 22vw, 20rem);
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-inset) var(--space-inset-inline);
+  }
+
+  .capability-statement {
+    max-width: 34ch;
+    margin: clamp(1.25rem, 2.2vw, 2rem) 0 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-subtitle);
+    letter-spacing: var(--font-tracking-subtitle);
+    line-height: var(--font-line-height-base);
+  }
+
+  .capability-body {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    min-height: clamp(30rem, 42vw, 40rem);
+  }
+
+  .capability-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-2xl);
+    padding: var(--space-inset);
+    background: radial-gradient(130% 90% at 0% 0%, var(--color-surface-glow), transparent 62%);
+  }
+
+  .capability-copy > p {
+    max-width: 30rem;
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-l);
+    line-height: var(--font-line-height-loose);
+  }
+
+  .capability-proof {
+    margin: 0 0 1.1rem;
+    color: var(--color-text-muted);
+  }
+
+  .capability-secondary {
+    margin-top: 1.1rem;
+  }
+
+  .capability-visual {
+    position: relative;
+    min-width: 0;
+    border-left: 1px solid var(--color-border-default);
+  }
+
+  .capability--flip .capability-visual {
+    order: -1;
+    border-right: 1px solid var(--color-border-default);
+    border-left: 0;
+  }
+
+  @media (max-width: 680px) {
+    .capability-head,
+    .capability-copy {
+      padding: var(--space-2xl) var(--space-m);
+    }
+
+    .capability-head {
+      min-height: 0;
+    }
+
+    .capability-body {
+      grid-template-columns: 1fr;
+    }
+
+    .capability-visual,
+    .capability--flip .capability-visual {
+      order: 0;
+      aspect-ratio: 4 / 3;
+      border-top: 1px solid var(--color-border-default);
+      border-right: 0;
+      border-left: 0;
+    }
+  }
+</style>

@@ -1,0 +1,22 @@
+{
+  "name": "@tetiana/tokens",
+  "version": "0.1.0",
+  "description": "Design tokens for the Tetiana Dovgalenko design system, in W3C DTCG format.",
+  "private": true,
+  "type": "module",
+  "files": [
+    "tokens",
+    "build"
+  ],
+  "exports": {
+    "./tokens.css": "./build/tokens.css",
+    "./tokens.json": "./build/tokens.json",
+    "./source/*": "./tokens/*"
+  },
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "style-dictionary": "5.7.1"
+  }
+}

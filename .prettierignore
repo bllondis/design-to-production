@@ -1,11 +1,10 @@
 dist/
-storybook-static/
-legacy/
-public/
-.astro/
+**/.astro/
+**/storybook-static/
+apps/portfolio/legacy/
+apps/portfolio/public/
+apps/portfolio/tools/
+packages/tokens/build/
 package-lock.json
-src/styles/tokens.css
-src/data/tokens.json
 build-docustream.mjs
-tools/
 .claude/
