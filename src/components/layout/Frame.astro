@@ -1,0 +1,71 @@
+---
+/**
+ * Frame: the bordered container with a narrow gutter column on each side (1 of 12).
+ * Fill it with FrameRow. Gutter lines run the full height; rows draw the horizontal lines.
+ * Below 980px the gutters collapse and the frame becomes a plain bordered column.
+ *
+ * as      element to render: "section" (default), "div" or "footer"
+ * closed  also draw the bottom border (for the last frame on the page)
+ * tone    "default" flat page colour · "footer" fades into the footer blue-black
+ */
+interface Props {
+  as?: "section" | "div" | "footer";
+  closed?: boolean;
+  tone?: "default" | "footer";
+  id?: string;
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
+}
+
+const { as: Tag = "section", closed = false, tone = "default", ...attributes } = Astro.props;
+---
+
+<Tag class:list={["frame", `frame--${tone}`, { "frame--closed": closed }]} {...attributes}>
+  <slot />
+</Tag>
+
+<style>
+  .frame {
+    --gutter: var(--layout-gutter);
+    position: relative;
+    margin: 0 var(--space-page);
+    border: 1px solid var(--color-border-default);
+    border-bottom: 0;
+    background: var(--color-surface-page);
+  }
+
+  .frame--closed {
+    margin-bottom: var(--space-page);
+    border-bottom: 1px solid var(--color-border-default);
+  }
+
+  .frame--footer {
+    background: linear-gradient(180deg, var(--color-surface-page) 0%, var(--color-surface-footer-end) 100%);
+  }
+
+  .frame::before {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(
+      90deg,
+      transparent calc(var(--gutter) - 1px),
+      var(--color-border-default) calc(var(--gutter) - 1px) var(--gutter),
+      transparent var(--gutter) calc(100% - var(--gutter)),
+      var(--color-border-default) calc(100% - var(--gutter)) calc(100% - var(--gutter) + 1px),
+      transparent calc(100% - var(--gutter) + 1px)
+    );
+    content: "";
+    pointer-events: none;
+  }
+
+  @media (max-width: 980px) {
+    .frame {
+      --gutter: 0%;
+    }
+
+    .frame::before {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,27 @@
+---
+/**
+ * Tile: the square marker that sits in the frame's gutter next to a chapter title.
+ * It fills the gutter width, so it always lines up with PixelDoor.
+ */
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<span class="tile" aria-hidden="true">{label}</span>
+
+<style>
+  .tile {
+    display: grid;
+    width: 100%;
+    aspect-ratio: 1;
+    place-items: center;
+    margin-top: var(--space-inset);
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+    font: var(--font-weight-regular) clamp(1.6rem, 3.4vw, 3.4rem) / 1 var(--font-family-pixel);
+    letter-spacing: -0.02em;
+  }
+</style>

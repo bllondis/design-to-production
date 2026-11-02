@@ -1,0 +1,67 @@
+{
+  "$description": "Primitive tokens: raw values with no meaning attached. Components never use these directly; they go through semantic tokens.",
+  "color": {
+    "ink": {
+      "$type": "color",
+      "1000": { "$value": "#000000", "$description": "Pure black, used inside the pixel door frame." },
+      "950": { "$value": "#050607", "$description": "Page background." },
+      "900": { "$value": "#0d0f12" },
+      "850": { "$value": "#121420", "$description": "Blue-black at the bottom of the footer gradient." },
+      "800": { "$value": "#1d2023" },
+      "600": { "$value": "#555b5f" },
+      "400": { "$value": "#9ca1a4" }
+    },
+    "paper": {
+      "$type": "color",
+      "200": { "$value": "#d8dbd4" },
+      "50": { "$value": "#f4f5f0", "$description": "Warm off-white used for inverse surfaces and primary text." }
+    },
+    "blue": {
+      "$type": "color",
+      "400": { "$value": "#7ca2ff" }
+    },
+    "amber": {
+      "$type": "color",
+      "50": { "$value": "#fff3cf" },
+      "200": { "$value": "#ffc977" },
+      "300": { "$value": "rgb(255, 214, 140)" },
+      "400": { "$value": "rgb(255, 190, 110)" },
+      "500": { "$value": "rgb(255, 150, 60)" }
+    },
+    "alpha": {
+      "$type": "color",
+      "paper-45": { "$value": "rgba(244, 245, 240, 0.45)" },
+      "paper-14": { "$value": "rgba(244, 245, 240, 0.14)" },
+      "paper-8": { "$value": "rgba(244, 245, 240, 0.085)" },
+      "paper-7": { "$value": "rgba(244, 245, 240, 0.075)" },
+      "ink-88": { "$value": "rgba(5, 6, 7, 0.88)" },
+      "ink-28": { "$value": "rgba(5, 6, 7, 0.28)" }
+    }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "urbanist": { "$value": ["Urbanist", "Helvetica Neue", "Arial", "sans-serif"] },
+      "sf-mono": { "$value": ["SFMono-Regular", "Consolas", "Liberation Mono", "monospace"] },
+      "pixelify": { "$value": ["Pixelify Sans", "SFMono-Regular", "Consolas", "monospace"] }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "400": { "$value": 400 },
+      "500": { "$value": 500 }
+    }
+  },
+  "duration": {
+    "$type": "duration",
+    "fast": { "$value": "160ms" },
+    "base": { "$value": "220ms" },
+    "slow": { "$value": "340ms" },
+    "flap": { "$value": "480ms" },
+    "reveal": { "$value": "1400ms" }
+  },
+  "easing": {
+    "$type": "cubicBezier",
+    "standard": { "$value": [0.25, 0.1, 0.25, 1] },
+    "swing": { "$value": [0.3, 0.7, 0.2, 1] }
+  }
+}

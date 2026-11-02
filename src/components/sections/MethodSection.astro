@@ -1,0 +1,95 @@
+---
+import RuledSection from "../layout/RuledSection.astro";
+import Heading from "../ui/Heading.astro";
+
+const steps = [
+  ["Understand", "Domain, rules, constraints"],
+  ["Model", "States, relationships, edge cases"],
+  ["Reduce", "Hierarchy, guidance, disclosure"],
+  ["Prototype", "Flows, behaviour, evidence"],
+  ["Build", "Components, feasibility, implementation"],
+  ["Validate", "Quality, outcomes, iteration"],
+];
+---
+
+<RuledSection label="Working method" note="System to interface" aria-labelledby="method-title">
+  <div class="method-heading">
+    <Heading id="method-title" size="display-3" pixel={false} measure={10}>
+      Make the model clear before making the screen polished.
+    </Heading>
+    <p>One continuous loop from understanding the domain to validating the behaviour in product.</p>
+  </div>
+  <ol class="method-list">
+    {
+      steps.map(([step, detail], index) => (
+        <li>
+          <span class="text-label-m">{String(index + 1).padStart(2, "0")}</span>
+          <strong>{step}</strong>
+          <small class="text-label-m">{detail}</small>
+        </li>
+      ))
+    }
+  </ol>
+</RuledSection>
+
+<style>
+  .method-heading {
+    display: grid;
+    grid-template-columns: 1.35fr 0.65fr;
+    gap: clamp(2rem, 6vw, 7rem);
+    align-items: end;
+    margin-top: clamp(3rem, 7vw, 6rem);
+  }
+
+  .method-heading p {
+    max-width: 28rem;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body-m);
+  }
+
+  .method-list {
+    padding: 0;
+    margin: clamp(4rem, 9vw, 8rem) 0 0;
+    border-bottom: 1px solid var(--color-border-default);
+    list-style: none;
+  }
+
+  .method-list li {
+    display: grid;
+    grid-template-columns: 4rem minmax(12rem, 1fr) minmax(12rem, 0.75fr);
+    gap: var(--space-s);
+    align-items: baseline;
+    padding: 1.15rem 0;
+    border-top: 1px solid var(--color-border-default);
+  }
+
+  .method-list span,
+  .method-list small {
+    color: var(--color-text-muted);
+    font-size: 0.6rem;
+    line-height: var(--font-line-height-base);
+  }
+
+  .method-list strong {
+    font-size: var(--font-size-heading-2);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: var(--font-tracking-heading);
+  }
+
+  @media (max-width: 980px) {
+    .method-heading {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .method-list li {
+      grid-template-columns: 2.5rem 1fr;
+    }
+
+    .method-list small {
+      grid-column: 2;
+    }
+  }
+</style>

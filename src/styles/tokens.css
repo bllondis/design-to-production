@@ -1,0 +1,119 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --color-ink-400: #9ca1a4;
+  --color-ink-600: #555b5f;
+  --color-ink-800: #1d2023;
+  --color-ink-850: #121420; /** Blue-black at the bottom of the footer gradient. */
+  --color-ink-900: #0d0f12;
+  --color-ink-950: #050607; /** Page background. */
+  --color-ink-1000: #000000; /** Pure black, used inside the pixel door frame. */
+  --color-paper-50: #f4f5f0; /** Warm off-white used for inverse surfaces and primary text. */
+  --color-paper-200: #d8dbd4;
+  --color-blue-400: #7ca2ff;
+  --color-amber-50: #fff3cf;
+  --color-amber-200: #ffc977;
+  --color-amber-300: #ffd68c;
+  --color-amber-400: #ffbe6e;
+  --color-amber-500: #ff963c;
+  --color-alpha-paper-45: rgba(244, 245, 240, 0.45);
+  --color-alpha-paper-14: rgba(244, 245, 240, 0.14);
+  --color-alpha-paper-8: rgba(244, 245, 240, 0.085);
+  --color-alpha-paper-7: rgba(244, 245, 240, 0.075);
+  --color-alpha-ink-88: rgba(5, 6, 7, 0.88);
+  --color-alpha-ink-28: rgba(5, 6, 7, 0.28);
+  --font-family-urbanist: Urbanist, 'Helvetica Neue', Arial, sans-serif;
+  --font-family-sf-mono: SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+  --font-family-pixelify: 'Pixelify Sans', SFMono-Regular, Consolas, monospace;
+  --font-weight-400: 400;
+  --font-weight-500: 500;
+  --font-size-display-1: clamp(3.8rem, 8.8vw, 8.6rem); /** Hero headline. */
+  --font-size-display-2: clamp(3.2rem, 7.4vw, 7.6rem); /** Chapter titles. */
+  --font-size-display-3: clamp(3rem, 6.4vw, 6.7rem); /** Editorial section titles. */
+  --font-size-display-4: clamp(2.6rem, 5vw, 5.2rem); /** Capability titles. */
+  --font-size-heading-1: clamp(2.3rem, 3.9vw, 4rem); /** Band headlines, e.g. contact. */
+  --font-size-heading-2: clamp(1.3rem, 2.5vw, 2.5rem); /** List-level headings. */
+  --font-size-subtitle: clamp(1.25rem, 2vw, 1.85rem); /** Statements under capability titles. */
+  --font-size-body-l: clamp(1.05rem, 1.5vw, 1.4rem);
+  --font-size-body-m: clamp(1rem, 1.35vw, 1.22rem);
+  --font-size-body-s: 1rem;
+  --font-size-label-l: clamp(0.72rem, 1vw, 0.9rem); /** Mono section labels. */
+  --font-size-label-m: 0.63rem; /** Mono kickers and nav. */
+  --font-size-label-s: 0.57rem; /** Mono captions and metadata. */
+  --font-line-height-display-tight: 0.86; /** Hero headline. */
+  --font-line-height-display: 0.92;
+  --font-line-height-heading: 1;
+  --font-line-height-snug: 1.04;
+  --font-line-height-compact: 1.25;
+  --font-line-height-base: 1.3;
+  --font-line-height-relaxed: 1.6;
+  --font-line-height-loose: 1.75; /** Long-form copy on dark panels. */
+  --font-tracking-tightest: -0.075em; /** Hero headline. */
+  --font-tracking-tighter: -0.06em;
+  --font-tracking-tight: -0.045em;
+  --font-tracking-snug: -0.04em;
+  --font-tracking-heading: -0.035em;
+  --font-tracking-subtitle: -0.02em;
+  --font-tracking-body: -0.01em;
+  --font-tracking-label: 0.07em; /** Mono labels are set open and uppercase. */
+  --duration-fast: 0.16s;
+  --duration-base: 0.22s;
+  --duration-slow: 0.34s;
+  --duration-flap: 0.48s;
+  --duration-reveal: 1.4s;
+  --easing-standard: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --easing-swing: cubic-bezier(0.3, 0.7, 0.2, 1);
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.25rem;
+  --space-l: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-inset: clamp(2.5rem, 5vw, 4.5rem); /** Padding inside framed cells. */
+  --space-inset-inline: clamp(1.5rem, 4.5vw, 4.5rem); /** Horizontal padding for full-width rows. */
+  --space-section: clamp(4rem, 9vw, 9rem); /** Empty band between framed blocks. */
+  --space-page: clamp(1rem, 2vw, 2rem); /** Gap between the frame and the viewport edge. */
+  --layout-gutter: 8.333%; /** Width of the side columns of the frame (1 of 12). */
+  --layout-header-height: 5.25rem;
+  --layout-measure: 34rem; /** Longest comfortable line for body copy. */
+  --color-surface-page: var(--color-ink-950); /** Default dark page and section background. */
+  --color-surface-raised: var(--color-ink-900);
+  --color-surface-inverse: var(--color-paper-50); /** Light bands: hero card, contact band, hovered skill. */
+  --color-surface-glow: var(--color-alpha-paper-8); /** Soft light in the top-left of copy panels. */
+  --color-surface-header: var(--color-alpha-ink-88);
+  --color-surface-footer-end: var(--color-ink-850);
+  --color-surface-void: var(--color-ink-1000);
+  --color-text-primary: var(--color-paper-50);
+  --color-text-secondary: var(--color-paper-200);
+  --color-text-muted: var(--color-ink-400);
+  --color-text-inverse: var(--color-ink-950);
+  --color-text-inverse-body: var(--color-ink-800);
+  --color-text-inverse-muted: var(--color-ink-600);
+  --color-border-default: var(--color-alpha-paper-45); /** Structural grid lines. */
+  --color-border-subtle: var(--color-alpha-paper-14);
+  --color-border-inverse: var(--color-alpha-ink-28);
+  --color-border-page-grid: var(--color-alpha-paper-7); /** The faint 12-column grid behind the page. */
+  --color-accent-default: var(--color-blue-400); /** Focus rings, selection, list markers. */
+  --color-light-core: var(--color-amber-50); /** Brightest point of the light behind a pixel door. */
+  --color-light-warm: var(--color-amber-200);
+  --color-light-beam: var(--color-amber-300); /** Light spilling out of an ajar door. */
+  --color-light-fade: var(--color-amber-400);
+  --color-light-ember: var(--color-amber-500);
+  --font-family-sans: var(--font-family-urbanist);
+  --font-family-mono: var(--font-family-sf-mono);
+  --font-family-pixel: var(--font-family-pixelify);
+  --font-weight-regular: var(--font-weight-400);
+  --font-weight-strong: var(--font-weight-500);
+  --motion-duration-hover: var(--duration-fast);
+  --motion-duration-fade: var(--duration-base);
+  --motion-duration-swing: var(--duration-slow);
+  --motion-duration-flap: var(--duration-flap);
+  --motion-duration-reveal: var(--duration-reveal);
+  --motion-easing-standard: var(--easing-standard);
+  --motion-easing-swing: var(--easing-swing);
+}

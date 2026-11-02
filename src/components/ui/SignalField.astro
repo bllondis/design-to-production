@@ -1,0 +1,49 @@
+---
+/**
+ * SignalField: the animated glyph field behind the hero and the contact band.
+ * It fills the nearest positioned ancestor; that ancestor (or the element marked
+ * data-signal-host) is where the pointer is tracked.
+ *
+ * tone     "dark" light glyphs for dark surfaces (default) · "light" dark glyphs for inverse bands
+ * text     run this text on a loop instead of random glyphs
+ * top      leave room at the top, e.g. under a header
+ * fade     fade the bottom quarter out
+ * opacity  overall strength, 0–1
+ */
+interface Props {
+  tone?: "dark" | "light";
+  text?: string;
+  top?: string;
+  fade?: boolean;
+  opacity?: number;
+}
+
+const { tone = "dark", text, top = "0px", fade = false, opacity = 1 } = Astro.props;
+---
+
+<canvas
+  class:list={["field", { "field--fade": fade }]}
+  style={`--field-top: ${top}; --field-opacity: ${opacity}`}
+  data-signal-field={tone}
+  data-field-text={text}
+  aria-hidden="true"></canvas>
+
+<script>
+  import "../../scripts/signal-field.js";
+</script>
+
+<style>
+  .field {
+    position: absolute;
+    inset: var(--field-top) 0 0;
+    z-index: -2;
+    width: 100%;
+    height: calc(100% - var(--field-top));
+    opacity: var(--field-opacity);
+  }
+
+  .field--fade {
+    -webkit-mask-image: linear-gradient(to bottom, black 0 76%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 0 76%, transparent 100%);
+  }
+</style>

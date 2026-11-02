@@ -1,0 +1,127 @@
+{
+  "$description": "Semantic tokens: what a value is for. Components and pages use only these.",
+  "color": {
+    "$type": "color",
+    "surface": {
+      "page": { "$value": "{color.ink.950}", "$description": "Default dark page and section background." },
+      "raised": { "$value": "{color.ink.900}" },
+      "inverse": { "$value": "{color.paper.50}", "$description": "Light bands: hero card, contact band, hovered skill." },
+      "glow": { "$value": "{color.alpha.paper-8}", "$description": "Soft light in the top-left of copy panels." },
+      "header": { "$value": "{color.alpha.ink-88}" },
+      "footer-end": { "$value": "{color.ink.850}" },
+      "void": { "$value": "{color.ink.1000}" }
+    },
+    "text": {
+      "primary": { "$value": "{color.paper.50}" },
+      "secondary": { "$value": "{color.paper.200}" },
+      "muted": { "$value": "{color.ink.400}" },
+      "inverse": { "$value": "{color.ink.950}" },
+      "inverse-body": { "$value": "{color.ink.800}" },
+      "inverse-muted": { "$value": "{color.ink.600}" }
+    },
+    "border": {
+      "default": { "$value": "{color.alpha.paper-45}", "$description": "Structural grid lines." },
+      "subtle": { "$value": "{color.alpha.paper-14}" },
+      "inverse": { "$value": "{color.alpha.ink-28}" },
+      "page-grid": { "$value": "{color.alpha.paper-7}", "$description": "The faint 12-column grid behind the page." }
+    },
+    "accent": {
+      "default": { "$value": "{color.blue.400}", "$description": "Focus rings, selection, list markers." }
+    },
+    "light": {
+      "core": { "$value": "{color.amber.50}", "$description": "Brightest point of the light behind a pixel door." },
+      "warm": { "$value": "{color.amber.200}" },
+      "beam": { "$value": "{color.amber.300}", "$description": "Light spilling out of an ajar door." },
+      "fade": { "$value": "{color.amber.400}" },
+      "ember": { "$value": "{color.amber.500}" }
+    }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "sans": { "$value": "{font.family.urbanist}" },
+      "mono": { "$value": "{font.family.sf-mono}" },
+      "pixel": { "$value": "{font.family.pixelify}" }
+    },
+    "size": {
+      "$type": "dimension",
+      "display-1": { "$value": "clamp(3.8rem, 8.8vw, 8.6rem)", "$description": "Hero headline." },
+      "display-2": { "$value": "clamp(3.2rem, 7.4vw, 7.6rem)", "$description": "Chapter titles." },
+      "display-3": { "$value": "clamp(3rem, 6.4vw, 6.7rem)", "$description": "Editorial section titles." },
+      "display-4": { "$value": "clamp(2.6rem, 5vw, 5.2rem)", "$description": "Capability titles." },
+      "heading-1": { "$value": "clamp(2.3rem, 3.9vw, 4rem)", "$description": "Band headlines, e.g. contact." },
+      "heading-2": { "$value": "clamp(1.3rem, 2.5vw, 2.5rem)", "$description": "List-level headings." },
+      "subtitle": { "$value": "clamp(1.25rem, 2vw, 1.85rem)", "$description": "Statements under capability titles." },
+      "body-l": { "$value": "clamp(1.05rem, 1.5vw, 1.4rem)" },
+      "body-m": { "$value": "clamp(1rem, 1.35vw, 1.22rem)" },
+      "body-s": { "$value": "1rem" },
+      "label-l": { "$value": "clamp(0.72rem, 1vw, 0.9rem)", "$description": "Mono section labels." },
+      "label-m": { "$value": "0.63rem", "$description": "Mono kickers and nav." },
+      "label-s": { "$value": "0.57rem", "$description": "Mono captions and metadata." }
+    },
+    "line-height": {
+      "$type": "number",
+      "display-tight": { "$value": 0.86, "$description": "Hero headline." },
+      "display": { "$value": 0.92 },
+      "heading": { "$value": 1 },
+      "snug": { "$value": 1.04 },
+      "compact": { "$value": 1.25 },
+      "base": { "$value": 1.3 },
+      "relaxed": { "$value": 1.6 },
+      "loose": { "$value": 1.75, "$description": "Long-form copy on dark panels." }
+    },
+    "tracking": {
+      "$type": "dimension",
+      "tightest": { "$value": "-0.075em", "$description": "Hero headline." },
+      "tighter": { "$value": "-0.06em" },
+      "tight": { "$value": "-0.045em" },
+      "snug": { "$value": "-0.04em" },
+      "heading": { "$value": "-0.035em" },
+      "subtitle": { "$value": "-0.02em" },
+      "body": { "$value": "-0.01em" },
+      "label": { "$value": "0.07em", "$description": "Mono labels are set open and uppercase." }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": { "$value": "{font.weight.400}" },
+      "strong": { "$value": "{font.weight.500}" }
+    }
+  },
+  "space": {
+    "$type": "dimension",
+    "3xs": { "$value": "0.25rem" },
+    "2xs": { "$value": "0.5rem" },
+    "xs": { "$value": "0.75rem" },
+    "s": { "$value": "1rem" },
+    "m": { "$value": "1.25rem" },
+    "l": { "$value": "1.5rem" },
+    "xl": { "$value": "2rem" },
+    "2xl": { "$value": "3rem" },
+    "3xl": { "$value": "4rem" },
+    "inset": { "$value": "clamp(2.5rem, 5vw, 4.5rem)", "$description": "Padding inside framed cells." },
+    "inset-inline": { "$value": "clamp(1.5rem, 4.5vw, 4.5rem)", "$description": "Horizontal padding for full-width rows." },
+    "section": { "$value": "clamp(4rem, 9vw, 9rem)", "$description": "Empty band between framed blocks." },
+    "page": { "$value": "clamp(1rem, 2vw, 2rem)", "$description": "Gap between the frame and the viewport edge." }
+  },
+  "layout": {
+    "$type": "dimension",
+    "gutter": { "$value": "8.333%", "$description": "Width of the side columns of the frame (1 of 12)." },
+    "header-height": { "$value": "5.25rem" },
+    "measure": { "$value": "34rem", "$description": "Longest comfortable line for body copy." }
+  },
+  "motion": {
+    "duration": {
+      "$type": "duration",
+      "hover": { "$value": "{duration.fast}" },
+      "fade": { "$value": "{duration.base}" },
+      "swing": { "$value": "{duration.slow}" },
+      "flap": { "$value": "{duration.flap}" },
+      "reveal": { "$value": "{duration.reveal}" }
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "standard": { "$value": "{easing.standard}" },
+      "swing": { "$value": "{easing.swing}" }
+    }
+  }
+}

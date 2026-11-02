@@ -1,0 +1,115 @@
+---
+/**
+ * Specimen: one documented component — name and notes on the left, live examples on the right,
+ * and the usage snippet underneath.
+ */
+import FrameRow from "../layout/FrameRow.astro";
+
+interface Props {
+  name: string;
+  file: string;
+  usage?: string;
+  surface?: "dark" | "light";
+}
+
+const { name, file, usage, surface = "dark" } = Astro.props;
+---
+
+<FrameRow>
+  <div class="specimen">
+    <div class="specimen-notes">
+      <h3>{name}</h3>
+      <p class="text-label-s">{file}</p>
+      <slot name="notes" />
+    </div>
+    <div class:list={["specimen-stage", `specimen-stage--${surface}`]}>
+      <slot />
+    </div>
+  </div>
+  {usage && <pre class="specimen-code"><code>{usage}</code></pre>}
+</FrameRow>
+
+<style>
+  .specimen {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+
+  .specimen-notes {
+    padding: var(--space-xl) var(--space-inset-inline);
+    border-right: 1px solid var(--color-border-default);
+  }
+
+  h3 {
+    margin: 0;
+    font-size: var(--font-size-heading-2);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: var(--font-tracking-heading);
+  }
+
+  .specimen-notes > .text-label-s {
+    margin: var(--space-2xs) 0 var(--space-l);
+    color: var(--color-text-muted);
+  }
+
+  .specimen-notes :global(p:not(.text-label-s)),
+  .specimen-notes :global(li) {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-s);
+    line-height: var(--font-line-height-relaxed);
+  }
+
+  .specimen-notes :global(ul) {
+    padding-left: var(--space-m);
+  }
+
+  .specimen-notes :global(code) {
+    color: var(--color-text-primary);
+    font-family: var(--font-family-mono);
+    font-size: 0.85em;
+  }
+
+  .specimen-stage {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    gap: var(--space-xl);
+    min-width: 0;
+    padding: var(--space-xl);
+  }
+
+  .specimen-stage--light {
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+  }
+
+  .specimen-code {
+    margin: 0;
+    overflow-x: auto;
+    padding: var(--space-m) var(--space-inset-inline);
+    border-top: 1px solid var(--color-border-subtle);
+    background: var(--color-surface-raised);
+    color: var(--color-text-secondary);
+    font: 0.8rem / 1.6 var(--font-family-mono);
+  }
+
+  @media (max-width: 980px) {
+    .specimen {
+      grid-template-columns: 1fr;
+    }
+
+    .specimen-notes {
+      border-right: 0;
+      border-bottom: 1px solid var(--color-border-default);
+    }
+  }
+
+  @media (max-width: 680px) {
+    .specimen-notes,
+    .specimen-code {
+      padding-right: var(--space-m);
+      padding-left: var(--space-m);
+    }
+  }
+</style>

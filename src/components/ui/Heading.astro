@@ -1,0 +1,99 @@
+---
+/**
+ * Heading: one component for every title on the site.
+ *
+ * as       the semantic tag (h1–h4); choose it for document outline, not looks
+ * size     the visual step from the type scale:
+ *          "display-1" hero · "display-2" chapter · "display-3" editorial section
+ *          "display-4" capability · "heading-1" band headline
+ * tone     "default" on dark surfaces, "inverse" on light ones
+ * pixel    swaps a few letters into the pixel face (default on)
+ * measure  max line length in ch
+ */
+interface Props {
+  as?: "h1" | "h2" | "h3" | "h4";
+  size: "display-1" | "display-2" | "display-3" | "display-4" | "heading-1";
+  tone?: "default" | "inverse";
+  pixel?: boolean;
+  measure?: number;
+  id?: string;
+}
+
+const { as: Tag = "h2", size, tone = "default", pixel = true, measure, id } = Astro.props;
+const style = measure ? `--heading-measure: ${measure}ch` : undefined;
+---
+
+<Tag id={id} class:list={["heading", `heading--${size}`, `heading--${tone}`]} style={style} data-pixel={pixel ? "" : undefined}>
+  <slot />
+</Tag>
+
+<script>
+  import "../../scripts/pixel-heading.js";
+</script>
+
+<style>
+  .heading {
+    max-width: var(--heading-measure, none);
+    margin: 0;
+    font-weight: var(--font-weight-regular);
+    text-wrap: balance;
+  }
+
+  .heading--inverse {
+    color: var(--color-text-inverse);
+  }
+
+  .heading--display-1 {
+    font-size: var(--font-size-display-1);
+    letter-spacing: var(--font-tracking-tightest);
+    line-height: var(--font-line-height-display-tight);
+  }
+
+  .heading--display-2 {
+    font-size: var(--font-size-display-2);
+    letter-spacing: var(--font-tracking-tight);
+    line-height: var(--font-line-height-display);
+  }
+
+  .heading--display-3 {
+    font-size: var(--font-size-display-3);
+    letter-spacing: var(--font-tracking-tighter);
+    line-height: var(--font-line-height-display);
+  }
+
+  .heading--display-4 {
+    font-size: var(--font-size-display-4);
+    letter-spacing: var(--font-tracking-snug);
+    line-height: var(--font-line-height-heading);
+  }
+
+  .heading--heading-1 {
+    font-size: var(--font-size-heading-1);
+    letter-spacing: var(--font-tracking-heading);
+    line-height: var(--font-line-height-snug);
+  }
+
+  /* Letters the pixel script swaps in. */
+  .heading :global(.pixel-word) {
+    white-space: nowrap;
+  }
+
+  .heading :global(.is-pixel) {
+    font-family: var(--font-family-pixel);
+    font-size: 0.94em;
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 680px) {
+    .heading--display-1 {
+      max-width: 9.2ch;
+      font-size: clamp(3.5rem, 17vw, 5.5rem);
+      line-height: 0.88;
+    }
+
+    .heading--display-3 {
+      font-size: clamp(3rem, 14vw, 4.6rem);
+      letter-spacing: -0.055em;
+    }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+/**
+ * FrameRow: one horizontal band inside a Frame — gutter | content | gutter.
+ * Put a Tile or PixelDoor in the "gutter" slot; everything else goes in the middle.
+ *
+ * divider  which horizontal lines to draw: "top" (default) · "none" · "both"
+ * as       element to render, e.g. "header" for a chapter title row
+ */
+interface Props {
+  divider?: "top" | "none" | "both";
+  as?: "div" | "header";
+}
+
+const { divider = "top", as: Tag = "div" } = Astro.props;
+---
+
+<Tag class:list={["row", `row--${divider}`]}>
+  <div class="row-gutter"><slot name="gutter" /></div>
+  <div class="row-main"><slot /></div>
+</Tag>
+
+<style>
+  .row {
+    display: grid;
+    grid-template-columns: var(--gutter) minmax(0, 1fr) var(--gutter);
+  }
+
+  .row--top,
+  .row--both {
+    border-top: 1px solid var(--color-border-default);
+  }
+
+  .row--both {
+    border-bottom: 1px solid var(--color-border-default);
+  }
+
+  .row-gutter {
+    position: relative;
+    min-width: 0;
+  }
+
+  .row-main {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  @media (max-width: 980px) {
+    .row-gutter {
+      display: none;
+    }
+  }
+</style>

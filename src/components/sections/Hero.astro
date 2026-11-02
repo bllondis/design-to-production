@@ -1,0 +1,205 @@
+---
+import Heading from "../ui/Heading.astro";
+import SignalField from "../ui/SignalField.astro";
+
+const areas = ["Product design", "Design engineering", "Enterprise", "AI", "Design systems"];
+---
+
+<section class="hero" id="top" aria-labelledby="hero-title" data-signal-host>
+  <SignalField top="var(--layout-header-height)" fade opacity={0.98} />
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-legend text-label-s" aria-hidden="true">
+    <span>FIELD / 01</span>
+    <span data-field-status>SIGNALS / 32</span>
+    <span>STATE / STRUCTURING</span>
+  </div>
+  <button class="hero-toggle text-label-s" type="button" data-field-toggle aria-pressed="false">
+    <span data-field-toggle-label>Pause signal</span>
+    <span aria-hidden="true">[ II ]</span>
+  </button>
+  <div class="hero-card">
+    <p class="hero-kicker text-label-m">Product Designer / Design Engineer</p>
+    <Heading as="h1" id="hero-title" size="display-1" tone="inverse" pixel={false} measure={8.8}>
+      I design calm interfaces for complex systems.
+    </Heading>
+  </div>
+  <div class="hero-footer">
+    <p>Working across complex B2B software, AI-assisted products, and design systems.</p>
+    <ul class="hero-areas text-label-s" aria-label="Areas of expertise">
+      {areas.map((area) => <li>{area}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    min-height: 100svh;
+    grid-template-rows: 1fr auto;
+    margin: 0 var(--space-page);
+    overflow: hidden;
+    padding: clamp(8.5rem, 17vh, 11rem) 0 0;
+    isolation: isolate;
+  }
+
+  /* The hero's own gutter lines, matching the Frame below it. */
+  .hero::before,
+  .hero::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    width: 1px;
+    background: var(--color-border-default);
+    content: "";
+  }
+
+  .hero::before {
+    left: var(--layout-gutter);
+  }
+
+  .hero::after {
+    right: var(--layout-gutter);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    background-image:
+      linear-gradient(var(--color-border-subtle) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border-subtle) 1px, transparent 1px);
+    background-size:
+      100% 4.6rem,
+      var(--layout-gutter) 100%;
+    pointer-events: none;
+  }
+
+  .hero-legend {
+    position: absolute;
+    right: var(--space-l);
+    bottom: 9.1rem;
+    display: grid;
+    gap: 0.3rem;
+    color: var(--color-text-secondary);
+    line-height: 1.2;
+    text-align: right;
+  }
+
+  .hero-toggle {
+    position: absolute;
+    top: 7.5rem;
+    right: var(--space-l);
+    display: flex;
+    min-height: 2.5rem;
+    align-items: center;
+    gap: var(--space-s);
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--color-border-default);
+    border-radius: 0;
+    background: var(--color-surface-page);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    line-height: 1;
+    transition:
+      background var(--motion-duration-hover) var(--motion-easing-standard),
+      color var(--motion-duration-hover) var(--motion-easing-standard);
+  }
+
+  .hero-toggle:hover {
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+  }
+
+  .hero-card {
+    align-self: end;
+    width: min(68%, 55rem);
+    margin: 0 0 0 var(--layout-gutter);
+    padding: clamp(2rem, 4vw, 4rem);
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+  }
+
+  .hero-kicker {
+    margin: 0 0 1.2rem;
+    color: var(--color-text-inverse-muted);
+  }
+
+  .hero-footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid var(--color-border-default);
+    border-bottom: 0;
+    background: var(--color-surface-page);
+  }
+
+  .hero-footer > p {
+    margin: 0;
+    padding: 1.35rem var(--space-l);
+    border-right: 1px solid var(--color-border-default);
+    font-size: clamp(1rem, 1.55vw, 1.35rem);
+    letter-spacing: -0.015em;
+    line-height: 1.35;
+  }
+
+  .hero-areas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.45rem 1.15rem;
+    align-content: center;
+    padding: 1.35rem var(--space-l);
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: 1.25;
+    list-style: none;
+  }
+
+  .hero-areas li::before {
+    margin-right: 0.45rem;
+    color: var(--color-accent-default);
+    content: "+";
+  }
+
+  @media (max-width: 980px) {
+    .hero-card {
+      width: 76%;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .hero {
+      min-height: 47rem;
+      padding-top: 7.2rem;
+    }
+
+    .hero-toggle {
+      top: 5.8rem;
+      right: var(--space-page);
+    }
+
+    .hero-legend {
+      display: none;
+    }
+
+    .hero-card {
+      width: 91.667%;
+      margin-left: 0;
+      padding: var(--space-l);
+    }
+
+    .hero-footer {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-footer > p {
+      border-right: 0;
+      border-bottom: 1px solid var(--color-border-default);
+    }
+
+    .hero-areas {
+      justify-content: flex-start;
+    }
+  }
+</style>

@@ -3,7 +3,8 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
-const outputDirectory = join(root, "assets");
+const publicDirectory = join(root, "public");
+const outputDirectory = join(publicDirectory, "assets");
 
 const selections = [
   {
@@ -30,7 +31,7 @@ function escapeExpression(value) {
 await mkdir(outputDirectory, { recursive: true });
 
 for (const selection of selections) {
-  const html = await readFile(join(root, selection.source), "utf8");
+  const html = await readFile(join(publicDirectory, selection.source), "utf8");
   const alt = escapeExpression(selection.alt).replace("&", "(?:&|&amp;)");
   const pattern = new RegExp(
     `<img\\b(?=[^>]*\\balt="${alt}")(?=[^>]*\\bsrc="data:([^;,\"]+)(?:;[^,\"]*)?,([^\"]+)")[^>]*>`,
