@@ -4,8 +4,7 @@
  * Blocks go in the default slot. Chapters after the first get a gap and a top line.
  */
 import FrameRow from "../layout/FrameRow.astro";
-import Heading from "../ui/Heading.astro";
-import Tile from "../ui/Tile.astro";
+import { Heading, Tile } from "../ui";
 
 interface Props {
   id: string;
@@ -21,11 +20,13 @@ const titleId = `${id}-title`;
 
 <section class:list={["chapter", { "chapter--first": first }]} aria-labelledby={titleId}>
   <FrameRow as="header" divider={first ? "none" : "top"}>
-    <Tile slot="gutter" label={number} />
+    <div slot="gutter">
+      <Tile label={number} />
+    </div>
     <div class="chapter-head">
       <div>
         <p class="chapter-kicker text-label-l">Capability / {number}</p>
-        <Heading id={titleId} size="display-2" measure={9.5}>{title}</Heading>
+        <Heading client:visible id={titleId} size="display-2" measure={9.5} text={title} />
       </div>
       <p class="chapter-intro">{intro}</p>
     </div>

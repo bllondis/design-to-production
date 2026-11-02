@@ -1,7 +1,9 @@
-import { monoFont, reducedMotion, whenVisible } from "./motion.js";
+import { monoFont, observeVisibility, onReducedMotionChange, prefersReducedMotion } from "./motion";
+
+export type SignalTone = "dark" | "light";
 
 // Canvas palettes per tone. "dark" sits on the page background, "light" on inverse bands.
-const palettes = {
+const palettes: Record<SignalTone, { ink: string; blocks: string[]; accents: string[] }> = {
   dark: {
     ink: "244,245,240",
     blocks: ["rgba(124,162,255,0.22)", "rgba(199,215,98,0.18)", "rgba(255,109,88,0.16)"],
@@ -16,20 +18,24 @@ const palettes = {
 
 const glyphs = "01+·/:*<>[]{}xyzuvw";
 
-const noise = (x, y, offset = 0) => {
+const noise = (x: number, y: number, offset = 0) => {
   const value = Math.sin(x * 12.9898 + y * 78.233 + offset * 37.719) * 43758.5453;
   return value - Math.floor(value);
 };
 
-// The field reacts to the pointer anywhere in its host section and only animates while on screen.
-const setupField = (canvas) => {
+/**
+ * Starts the glyph field on a canvas and returns a cleanup function.
+ * The pointer is tracked on the nearest [data-signal-host] (or the canvas parent); a
+ * [data-field-toggle] button and [data-field-status] label inside that host are wired up too.
+ */
+export const startSignalField = (canvas: HTMLCanvasElement, tone: SignalTone, text = ""): (() => void) => {
   const context = canvas.getContext("2d", { alpha: true });
-  const field = canvas.closest("[data-signal-host]") ?? canvas.parentElement;
-  const status = field.querySelector("[data-field-status]");
-  const toggle = field.querySelector("[data-field-toggle]");
-  const toggleLabel = field.querySelector("[data-field-toggle-label]");
-  const { ink, blocks, accents } = palettes[canvas.dataset.signalField] ?? palettes.dark;
-  const text = canvas.dataset.fieldText || "";
+  if (!context) return () => {};
+  const host = canvas.closest<HTMLElement>("[data-signal-host]") ?? canvas.parentElement ?? canvas;
+  const status = host.querySelector("[data-field-status]");
+  const toggle = host.querySelector<HTMLButtonElement>("[data-field-toggle]");
+  const toggleLabel = host.querySelector("[data-field-toggle-label]");
+  const { ink, blocks, accents } = palettes[tone];
   const pointer = { x: -1000, y: -1000, active: false };
   let width = 0;
   let height = 0;
@@ -41,7 +47,7 @@ const setupField = (canvas) => {
   let paused = false;
   let visible = true;
 
-  const draw = (time, still = false) => {
+  const draw = (time: number, still = false) => {
     context.clearRect(0, 0, width, height);
     const phase = still ? 0 : time * 0.00035;
     const pointerRadius = Math.max(95, width * 0.085);
@@ -65,7 +71,9 @@ const setupField = (canvas) => {
         }
 
         context.fillStyle =
-          signal > 1.02 ? accents[Math.floor(noise(column + 60, row + 30) * 3)] : `rgba(${ink},${0.055 + signal * 0.34})`;
+          signal > 1.02
+            ? accents[Math.floor(noise(column + 60, row + 30) * 3)]
+            : `rgba(${ink},${0.055 + signal * 0.34})`;
 
         // With text, each row reads the text on a loop and scrolls sideways; otherwise random glyphs.
         const glyph = text
@@ -93,7 +101,7 @@ const setupField = (canvas) => {
     draw(0, true);
   };
 
-  const animate = (time) => {
+  const animate = (time: number) => {
     if (time - lastFrame > 42) {
       draw(time);
       lastFrame = time;
@@ -103,43 +111,53 @@ const setupField = (canvas) => {
 
   const updateMotion = () => {
     window.cancelAnimationFrame(animationFrame);
-    if (reducedMotion.matches || paused) {
+    if (prefersReducedMotion() || paused) {
       draw(lastFrame || 0, true);
     } else if (visible) {
       animationFrame = window.requestAnimationFrame(animate);
     }
   };
 
-  field.addEventListener("pointermove", (event) => {
+  const onPointerMove = (event: PointerEvent) => {
     const bounds = canvas.getBoundingClientRect();
     pointer.x = event.clientX - bounds.left;
     pointer.y = event.clientY - bounds.top;
     pointer.active = true;
-  });
-
-  field.addEventListener("pointerleave", () => {
+  };
+  const onPointerLeave = () => {
     pointer.active = false;
-  });
-
-  toggle?.addEventListener("click", () => {
+  };
+  const onToggle = () => {
     paused = !paused;
-    toggle.setAttribute("aria-pressed", String(paused));
+    toggle?.setAttribute("aria-pressed", String(paused));
     if (toggleLabel) toggleLabel.textContent = paused ? "Resume signal" : "Pause signal";
-    const icon = toggle.querySelector("[aria-hidden='true']");
+    const icon = toggle?.querySelector("[aria-hidden='true']");
     if (icon) icon.textContent = paused ? "[ > ]" : "[ II ]";
     updateMotion();
-  });
+  };
 
-  new ResizeObserver(resize).observe(canvas);
-  reducedMotion.addEventListener("change", updateMotion);
-  whenVisible(
-    field,
+  host.addEventListener("pointermove", onPointerMove);
+  host.addEventListener("pointerleave", onPointerLeave);
+  toggle?.addEventListener("click", onToggle);
+  const resizeObserver = new ResizeObserver(resize);
+  resizeObserver.observe(canvas);
+  const stopReducedMotion = onReducedMotionChange(updateMotion);
+  const stopVisibility = observeVisibility(
+    host,
     (isVisible) => {
       visible = isVisible;
       updateMotion();
     },
     0,
   );
-};
 
-document.querySelectorAll("[data-signal-field]").forEach(setupField);
+  return () => {
+    window.cancelAnimationFrame(animationFrame);
+    host.removeEventListener("pointermove", onPointerMove);
+    host.removeEventListener("pointerleave", onPointerLeave);
+    toggle?.removeEventListener("click", onToggle);
+    resizeObserver.disconnect();
+    stopReducedMotion();
+    stopVisibility();
+  };
+};

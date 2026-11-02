@@ -6,13 +6,7 @@ import Frame from "../components/layout/Frame.astro";
 import FrameRow from "../components/layout/FrameRow.astro";
 import SiteFooter from "../components/sections/SiteFooter.astro";
 import SiteHeader from "../components/sections/SiteHeader.astro";
-import AsciiVisual from "../components/ui/AsciiVisual.astro";
-import Button from "../components/ui/Button.astro";
-import Heading from "../components/ui/Heading.astro";
-import PixelDoor from "../components/ui/PixelDoor.astro";
-import SignalField from "../components/ui/SignalField.astro";
-import SkillGrid from "../components/ui/SkillGrid.astro";
-import Tile from "../components/ui/Tile.astro";
+import { AsciiVisual, Button, Heading, PixelDoor, SignalField, SkillGrid, Tile } from "../components/ui";
 import tokens from "../data/tokens.json";
 
 const byPrefix = (...path) => tokens.filter((token) => path.every((part, index) => token.path[index] === part));
@@ -52,14 +46,26 @@ const sections = [
       <FrameRow divider="none">
         <div class="intro">
           <p class="text-label-l">Design system / v1</p>
-          <Heading as="h1" id="system-title" size="display-2" measure={11}>The system behind this site.</Heading>
+          <Heading
+            client:load
+            as="h1"
+            id="system-title"
+            size="display-2"
+            measure={11}
+            text="The system behind this site."
+          />
           <p class="intro-lead">
             Every colour, size and motion on the portfolio comes from one set of tokens, and every block is a component
             with named variants. This page is built from those same components, so it can't drift from the site.
           </p>
           <nav class="toc text-label-m" aria-label="On this page">
-            {sections.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}
+            {sections.map(([id, label]) => (
+              <a href={`#${id}`}>{label}</a>
+            ))}
           </nav>
+          <div class="intro-actions">
+            <Button href="/storybook/">Open Storybook</Button>
+          </div>
         </div>
       </FrameRow>
 
@@ -71,10 +77,26 @@ const sections = [
       >
         <FrameRow>
           <ol class="pipeline">
-            <li><span class="text-label-s">Source</span><strong>tokens/*.tokens.json</strong><small>W3C DTCG format</small></li>
-            <li><span class="text-label-s">Build</span><strong>Style Dictionary</strong><small>npm run tokens</small></li>
-            <li><span class="text-label-s">Code</span><strong>src/styles/tokens.css</strong><small>CSS custom properties</small></li>
-            <li><span class="text-label-s">Design</span><strong>Figma Variables</strong><small>same source, next step</small></li>
+            <li>
+              <span class="text-label-s">Source</span>
+              <strong>tokens/*.tokens.json</strong>
+              <small>W3C DTCG format</small>
+            </li>
+            <li>
+              <span class="text-label-s">Build</span>
+              <strong>Style Dictionary</strong>
+              <small>npm run tokens</small>
+            </li>
+            <li>
+              <span class="text-label-s">Code</span>
+              <strong>src/styles/tokens.css</strong>
+              <small>CSS custom properties</small>
+            </li>
+            <li>
+              <span class="text-label-s">Design</span>
+              <strong>Figma Variables</strong>
+              <small>same source, next step</small>
+            </li>
           </ol>
         </FrameRow>
       </DocSection>
@@ -82,34 +104,30 @@ const sections = [
       <DocSection id="color" label="02 / Colour" title="Ink, paper, one accent and warm light.">
         <FrameRow>
           <div class="swatches">
-            {
-              primitiveColors.map((token) => (
-                <div class="swatch">
-                  <span class="swatch-chip" style={`background: var(${cssVar(token)})`} />
-                  <span class="text-label-s">{token.path.slice(1).join("-")}</span>
-                  <code>{token.value}</code>
-                </div>
-              ))
-            }
+            {primitiveColors.map((token) => (
+              <div class="swatch">
+                <span class="swatch-chip" style={`background: var(${cssVar(token)})`} />
+                <span class="text-label-s">{token.path.slice(1).join("-")}</span>
+                <code>{token.value}</code>
+              </div>
+            ))}
           </div>
         </FrameRow>
-        {
-          semanticColorGroups.map(({ group, tokens: groupTokens }) => (
-            <FrameRow>
-              <div class="token-table">
-                <p class="text-label-m token-group">{group}</p>
-                {groupTokens.map((token) => (
-                  <div class="token-line">
-                    <span class="token-preview" style={`background: var(${cssVar(token)})`} />
-                    <code>{cssVar(token)}</code>
-                    <span class="token-ref">{token.reference ?? token.value}</span>
-                    <span class="token-note">{token.description}</span>
-                  </div>
-                ))}
-              </div>
-            </FrameRow>
-          ))
-        }
+        {semanticColorGroups.map(({ group, tokens: groupTokens }) => (
+          <FrameRow>
+            <div class="token-table">
+              <p class="text-label-m token-group">{group}</p>
+              {groupTokens.map((token) => (
+                <div class="token-line">
+                  <span class="token-preview" style={`background: var(${cssVar(token)})`} />
+                  <code>{cssVar(token)}</code>
+                  <span class="token-ref">{token.reference ?? token.value}</span>
+                  <span class="token-note">{token.description}</span>
+                </div>
+              ))}
+            </div>
+          </FrameRow>
+        ))}
       </DocSection>
 
       <DocSection
@@ -118,28 +136,26 @@ const sections = [
         title="Urbanist for voice, mono for labels, pixels for play."
         intro="Fluid sizes scale with the viewport between a floor and a ceiling. Headings pick a size by role, not by tag."
       >
-        {
-          typeScale.map((token) => (
-            <FrameRow>
-              <div class="type-row">
-                <div class="type-meta">
-                  <code>{cssVar(token)}</code>
-                  <span class="token-note">{token.description ?? token.value}</span>
-                </div>
-                <p
-                  class:list={["type-sample", { "text-label-l": token.path[2].startsWith("label") }]}
-                  style={`font-size: var(${cssVar(token)})`}
-                >
-                  {token.path[2].startsWith("label")
-                    ? "Capability / 01"
-                    : token.path[2].startsWith("display")
-                      ? "Calm systems"
-                      : "Calm interfaces for complex systems"}
-                </p>
+        {typeScale.map((token) => (
+          <FrameRow>
+            <div class="type-row">
+              <div class="type-meta">
+                <code>{cssVar(token)}</code>
+                <span class="token-note">{token.description ?? token.value}</span>
               </div>
-            </FrameRow>
-          ))
-        }
+              <p
+                class:list={["type-sample", { "text-label-l": token.path[2].startsWith("label") }]}
+                style={`font-size: var(${cssVar(token)})`}
+              >
+                {token.path[2].startsWith("label")
+                  ? "Capability / 01"
+                  : token.path[2].startsWith("display")
+                    ? "Calm systems"
+                    : "Calm interfaces for complex systems"}
+              </p>
+            </div>
+          </FrameRow>
+        ))}
         <FrameRow>
           <div class="token-table token-table--split">
             <div>
@@ -172,25 +188,21 @@ const sections = [
       >
         <FrameRow>
           <div class="token-table">
-            {
-              spacing.map((token) => (
-                <div class="token-line token-line--space">
-                  <span class="space-bar" style={`width: var(${cssVar(token)})`} />
-                  <code>{cssVar(token)}</code>
-                  <span class="token-ref">{token.value}</span>
-                  <span class="token-note">{token.description}</span>
-                </div>
-              ))
-            }
-            {
-              layout.map((token) => (
-                <div class="token-line token-line--plain">
-                  <code>{cssVar(token)}</code>
-                  <span class="token-ref">{token.value}</span>
-                  <span class="token-note">{token.description}</span>
-                </div>
-              ))
-            }
+            {spacing.map((token) => (
+              <div class="token-line token-line--space">
+                <span class="space-bar" style={`width: var(${cssVar(token)})`} />
+                <code>{cssVar(token)}</code>
+                <span class="token-ref">{token.value}</span>
+                <span class="token-note">{token.description}</span>
+              </div>
+            ))}
+            {layout.map((token) => (
+              <div class="token-line token-line--plain">
+                <code>{cssVar(token)}</code>
+                <span class="token-ref">{token.value}</span>
+                <span class="token-note">{token.description}</span>
+              </div>
+            ))}
           </div>
         </FrameRow>
       </DocSection>
@@ -203,15 +215,13 @@ const sections = [
       >
         <FrameRow>
           <div class="token-table">
-            {
-              [...durations, ...easings].map((token) => (
-                <div class="token-line token-line--plain">
-                  <code>{cssVar(token)}</code>
-                  <span class="token-ref">{token.reference ?? token.value}</span>
-                  <span class="token-note">{token.value}</span>
-                </div>
-              ))
-            }
+            {[...durations, ...easings].map((token) => (
+              <div class="token-line token-line--plain">
+                <code>{cssVar(token)}</code>
+                <span class="token-ref">{token.reference ?? token.value}</span>
+                <span class="token-note">{token.value}</span>
+              </div>
+            ))}
           </div>
         </FrameRow>
       </DocSection>
@@ -220,102 +230,168 @@ const sections = [
         id="components"
         label="06 / Components"
         title="Every block, with its variants and states."
-        intro="Components live in src/components/ui (building blocks), layout (Frame, FrameRow, RuledSection) and sections (page-level compositions such as CapabilityBlock)."
+        intro="Building blocks are React + TypeScript components in src/components/ui, each with its CSS module, Storybook story and tests. Astro composes them into pages: layout (Frame, FrameRow, RuledSection) and sections (CapabilityBlock and friends). Interactive blocks hydrate only when they scroll into view."
       >
         <Specimen
           name="Button"
-          file="ui/Button.astro"
+          file="ui/Button/Button.tsx"
           usage={`<Button href="/Cases/timeflow.html">See it in Timeflow</Button>\n<Button href="mailto:…" variant="dark" size="s">Get in touch</Button>\n<Button href="https://…" variant="text" external>Open live product</Button>`}
         >
           <ul slot="notes">
-            <li><code>variant</code>: light (on dark), dark (on light), text</li>
-            <li><code>size</code>: m, s</li>
-            <li><code>icon</code>: ↗ (default), ↓, or none</li>
+            <li>
+              <code>variant</code>: light (on dark), dark (on light), text
+            </li>
+            <li>
+              <code>size</code>: m, s
+            </li>
+            <li>
+              <code>icon</code>: ↗ (default), ↓, or none
+            </li>
             <li>Hover inverts the fill.</li>
           </ul>
           <Button href="#components">Light, m</Button>
-          <Button href="#components" variant="text">Text link</Button>
+          <Button href="#components" variant="text">
+            Text link
+          </Button>
         </Specimen>
-        <Specimen name="Button on light" file="ui/Button.astro" surface="light">
+        <Specimen name="Button on light" file="ui/Button/Button.tsx" surface="light">
           <p slot="notes">The dark variant is for inverse bands such as the contact section.</p>
-          <Button href="#components" variant="dark" size="s">Dark, s</Button>
-          <Button href="#components" variant="dark" icon="↓">Download CV</Button>
+          <Button href="#components" variant="dark" size="s">
+            Dark, s
+          </Button>
+          <Button href="#components" variant="dark" icon="↓">
+            Download CV
+          </Button>
         </Specimen>
 
         <Specimen
           name="Heading"
-          file="ui/Heading.astro"
-          usage={`<Heading as="h3" size="display-4" measure={16}>Design Systems</Heading>`}
+          file="ui/Heading/Heading.tsx"
+          usage={`<Heading as="h3" size="display-4" measure={16} text="Design Systems" />`}
         >
           <ul slot="notes">
-            <li><code>as</code>: h1–h4, for the outline</li>
-            <li><code>size</code>: display-1 to display-4, heading-1</li>
-            <li><code>tone</code>: default, inverse</li>
-            <li><code>pixel</code>: on by default; a few letters swap into Pixelify Sans, settle in on first view, then flicker now and then</li>
+            <li>
+              <code>as</code>: h1–h4, for the outline
+            </li>
+            <li>
+              <code>size</code>: display-1 to display-4, heading-1
+            </li>
+            <li>
+              <code>tone</code>: default, inverse
+            </li>
+            <li>
+              <code>pixel</code>: on by default; a few letters swap into Pixelify Sans, settle in on first view, then
+              flicker now and then
+            </li>
           </ul>
-          <Heading as="h4" size="display-4">Pixel on</Heading>
-          <Heading as="h4" size="display-4" pixel={false}>Pixel off</Heading>
+          <Heading client:visible as="h4" size="display-4" text="Pixel on" />
+          <Heading as="h4" size="display-4" pixel={false} text="Pixel off" />
         </Specimen>
 
-        <Specimen name="Tile" file="ui/Tile.astro" usage={`<Tile slot="gutter" label="01" />`}>
+        <Specimen name="Tile" file="ui/Tile/Tile.tsx" usage={`<Tile label="01" />`}>
           <p slot="notes">Chapter marker for the frame gutter. Fills the gutter width, same footprint as PixelDoor.</p>
-          <div class="gutter-demo"><Tile label="01" /></div>
-          <div class="gutter-demo"><Tile label="02" /></div>
+          <div class="gutter-demo">
+            <Tile label="01" inset={false} />
+          </div>
+          <div class="gutter-demo">
+            <Tile label="02" inset={false} />
+          </div>
         </Specimen>
 
         <Specimen
           name="PixelDoor"
-          file="ui/PixelDoor.astro"
-          usage={`<PixelDoor slot="gutter" character="/assets/pixel-cat.jpg" offset />`}
+          file="ui/PixelDoor/PixelDoor.tsx"
+          usage={`<PixelDoor client:visible character="/assets/pixel-cat.jpg" offset />`}
         >
           <ul slot="notes">
             <li>States: closed, peek (hover, or flapping while the page scrolls), open (click)</li>
             <li>Ajar doors leak warm light: in the gap, a faint beam to the side, a sliver below</li>
-            <li><code>offset</code>: flap half a beat later than neighbours</li>
-            <li><code>still</code>: ignore scrolling; <code>state</code>: force a state for docs</li>
+            <li>
+              <code>offset</code>: flap half a beat later than neighbours
+            </li>
+            <li>
+              <code>still</code>: ignore scrolling; <code>initialState</code>: start closed, peek or open
+            </li>
           </ul>
           <figure class="door-demo">
-            <div class="gutter-demo"><PixelDoor character="/assets/pixel-cat.jpg" still /></div>
+            <div class="gutter-demo">
+              <PixelDoor client:visible character="/assets/pixel-cat.jpg" still inset={false} />
+            </div>
             <figcaption class="text-label-s">Closed</figcaption>
           </figure>
           <figure class="door-demo">
-            <div class="gutter-demo"><PixelDoor character="/assets/pixel-waffle.jpg" still state="peek" /></div>
+            <div class="gutter-demo">
+              <PixelDoor client:visible character="/assets/pixel-waffle.jpg" still initialState="peek" inset={false} />
+            </div>
             <figcaption class="text-label-s">Peek</figcaption>
           </figure>
           <figure class="door-demo">
-            <div class="gutter-demo"><PixelDoor character="/assets/pixel-beet.jpg?v=2" still state="open" /></div>
+            <div class="gutter-demo">
+              <PixelDoor
+                client:visible
+                character="/assets/pixel-beet.jpg?v=2"
+                still
+                initialState="open"
+                inset={false}
+              />
+            </div>
             <figcaption class="text-label-s">Open</figcaption>
           </figure>
         </Specimen>
 
         <Specimen
           name="AsciiVisual"
-          file="ui/AsciiVisual.astro"
+          file="ui/AsciiVisual/AsciiVisual.tsx"
           usage={`<AsciiVisual src="/assets/bookit-floorplan.jpg" focus="0.6 0.55" caption="BookIT / Floorplan editor" />`}
         >
           <ul slot="notes">
-            <li>Redraws a screenshot as a coloured glyph mosaic; light UI is inverted so ink and colour carry the shape</li>
+            <li>
+              Redraws a screenshot as a coloured glyph mosaic; light UI is inverted so ink and colour carry the shape
+            </li>
             <li>Resolves from noise on first view; glyphs scramble under the pointer</li>
-            <li><code>focus</code>: which part to keep when cropping</li>
+            <li>
+              <code>focus</code>: which part to keep when cropping
+            </li>
           </ul>
           <div class="visual-demo">
-            <AsciiVisual src="/assets/bookit-floorplan.jpg" focus="0.6 0.55" caption="BookIT / Floorplan editor" />
+            <AsciiVisual
+              client:visible
+              src="/assets/bookit-floorplan.jpg"
+              focus="0.6 0.55"
+              caption="BookIT / Floorplan editor"
+            />
           </div>
         </Specimen>
 
-        <Specimen name="SignalField" file="ui/SignalField.astro" usage={`<SignalField tone="light" text="TetianaDovgalenko" />`}>
+        <Specimen
+          name="SignalField"
+          file="ui/SignalField/SignalField.tsx"
+          usage={`<SignalField tone="light" text="TetianaDovgalenko" />`}
+        >
           <ul slot="notes">
-            <li><code>tone</code>: dark (light glyphs, hero) or light (dark glyphs, contact band)</li>
-            <li><code>text</code>: run a word on a loop instead of random glyphs</li>
-            <li><code>fade</code>, <code>top</code>, <code>opacity</code> for placement</li>
+            <li>
+              <code>tone</code>: dark (light glyphs, hero) or light (dark glyphs, contact band)
+            </li>
+            <li>
+              <code>text</code>: run a word on a loop instead of random glyphs
+            </li>
+            <li>
+              <code>fade</code>, <code>top</code>, <code>opacity</code> for placement
+            </li>
           </ul>
-          <div class="field-demo" data-signal-host><SignalField /></div>
+          <div class="field-demo" data-signal-host>
+            <SignalField client:visible />
+          </div>
           <div class="field-demo field-demo--light" data-signal-host>
-            <SignalField tone="light" text="TetianaDovgalenko" opacity={0.65} />
+            <SignalField client:visible tone="light" text="TetianaDovgalenko" opacity={0.65} />
           </div>
         </Specimen>
 
-        <Specimen name="SkillGrid" file="ui/SkillGrid.astro" usage={`<SkillGrid items={["Domain modelling", "Information architecture", …]} />`}>
+        <Specimen
+          name="SkillGrid"
+          file="ui/SkillGrid/SkillGrid.tsx"
+          usage={`<SkillGrid items={["Domain modelling", "Information architecture", …]} />`}
+        >
           <p slot="notes">Three columns, two at medium width, a list on narrow screens. Cells invert on hover.</p>
           <div class="grid-demo">
             <SkillGrid items={["Domain modelling", "Information architecture", "Role-based workflows"]} />
@@ -326,11 +402,32 @@ const sections = [
           <div class="patterns">
             <p class="text-label-m token-group">Layout & patterns</p>
             <dl>
-              <div><dt>Frame + FrameRow</dt><dd>The bordered container with gutter columns. Rows take a <code>gutter</code> slot and a <code>divider</code> (top, none, both).</dd></div>
-              <div><dt>RuledSection</dt><dd>Editorial section with an index line, used by Working method and About.</dd></div>
-              <div><dt>CapabilityChapter</dt><dd>Tile + chapter title + intro; groups capability blocks.</dd></div>
-              <div><dt>CapabilityBlock</dt><dd>Door + title + statement, copy with proof Button, AsciiVisual, SkillGrid. Content comes from <code>src/data/capabilities.js</code>; <code>flip</code> alternates.</dd></div>
-              <div><dt>ContactBand</dt><dd>Inverse band with a light SignalField, heading-1 and a dark Button.</dd></div>
+              <div>
+                <dt>Frame + FrameRow</dt>
+                <dd>
+                  The bordered container with gutter columns. Rows take a <code>gutter</code> slot and a{" "}
+                  <code>divider</code> (top, none, both).
+                </dd>
+              </div>
+              <div>
+                <dt>RuledSection</dt>
+                <dd>Editorial section with an index line, used by Working method and About.</dd>
+              </div>
+              <div>
+                <dt>CapabilityChapter</dt>
+                <dd>Tile + chapter title + intro; groups capability blocks.</dd>
+              </div>
+              <div>
+                <dt>CapabilityBlock</dt>
+                <dd>
+                  Door + title + statement, copy with proof Button, AsciiVisual, SkillGrid. Content comes from{" "}
+                  <code>src/data/capabilities.js</code>; <code>flip</code> alternates.
+                </dd>
+              </div>
+              <div>
+                <dt>ContactBand</dt>
+                <dd>Inverse band with a light SignalField, heading-1 and a dark Button.</dd>
+              </div>
             </dl>
           </div>
         </FrameRow>
@@ -362,6 +459,10 @@ const sections = [
     color: var(--color-text-secondary);
     font-size: var(--font-size-body-l);
     line-height: var(--font-line-height-relaxed);
+  }
+
+  .intro-actions {
+    margin-top: var(--space-2xl);
   }
 
   .toc {
@@ -513,11 +614,6 @@ const sections = [
 
   .gutter-demo {
     width: 6.5rem;
-  }
-
-  .gutter-demo :global(.tile),
-  .gutter-demo :global(.door) {
-    margin-top: 0;
   }
 
   .door-demo {

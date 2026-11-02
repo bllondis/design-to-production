@@ -7,22 +7,20 @@ import { footerColumns, person } from "../../data/site.js";
 <Frame as="footer" tone="footer" closed>
   <FrameRow divider="none">
     <nav class="columns" aria-label="Footer">
-      {
-        footerColumns.map((column) => (
-          <div>
-            <p>{column.title}</p>
-            <ul>
-              {column.links.map((link) => (
-                <li>
-                  <a href={link.href} {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
-      }
+      {footerColumns.map((column) => (
+        <div>
+          <p>{column.title}</p>
+          <ul>
+            {column.links.map((link) => (
+              <li>
+                <a href={link.href} {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </nav>
   </FrameRow>
   <FrameRow>

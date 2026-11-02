@@ -36,9 +36,10 @@ dictionary.registerFormat({
         path: token.path,
         type: token.$type,
         value: token.$value,
-        reference: typeof token.original.$value === "string" && token.original.$value.startsWith("{")
-          ? token.original.$value.slice(1, -1)
-          : null,
+        reference:
+          typeof token.original.$value === "string" && token.original.$value.startsWith("{")
+            ? token.original.$value.slice(1, -1)
+            : null,
         description: token.$description ?? null,
         tier: token.filePath.includes("primitives") ? "primitive" : "semantic",
       })),

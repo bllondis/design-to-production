@@ -1,0 +1,11 @@
+dist/
+storybook-static/
+legacy/
+public/
+.astro/
+package-lock.json
+src/styles/tokens.css
+src/data/tokens.json
+build-docustream.mjs
+tools/
+.claude/

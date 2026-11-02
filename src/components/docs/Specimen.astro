@@ -26,7 +26,7 @@ const { name, file, usage, surface = "dark" } = Astro.props;
       <slot />
     </div>
   </div>
-  {usage && <pre class="specimen-code"><code>{usage}</code></pre>}
+  {usage && <pre class="specimen-code" tabindex="0" aria-label={`${name} usage`}><code>{usage}</code></pre>}
 </FrameRow>
 
 <style>

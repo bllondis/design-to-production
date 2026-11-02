@@ -20,21 +20,19 @@ import { chapters } from "../data/capabilities.js";
   <main id="main">
     <Hero />
     <Frame id="work" aria-label="Capabilities">
-      {
-        chapters.map((chapter, chapterIndex) => (
-          <CapabilityChapter
-            id={chapter.id}
-            number={chapter.number}
-            title={chapter.title}
-            intro={chapter.intro}
-            first={chapterIndex === 0}
-          >
-            {chapter.blocks.map((block, blockIndex) => (
-              <CapabilityBlock {...block} flip={blockIndex % 2 === 1} />
-            ))}
-          </CapabilityChapter>
-        ))
-      }
+      {chapters.map((chapter, chapterIndex) => (
+        <CapabilityChapter
+          id={chapter.id}
+          number={chapter.number}
+          title={chapter.title}
+          intro={chapter.intro}
+          first={chapterIndex === 0}
+        >
+          {chapter.blocks.map((block, blockIndex) => (
+            <CapabilityBlock {...block} flip={blockIndex % 2 === 1} />
+          ))}
+        </CapabilityChapter>
+      ))}
     </Frame>
     <MethodSection />
     <AboutSection />

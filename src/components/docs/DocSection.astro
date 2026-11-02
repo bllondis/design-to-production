@@ -3,7 +3,7 @@
  * DocSection: a titled chapter of the /system docs, built from the same Frame rows as the site.
  */
 import FrameRow from "../layout/FrameRow.astro";
-import Heading from "../ui/Heading.astro";
+import { Heading } from "../ui";
 
 interface Props {
   id: string;
@@ -19,7 +19,7 @@ const { id, label, title, intro } = Astro.props;
   <FrameRow as="header">
     <div class="doc-head">
       <p class="text-label-l">{label}</p>
-      <Heading id={`${id}-title`} size="display-4" measure={18}>{title}</Heading>
+      <Heading client:visible id={`${id}-title`} size="display-4" measure={18} text={title} />
       {intro && <p class="doc-intro">{intro}</p>}
     </div>
   </FrameRow>

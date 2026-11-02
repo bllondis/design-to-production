@@ -15,8 +15,12 @@ const { divider = "top", as: Tag = "div" } = Astro.props;
 ---
 
 <Tag class:list={["row", `row--${divider}`]}>
-  <div class="row-gutter"><slot name="gutter" /></div>
-  <div class="row-main"><slot /></div>
+  <div class="row-gutter">
+    <slot name="gutter" />
+  </div>
+  <div class="row-main">
+    <slot />
+  </div>
 </Tag>
 
 <style>

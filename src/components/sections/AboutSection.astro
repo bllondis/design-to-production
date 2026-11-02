@@ -1,15 +1,19 @@
 ---
 import RuledSection from "../layout/RuledSection.astro";
-import Heading from "../ui/Heading.astro";
+import { Heading } from "../ui";
 
 const practice = ["Photography", "Fashion", "Costume", "Visual direction"];
 ---
 
 <RuledSection label="About" note="The Hague / NL" id="about" aria-labelledby="about-title">
   <div class="about-grid">
-    <Heading id="about-title" size="display-3" pixel={false} measure={10.5}>
-      Product logic, interaction design, and implementation belong in the same conversation.
-    </Heading>
+    <Heading
+      id="about-title"
+      size="display-3"
+      pixel={false}
+      measure={10.5}
+      text="Product logic, interaction design, and implementation belong in the same conversation."
+    />
     <div class="about-copy">
       <p>
         I am a Product Designer and Design Engineer focused on complex enterprise systems. I work between product logic,
@@ -24,7 +28,9 @@ const practice = ["Photography", "Fashion", "Costume", "Visual direction"];
   <div class="practice" aria-label="Beyond product, visual practice">
     <p class="text-label-m">Beyond product / Visual practice</p>
     <ul>
-      {practice.map((item) => <li>{item}</li>)}
+      {practice.map((item) => (
+        <li>{item}</li>
+      ))}
     </ul>
   </div>
 </RuledSection>

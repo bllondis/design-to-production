@@ -1,0 +1,14 @@
+.tile {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 1;
+  place-items: center;
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  font: var(--font-weight-regular) clamp(1.6rem, 3.4vw, 3.4rem) / 1 var(--font-family-pixel);
+  letter-spacing: -0.02em;
+}
+
+.inset {
+  margin-top: var(--space-inset);
+}

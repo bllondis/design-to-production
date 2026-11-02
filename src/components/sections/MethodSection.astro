@@ -1,6 +1,6 @@
 ---
 import RuledSection from "../layout/RuledSection.astro";
-import Heading from "../ui/Heading.astro";
+import { Heading } from "../ui";
 
 const steps = [
   ["Understand", "Domain, rules, constraints"],
@@ -14,21 +14,23 @@ const steps = [
 
 <RuledSection label="Working method" note="System to interface" aria-labelledby="method-title">
   <div class="method-heading">
-    <Heading id="method-title" size="display-3" pixel={false} measure={10}>
-      Make the model clear before making the screen polished.
-    </Heading>
+    <Heading
+      id="method-title"
+      size="display-3"
+      pixel={false}
+      measure={10}
+      text="Make the model clear before making the screen polished."
+    />
     <p>One continuous loop from understanding the domain to validating the behaviour in product.</p>
   </div>
   <ol class="method-list">
-    {
-      steps.map(([step, detail], index) => (
-        <li>
-          <span class="text-label-m">{String(index + 1).padStart(2, "0")}</span>
-          <strong>{step}</strong>
-          <small class="text-label-m">{detail}</small>
-        </li>
-      ))
-    }
+    {steps.map(([step, detail], index) => (
+      <li>
+        <span class="text-label-m">{String(index + 1).padStart(2, "0")}</span>
+        <strong>{step}</strong>
+        <small class="text-label-m">{detail}</small>
+      </li>
+    ))}
   </ol>
 </RuledSection>
 

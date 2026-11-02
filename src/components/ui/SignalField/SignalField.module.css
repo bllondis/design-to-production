@@ -1,0 +1,13 @@
+.field {
+  position: absolute;
+  inset: var(--field-top) 0 0;
+  z-index: -2;
+  width: 100%;
+  height: calc(100% - var(--field-top));
+  opacity: var(--field-opacity);
+}
+
+.fade {
+  -webkit-mask-image: linear-gradient(to bottom, black 0 76%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0 76%, transparent 100%);
+}

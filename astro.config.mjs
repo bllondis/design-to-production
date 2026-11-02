@@ -1,3 +1,4 @@
+import react from "@astrojs/react";
 import { defineConfig } from "astro/config";
 
 // The host serves dist/client as static assets and dist/server/index.js as the worker
@@ -5,5 +6,6 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   site: "https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site",
   outDir: "./dist/client",
+  integrations: [react()],
   devToolbar: { enabled: false },
 });

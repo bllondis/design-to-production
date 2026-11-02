@@ -1,0 +1,41 @@
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { Button } from "./Button";
+
+describe("Button", () => {
+  it("renders a link with the label and an onward arrow hidden from assistive tech", () => {
+    render(<Button href="/cases">See it in Timeflow</Button>);
+    const link = screen.getByRole("link", { name: "See it in Timeflow" });
+    expect(link).toHaveAttribute("href", "/cases");
+    expect(link.querySelector("[aria-hidden='true']")).toHaveTextContent("↗");
+  });
+
+  it("applies variant and size classes", () => {
+    render(
+      <Button href="#" variant="dark" size="s">
+        Get in touch
+      </Button>,
+    );
+    expect(screen.getByRole("link")).toHaveClass("button", "dark", "s");
+  });
+
+  it("opens external links in a new tab safely", () => {
+    render(
+      <Button href="https://example.com" external>
+        Live product
+      </Button>,
+    );
+    const link = screen.getByRole("link");
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("drops the icon when asked", () => {
+    render(
+      <Button href="#" icon="">
+        Plain
+      </Button>,
+    );
+    expect(screen.getByRole("link").querySelector("[aria-hidden='true']")).toBeNull();
+  });
+});

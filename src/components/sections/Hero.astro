@@ -1,12 +1,11 @@
 ---
-import Heading from "../ui/Heading.astro";
-import SignalField from "../ui/SignalField.astro";
+import { Heading, SignalField } from "../ui";
 
 const areas = ["Product design", "Design engineering", "Enterprise", "AI", "Design systems"];
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-title" data-signal-host>
-  <SignalField top="var(--layout-header-height)" fade opacity={0.98} />
+  <SignalField client:load top="var(--layout-header-height)" fade opacity={0.98} />
   <div class="hero-grid" aria-hidden="true"></div>
   <div class="hero-legend text-label-s" aria-hidden="true">
     <span>FIELD / 01</span>
@@ -19,14 +18,22 @@ const areas = ["Product design", "Design engineering", "Enterprise", "AI", "Desi
   </button>
   <div class="hero-card">
     <p class="hero-kicker text-label-m">Product Designer / Design Engineer</p>
-    <Heading as="h1" id="hero-title" size="display-1" tone="inverse" pixel={false} measure={8.8}>
-      I design calm interfaces for complex systems.
-    </Heading>
+    <Heading
+      as="h1"
+      id="hero-title"
+      size="display-1"
+      tone="inverse"
+      pixel={false}
+      measure={8.8}
+      text="I design calm interfaces for complex systems."
+    />
   </div>
   <div class="hero-footer">
     <p>Working across complex B2B software, AI-assisted products, and design systems.</p>
     <ul class="hero-areas text-label-s" aria-label="Areas of expertise">
-      {areas.map((area) => <li>{area}</li>)}
+      {areas.map((area) => (
+        <li>{area}</li>
+      ))}
     </ul>
   </div>
 </section>

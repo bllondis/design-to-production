@@ -5,7 +5,10 @@
     "surface": {
       "page": { "$value": "{color.ink.950}", "$description": "Default dark page and section background." },
       "raised": { "$value": "{color.ink.900}" },
-      "inverse": { "$value": "{color.paper.50}", "$description": "Light bands: hero card, contact band, hovered skill." },
+      "inverse": {
+        "$value": "{color.paper.50}",
+        "$description": "Light bands: hero card, contact band, hovered skill."
+      },
       "glow": { "$value": "{color.alpha.paper-8}", "$description": "Soft light in the top-left of copy panels." },
       "header": { "$value": "{color.alpha.ink-88}" },
       "footer-end": { "$value": "{color.ink.850}" },
@@ -99,7 +102,10 @@
     "2xl": { "$value": "3rem" },
     "3xl": { "$value": "4rem" },
     "inset": { "$value": "clamp(2.5rem, 5vw, 4.5rem)", "$description": "Padding inside framed cells." },
-    "inset-inline": { "$value": "clamp(1.5rem, 4.5vw, 4.5rem)", "$description": "Horizontal padding for full-width rows." },
+    "inset-inline": {
+      "$value": "clamp(1.5rem, 4.5vw, 4.5rem)",
+      "$description": "Horizontal padding for full-width rows."
+    },
     "section": { "$value": "clamp(4rem, 9vw, 9rem)", "$description": "Empty band between framed blocks." },
     "page": { "$value": "clamp(1rem, 2vw, 2rem)", "$description": "Gap between the frame and the viewport edge." }
   },

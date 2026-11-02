@@ -3,3 +3,6 @@ dist/
 *.tar.gz
 node_modules/
 .astro/
+storybook-static/
+test-results/
+playwright-report/

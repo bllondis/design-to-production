@@ -1,9 +1,7 @@
 ---
 import Frame from "../layout/Frame.astro";
 import FrameRow from "../layout/FrameRow.astro";
-import Button from "../ui/Button.astro";
-import Heading from "../ui/Heading.astro";
-import SignalField from "../ui/SignalField.astro";
+import { Button, Heading, SignalField } from "../ui";
 import { person } from "../../data/site.js";
 ---
 
@@ -11,17 +9,24 @@ import { person } from "../../data/site.js";
   <div class="closing">
     <FrameRow divider="both">
       <div class="band" data-signal-host>
-        <SignalField tone="light" text={person.name.replace(" ", "")} opacity={0.65} />
-        <Heading id="contact-title" size="heading-1" tone="inverse" measure={14}>
-          Have a complex system that needs to feel simple?
-        </Heading>
+        <SignalField client:visible tone="light" text={person.name.replace(" ", "")} opacity={0.65} />
+        <Heading
+          client:visible
+          id="contact-title"
+          size="heading-1"
+          tone="inverse"
+          measure={14}
+          text="Have a complex system that needs to feel simple?"
+        />
         <div class="band-side">
           <p>
             I work between product logic, interaction design, and implementation for complex B2B software, AI-assisted
             products, and design systems.
           </p>
           <div class="band-action">
-            <Button href={`mailto:${person.email}`} variant="dark" size="s">Get in touch</Button>
+            <Button href={`mailto:${person.email}`} variant="dark" size="s">
+              Get in touch
+            </Button>
           </div>
         </div>
       </div>

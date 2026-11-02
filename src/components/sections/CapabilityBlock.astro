@@ -6,11 +6,7 @@
  * flip  put the visual on the left; the home page alternates this so blocks zig-zag
  */
 import FrameRow from "../layout/FrameRow.astro";
-import AsciiVisual from "../ui/AsciiVisual.astro";
-import Button from "../ui/Button.astro";
-import Heading from "../ui/Heading.astro";
-import PixelDoor from "../ui/PixelDoor.astro";
-import SkillGrid from "../ui/SkillGrid.astro";
+import { AsciiVisual, Button, Heading, PixelDoor, SkillGrid } from "../ui";
 
 interface Props {
   id: string;
@@ -32,9 +28,11 @@ const titleId = `${id}-title`;
 
 <article class:list={["capability", { "capability--flip": flip }]} aria-labelledby={titleId}>
   <FrameRow as="header">
-    <PixelDoor slot="gutter" character={character} offset={flip} />
+    <div slot="gutter">
+      <PixelDoor client:visible character={character} offset={flip} />
+    </div>
     <div class="capability-head">
-      <Heading as="h3" id={titleId} size="display-4" measure={16}>{title}</Heading>
+      <Heading client:visible as="h3" id={titleId} size="display-4" measure={16} text={title} />
       <p class="capability-statement">{statement}</p>
     </div>
   </FrameRow>
@@ -45,19 +43,17 @@ const titleId = `${id}-title`;
         <div>
           <p class="capability-proof text-label-m">{proof}</p>
           <Button href={action.href}>{action.label}</Button>
-          {
-            secondary && (
-              <div class="capability-secondary">
-                <Button href={secondary.href} variant="text" external>
-                  {secondary.label}
-                </Button>
-              </div>
-            )
-          }
+          {secondary && (
+            <div class="capability-secondary">
+              <Button href={secondary.href} variant="text" external>
+                {secondary.label}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       <div class="capability-visual">
-        <AsciiVisual src={visual.src} focus={visual.focus} caption={visual.caption} />
+        <AsciiVisual client:visible src={visual.src} focus={visual.focus} caption={visual.caption} />
       </div>
     </div>
   </FrameRow>

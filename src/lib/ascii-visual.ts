@@ -1,15 +1,29 @@
-import { hash, monoFont, reducedMotion, whenVisible } from "./motion.js";
+import { hash, monoFont, observeVisibility, onReducedMotionChange, prefersReducedMotion } from "./motion";
 
-// Project screenshots rendered as a coloured glyph field. Light UI is inverted so ink and colour carry the shape.
+// Project screenshots redrawn as a coloured glyph field. Light UI is inverted so ink and colour carry the shape.
 const ramp = " .'`,:;~-_+<>i!lI?|/\\()1{}[]rcvunxzjftLCJUYXZO0Qoahkbdpqwm*#MW&8%B@$";
 
-const setupVisual = (canvas) => {
+interface Cell {
+  x: number;
+  y: number;
+  glyph: string;
+  index: number;
+  color: string;
+  faint: string;
+  block: string;
+  noise: number;
+}
+
+/** Samples `src` into the canvas, animates the reveal and pointer scramble, and returns a cleanup function. */
+export const startAsciiVisual = (canvas: HTMLCanvasElement, src: string, focus: [number, number]): (() => void) => {
   const context = canvas.getContext("2d");
   const sampler = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
+  if (!context || !sampler) return () => {};
+  const host = canvas.parentElement ?? canvas;
   const image = new Image();
-  const [focusX, focusY] = (canvas.dataset.asciiFocus || "0.5 0.5").split(" ").map(Number);
+  const [focusX, focusY] = focus;
   const pointer = { x: -1000, y: -1000, active: false };
-  let cells = [];
+  let cells: Cell[] = [];
   let width = 0;
   let height = 0;
   let cellWidth = 10;
@@ -19,8 +33,10 @@ const setupVisual = (canvas) => {
   let animationFrame = 0;
   let lastFrame = 0;
   let visible = false;
+  let resizeObserver: ResizeObserver | undefined;
+  let stopVisibility = () => {};
 
-  const draw = (time) => {
+  const draw = (time: number) => {
     context.clearRect(0, 0, width, height);
     const radius = Math.max(70, width * 0.12);
     for (const cell of cells) {
@@ -66,12 +82,20 @@ const setupVisual = (canvas) => {
     const scale = Math.max(width / image.naturalWidth, height / image.naturalHeight);
     const sourceWidth = width / scale;
     const sourceHeight = height / scale;
-    const sourceX = (image.naturalWidth - sourceWidth) * focusX;
-    const sourceY = (image.naturalHeight - sourceHeight) * focusY;
     sampler.canvas.width = columns;
     sampler.canvas.height = rows;
     sampler.imageSmoothingQuality = "high";
-    sampler.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, columns, rows);
+    sampler.drawImage(
+      image,
+      (image.naturalWidth - sourceWidth) * focusX,
+      (image.naturalHeight - sourceHeight) * focusY,
+      sourceWidth,
+      sourceHeight,
+      0,
+      0,
+      columns,
+      rows,
+    );
     const pixels = sampler.getImageData(0, 0, columns, rows).data;
 
     cells = [];
@@ -111,7 +135,7 @@ const setupVisual = (canvas) => {
     draw(performance.now());
   };
 
-  const animate = (time) => {
+  const animate = (time: number) => {
     if (!revealStart) revealStart = time;
     reveal = Math.min(1, (time - revealStart) / 1400);
     if (time - lastFrame > 70) {
@@ -123,7 +147,7 @@ const setupVisual = (canvas) => {
 
   const updateMotion = () => {
     window.cancelAnimationFrame(animationFrame);
-    if (reducedMotion.matches) {
+    if (prefersReducedMotion()) {
       reveal = 1;
       draw(0);
     } else if (visible) {
@@ -131,20 +155,19 @@ const setupVisual = (canvas) => {
     }
   };
 
-  canvas.parentElement.addEventListener("pointermove", (event) => {
+  const onPointerMove = (event: PointerEvent) => {
     const bounds = canvas.getBoundingClientRect();
     pointer.x = event.clientX - bounds.left;
     pointer.y = event.clientY - bounds.top;
     pointer.active = true;
-  });
-
-  canvas.parentElement.addEventListener("pointerleave", () => {
+  };
+  const onPointerLeave = () => {
     pointer.active = false;
-  });
-
-  image.addEventListener("load", () => {
-    new ResizeObserver(build).observe(canvas);
-    whenVisible(
+  };
+  const onLoad = () => {
+    resizeObserver = new ResizeObserver(build);
+    resizeObserver.observe(canvas);
+    stopVisibility = observeVisibility(
       canvas,
       (isVisible) => {
         visible = isVisible;
@@ -152,9 +175,21 @@ const setupVisual = (canvas) => {
       },
       0.05,
     );
-  });
-  image.src = canvas.dataset.ascii;
-  reducedMotion.addEventListener("change", updateMotion);
-};
+  };
 
-document.querySelectorAll("[data-ascii]").forEach(setupVisual);
+  host.addEventListener("pointermove", onPointerMove);
+  host.addEventListener("pointerleave", onPointerLeave);
+  image.addEventListener("load", onLoad);
+  image.src = src;
+  const stopReducedMotion = onReducedMotionChange(updateMotion);
+
+  return () => {
+    window.cancelAnimationFrame(animationFrame);
+    host.removeEventListener("pointermove", onPointerMove);
+    host.removeEventListener("pointerleave", onPointerLeave);
+    image.removeEventListener("load", onLoad);
+    resizeObserver?.disconnect();
+    stopVisibility();
+    stopReducedMotion();
+  };
+};
