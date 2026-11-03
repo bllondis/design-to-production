@@ -4,6 +4,7 @@ import { expect, test } from "@playwright/test";
 for (const path of [
   "/",
   "/system/",
+  "/work/design-to-production/",
   "/work/ted-design-system/",
   "/work/timeflow/",
   "/work/docustream/",

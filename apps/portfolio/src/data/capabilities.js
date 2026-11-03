@@ -14,12 +14,12 @@ export const chapters = [
         title: "Design Systems",
         statement: "One product language, from Figma to production.",
         body: "I turn repeated product patterns into reusable foundations, components, and implementation rules, then review the built interface for design-code parity.",
-        proof: "Proof / TED Design System, Figma to React",
-        action: { label: "See it in the design system", href: "/work/ted-design-system/" },
+        proof: "Proof / Design to production: tokens, Figma, React, CI",
+        action: { label: "See it in the design system", href: "/work/design-to-production/" },
         visual: {
-          src: "/work/ted/react-manager-heatmap.png",
-          focus: "0.62 0.45",
-          caption: "TED / React heatmap",
+          src: "/work/design-to-production/storybook-tokens.jpg",
+          focus: "0.6 0.35",
+          caption: "Storybook / colour roles from tokens.json",
         },
         character: "/assets/pixel-cat.jpg",
         skills: [

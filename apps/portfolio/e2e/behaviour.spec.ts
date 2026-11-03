@@ -27,7 +27,7 @@ test("proof links open the case studies", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/high-stakes legal filing/);
 });
 
-for (const slug of ["ted-design-system", "timeflow", "docustream", "bookit"]) {
+for (const slug of ["design-to-production", "ted-design-system", "timeflow", "docustream", "bookit"]) {
   test(`${slug} case renders its hero and sections`, async ({ page }) => {
     await page.goto(`/work/${slug}/`);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();

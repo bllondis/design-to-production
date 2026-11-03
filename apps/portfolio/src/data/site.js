@@ -37,6 +37,7 @@ export const footerColumns = [
   {
     title: "Cases",
     links: [
+      { label: "Design to production", href: "/work/design-to-production/" },
       { label: "TED Design System", href: "/work/ted-design-system/" },
       { label: "Timeflow", href: "/work/timeflow/" },
       { label: "DocuStream", href: "/work/docustream/" },

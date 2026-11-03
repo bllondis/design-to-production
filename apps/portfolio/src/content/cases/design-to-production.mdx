@@ -1,0 +1,475 @@
+---
+title: One design system, from Figma variables to shipped CSS
+client: Design to production
+kicker: Case study / Design system
+order: 0
+summary:
+  - The design system behind this portfolio, built end-to-end. Tokens in three tiers, Figma variables that mirror them name for name, React components with stories and tests, and a pipeline that checks every change before it ships.
+  - Everything shown here is live. This site is built from it, the system page documents it, and the source is public.
+meta:
+  - 2026 · Ongoing
+  - Design Engineer
+  - Solo project
+  - Figma + React / TypeScript
+  - Live on this site
+stats:
+  - { value: "147", label: Design tokens in three tiers }
+  - { value: "17", label: React components in @tetiana/ui }
+  - { value: "59", label: "Automated tests, from unit to visual" }
+actions:
+  - { label: Open the system page, href: /system/ }
+  - { label: View the source on GitHub, href: "https://github.com/bllondis/design-to-production", external: true }
+cover:
+  src: /work/design-to-production/storybook-tokens.jpg
+  focus: "0.6 0.35"
+  caption: Storybook / colour roles from tokens.json
+character: /assets/pixel-cat.jpg
+---
+
+<Section label="The problem" title="A portfolio about parity can't be built on copied values">
+  This site argues that design and code should mean the same thing. Hand-copied hex values, pixel sizes and one-off
+  hover colours would quietly contradict that. I wanted every visual decision to have one name, one source, and an
+  automatic way to check that it is still used correctly.
+</Section>
+
+<Principle text="A design decision has one name and one source, wherever it is used." />
+
+<Section label="System architecture" title="One pipeline from token to page">
+  Tokens are written once, in the W3C design tokens format. A build step turns them into CSS for the components and a
+  JSON list for documentation. Figma holds the same tokens as variables, so a designer and the code are pointing at the
+  same decision.
+</Section>
+
+<Steps
+  items={[
+    { label: "Source", title: "tokens/*.tokens.json", detail: "W3C DTCG format, three tiers." },
+    { label: "Build", title: "Style Dictionary", detail: "tokens.css for code, tokens.json for docs." },
+    { label: "Design", title: "Figma variables", detail: "Same names, same tiers, CSS code syntax attached." },
+    { label: "Components", title: "@tetiana/ui", detail: "React + TypeScript, CSS modules, stories, tests." },
+    { label: "Product", title: "This site", detail: "Astro pages, the /system page and Storybook." },
+  ]}
+/>
+
+<Terms
+  columns={3}
+  items={[
+    { term: "@tetiana/tokens", detail: "Token source and the Style Dictionary build" },
+    { term: "@tetiana/ui", detail: "17 React components, each with a CSS module, story and test" },
+    { term: "apps/portfolio", detail: "The Astro site that composes them into pages" },
+  ]}
+/>
+
+<Note label="Boundary">
+  The app imports the system only through its package names. The packages never import from the app, so the system could
+  ship to a second product without changes.
+</Note>
+
+<Section label="Tokens" title="Three tiers, each with one job">
+  Primitives hold raw values and mean nothing on their own. Semantic tokens say what a value is for: a surface, a line,
+  muted text. Component tokens hold the decisions that belong to one component, such as a button's hover fill, and point
+  at semantic ones. Components never reach past that to a primitive.
+</Section>
+
+<Terms
+  emphasis="detail"
+  columns={3}
+  items={[
+    {
+      term: "Primitives · 33",
+      detail: "Ink, paper, one blue accent, warm amber light, fonts, durations, easing curves.",
+    },
+    {
+      term: "Semantic · 80",
+      detail: "Colour roles, the type scale, spacing, layout and motion. Fluid sizes use clamp().",
+    },
+    { term: "Component · 34", detail: "Button, Tile, PixelDoor, Tag and Skill: their colours, sizes and paddings." },
+  ]}
+/>
+
+<Subhead title="One decision, followed through the stack">
+  The light button's fill, from its source to the generated CSS to the component that uses it.
+</Subhead>
+
+<Snippets
+  items={[
+    {
+      file: "tokens/component.tokens.json",
+      lang: "json",
+      code: `
+  "button": {
+    "light": {
+      "$type": "color",
+      "bg": { "$value": "{color.surface.inverse}" },
+      "fg": { "$value": "{color.text.inverse}" },
+      "bg-hover": { "$value": "{color.surface.page}" },
+      "fg-hover": { "$value": "{color.text.primary}" }
+    }
+  }`,
+    },
+    {
+      file: "build/tokens.css · generated",
+      lang: "css",
+      code: `
+  --color-paper-50: #f4f5f0;
+  --color-surface-inverse: var(--color-paper-50);
+  --color-text-inverse: var(--color-ink-950);
+
+--button-light-bg: var(--color-surface-inverse);
+--button-light-fg: var(--color-text-inverse);
+--button-light-bg-hover: var(--color-surface-page);
+--button-light-fg-hover: var(--color-text-primary);`,
+},
+]}
+/>
+
+<Snippets
+  items={[
+    {
+      file: "Button/Button.module.css · uses component tokens only",
+      lang: "css",
+      code: `
+  .light {
+    border: 1px solid var(--button-light-bg);
+    background: var(--button-light-bg);
+    color: var(--button-light-fg);
+  }
+
+.light:hover {
+background: var(--button-light-bg-hover);
+color: var(--button-light-fg-hover);
+}`,
+},
+]}
+/>
+
+<Note>
+  The generated CSS keeps references (`outputReferences`), so the alias chain stays readable in the browser's inspector:
+  a component token resolves through its semantic role to the primitive.
+</Note>
+
+<Section label="Figma" title="The same names in Figma, with code attached">
+  Figma has three variable collections that match the three tiers one to one. Every variable carries its CSS name as
+  code syntax, so Dev Mode shows `var(--button-light-bg)` rather than a hex value. Semantic and Component have two
+  modes, Desktop 1440 and Mobile 375, so a designer sees the sizes the site actually renders at each width.
+</Section>
+
+<Shot
+  src="/work/design-to-production/figma-variables.jpg"
+  alt="Three columns, Primitives, Semantic and Component, each listing variables with their alias, value and CSS code syntax"
+  width={2400}
+  height={1742}
+  caption="Figma — an overview frame generated from the file's own variables: alias chain, values per mode, code syntax"
+/>
+
+<Shots
+  items={[
+    {
+      src: "/work/design-to-production/figma-button-set.jpg",
+      alt: "Button component set in Figma with light, dark and text variants in two sizes and two states",
+      width: 1090,
+      height: 898,
+      caption: "Button — 10 variants, every fill, stroke, padding and size bound to a variable",
+    },
+    {
+      src: "/work/design-to-production/figma-button-usage.jpg",
+      alt: "Light and text buttons on a dark band, dark buttons on a light inverse band",
+      width: 1280,
+      height: 740,
+      caption: "Usage — which variant goes on which surface",
+    },
+  ]}
+/>
+
+<Shot
+  src="/work/design-to-production/figma-pixeldoor.jpg"
+  alt="PixelDoor component in Figma in three states: closed, ajar with warm light, and open showing a pixel cat"
+  width={1808}
+  height={480}
+  caption="PixelDoor — closed, peek and open, with the character as an instance swap and the light bound to colour/light tokens"
+/>
+
+<Shots
+  items={[
+    {
+      src: "/work/design-to-production/figma-markers.jpg",
+      alt: "A chapter tile and four pixel doors, each with a different character",
+      width: 2064,
+      height: 528,
+      caption: "Markers — Tile and PixelDoor with each of the four characters",
+    },
+    {
+      src: "/work/design-to-production/figma-content-usage.jpg",
+      alt: "Figma composition of tags, a three-column term grid and a row of statistics",
+      width: 1924,
+      height: 1010,
+      caption: "Content — TagList, TermGrid and StatRow composed from component instances",
+    },
+  ]}
+/>
+
+<Note label="Code Connect">
+  Figma's Code Connect needs an Organization plan. Instead, each component's description carries the import and a usage
+  example from `@tetiana/ui`, and links to its source folder on GitHub.
+</Note>
+
+<Section label="Components" title="A component is a contract, not a drawing">
+  Each building block lives in `@tetiana/ui` with a typed API. Variants are props, states are behaviour, and the rules
+  that are easy to forget, such as reduced motion and accessible names, are part of the component rather than a
+  checklist next to it.
+</Section>
+
+<Checks
+  items={[
+    {
+      title: "Variants are props",
+      detail:
+        "Button takes variant, size and icon. The same axes are the variant properties of its Figma component set.",
+    },
+    {
+      title: "States are behaviour",
+      detail: "PixelDoor moves from closed to peek on hover or scroll, and to open on click, as a real toggle button.",
+    },
+    {
+      title: "Accessible by construction",
+      detail:
+        "Interactive blocks are buttons or links with names that change with their state; decorative canvases are hidden.",
+    },
+    {
+      title: "Motion respects the reader",
+      detail: "Every animation stops under prefers-reduced-motion; canvases draw a still frame instead.",
+    },
+    {
+      title: "Hydrate only what moves",
+      detail:
+        "Static components ship as HTML. Only interactive ones load JavaScript, and only when they scroll into view.",
+    },
+  ]}
+/>
+
+<Snippets
+  items={[
+    {
+      file: "PixelDoor/PixelDoor.tsx",
+      lang: "tsx",
+      code: `
+  export type DoorState = "closed" | "peek" | "open";
+
+export interface PixelDoorProps {
+/** Image shown behind the door. \*/
+character: string;
+/** Flap half a beat after neighbouring doors. _/
+offset?: boolean;
+/\*\* Ignore page scrolling (specimens). _/
+still?: boolean;
+/\*_ Starting state; "peek" holds the door ajar. _/
+initialState?: DoorState;
+}`,
+    },
+    {
+      file: "PixelDoor/PixelDoor.test.tsx",
+      lang: "tsx",
+      code: `
+it("starts closed and opens on click", async () => {
+render(<PixelDoor character="/cat.jpg" still />);
+const door = screen.getByRole("button", { name: "Open the pixel door" });
+expect(door).toHaveAttribute("aria-pressed", "false");
+await userEvent.click(door);
+expect(door).toHaveAttribute("aria-pressed", "true");
+expect(door).toHaveAccessibleName("Close the pixel door");
+});`,
+},
+]}
+columns={1}
+flow={false}
+/>
+
+<Shots
+  items={[
+    {
+      src: "/work/design-to-production/storybook-pixeldoor.jpg",
+      alt: "Storybook docs page for PixelDoor with a live preview and a table of props and controls",
+      width: 2400,
+      height: 1500,
+      caption: "Storybook — PixelDoor docs, generated from the component's types and comments",
+    },
+    {
+      src: "/work/design-to-production/storybook-button-docs.jpg",
+      alt: "Storybook docs page for Button with variant, size and icon controls",
+      width: 2400,
+      height: 1500,
+      caption: "Storybook — Button with every prop as a control",
+    },
+  ]}
+/>
+
+<Section label="Documentation" title="Documented where each reader already looks">
+  Designers open Figma, developers open Storybook, and anyone else opens the site. All three read the same token source,
+  so documentation can't fall behind the system it describes. The [system page](/system/) is itself built from the
+  components it documents.
+</Section>
+
+<Shots
+  items={[
+    {
+      src: "/work/design-to-production/storybook-tokens.jpg",
+      alt: "Storybook Foundations page with colour role palettes generated from the token list",
+      width: 2400,
+      height: 1500,
+      caption: "Storybook — colour roles rendered from tokens.json",
+    },
+    {
+      src: "/work/design-to-production/site-system-colour.jpg",
+      alt: "The site's system page showing primitive swatches and a table of semantic colour roles with their aliases",
+      width: 2400,
+      height: 1738,
+      caption: "/system — primitives and the semantic roles that point at them",
+    },
+  ]}
+/>
+
+<Shot
+  src="/work/design-to-production/site-system-components.jpg"
+  alt="The components section of the system page with live Button and Heading specimens and their usage code"
+  width={2400}
+  height={1703}
+  caption="/system — live components with their props and usage, rendered by the same code as the site"
+/>
+
+<Section label="Quality" title="Every change is checked before it ships">
+  A design system only stays a system if breaking it is noticed. Each push runs the same checks on GitHub Actions that
+  run locally, from formatting to a full browser pass with an accessibility audit.
+</Section>
+
+<Terms
+  columns={4}
+  items={[
+    { term: "Static", detail: "ESLint, Prettier and TypeScript across the whole monorepo" },
+    { term: "Unit", detail: "Vitest and Testing Library: roles, names, states and timing" },
+    { term: "Browser", detail: "Playwright behaviour tests and an axe accessibility audit per page" },
+    { term: "Visual", detail: "Screenshot baselines of key regions on desktop and mobile" },
+  ]}
+/>
+
+<Snippets
+  items={[
+    {
+      file: ".github/workflows/ci.yml",
+      lang: "yaml",
+      code: `
+  - run: npm ci
+  - run: npm run tokens
+  - run: npm run lint
+  - run: npm run format:check
+  - run: npm run typecheck
+  - run: npm test
+  - run: npm run build
+  - run: npx playwright install --with-deps chromium
+    working-directory: apps/portfolio
+  # Visual baselines are recorded on macOS, so CI runs behaviour and accessibility only.
+  - run: npx playwright test --grep-invert @visual
+    working-directory: apps/portfolio`,
+    },
+  ]}
+/>
+
+<Shots
+  items={[
+    {
+      src: "/work/design-to-production/storybook-a11y.jpg",
+      alt: "Storybook accessibility panel showing zero violations for all button variants",
+      width: 2400,
+      height: 1500,
+      caption: "Storybook — the accessibility panel checks every story as it is written",
+    },
+    {
+      src: "/work/design-to-production/ci-run.jpg",
+      alt: "A successful GitHub Actions run for the commit that added the component token tier",
+      width: 2400,
+      height: 1500,
+      caption: "GitHub Actions — the run for the commit that added component tokens",
+    },
+  ]}
+/>
+
+<Section label="Where it got complicated" title="Three problems worth keeping">
+  Most of the system was straightforward to build. These three needed a second look, and each changed how the system
+  works.
+</Section>
+
+<Cards columns={3}>
+  <Card title="Transparency disappeared in the build">
+    Translucent borders were written as `rgb(… / a)`. Style Dictionary's colour transform dropped the alpha, so every
+    grid line turned solid. **Rewriting the primitives as `rgba()`** kept the source readable and the output correct.
+  </Card>
+  <Card title="Fluid sizes on a fixed canvas">
+    The site's type and spacing use `clamp()`, which Figma can't express. I resolved each value at 1440 and 375 and
+    stored them as **two variable modes**, so switching the mode shows the real sizes rather than a guess.
+  </Card>
+  <Card title="An arrow Figma couldn't colour">
+    The ↗ in buttons isn't in Urbanist. Figma drew it with a fallback font that ignored the fill, so the arrow vanished
+    on light buttons. **Setting the glyph in Inter** let it take its colour and size from the component tokens.
+  </Card>
+</Cards>
+
+<Section label="Working with AI" title="Rules an AI agent can follow">
+  I build with AI coding agents, so the system's rules live in the repository, in a file agents read before they change
+  anything. The same rules a reviewer would enforce are written down once: which tokens to use, where new components go,
+  and which checks must pass.
+</Section>
+
+<Snippets
+  items={[
+    {
+      file: "AGENTS.md",
+      lang: "md",
+      code: `
+  1. **Use semantic and component tokens, never primitives.** Tokens come in three tiers,
+     mirrored one-to-one by the Figma variable collections Primitives, Semantic and Component.
+     In components write \`var(--color-text-muted)\`, \`var(--space-inset)\` or the component's
+     own \`var(--button-light-bg)\`, never raw hex, px sizes or primitive tokens.
+  2. **Reuse before you build.** Check \`packages/ui/src/index.ts\`, Storybook and \`/system\` first.
+     Extend a component with a variant prop rather than copying it.`,
+    },
+  ]}
+/>
+
+<Note>
+  The guardrails are mechanical where they can be: lint and type errors, failing tests and changed screenshots stop a
+  change. The written rules cover what a tool can't judge, such as choosing the right semantic role.
+</Note>
+
+<Section label="Outcome" title="A system that holds its shape as it grows">
+  The portfolio, its case studies and the system page are all composed from the same 17 components and 147 tokens. A
+  colour, a size or a component change is made once and reaches Figma, Storybook and the live site together.
+</Section>
+
+<Checks
+  marker="number"
+  items={[
+    {
+      title: "One source of tokens",
+      detail: "W3C format, three tiers, built into CSS and documentation, mirrored by Figma variables.",
+    },
+    {
+      title: "Components with contracts",
+      detail: "Typed React components with variants, stories and tests, and matching Figma component sets.",
+    },
+    {
+      title: "Checked on every push",
+      detail: "Static checks, unit tests, browser and accessibility tests in CI; visual baselines before release.",
+    },
+  ]}
+/>
+
+<Section label="Reflection" title="What this work reinforced" />
+
+<Cards columns={2}>
+  <Card title="Names are the real interface">
+    Hex values change; names last. Most of the work was choosing names that mean the same thing to a designer in Figma,
+    a developer in CSS and an agent reading the rules.
+  </Card>
+  <Card title="Tooling is part of the design">
+    A decision that can't be checked will drift. Tests, screenshots and CI are how a design system keeps its promises
+    after the first release.
+  </Card>
+</Cards>

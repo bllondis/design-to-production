@@ -1,0 +1,151 @@
+---
+/**
+ * Snippets: real source excerpts side by side, e.g. a token as it moves from source to CSS to a component.
+ * Highlighting uses Shiki's css-variables theme, mapped onto the system's own colour roles.
+ */
+import { Code } from "astro:components";
+import FrameRow from "../layout/FrameRow.astro";
+
+interface Snippet {
+  file: string;
+  lang: string;
+  code: string;
+}
+
+interface Props {
+  items: Snippet[];
+  /** Show an arrow between panes when they read as one flow (default on for more than one pane). */
+  flow?: boolean;
+  /** Panes per row on wide screens; long lines read better stacked (default: one per pane, up to 3). */
+  columns?: 1 | 2 | 3;
+}
+
+const { items, flow = items.length > 1, columns = Math.min(items.length, 3) } = Astro.props;
+---
+
+<FrameRow>
+  <div class:list={["snippets", { flow, stacked: columns === 1 }]} style={`--snippet-columns: ${columns}`}>
+    {items.map((item) => (
+      <figure class="snippet">
+        <figcaption class="text-label-m">{item.file}</figcaption>
+        <Code code={item.code.trim()} lang={item.lang as never} theme="css-variables" />
+      </figure>
+    ))}
+  </div>
+</FrameRow>
+
+<style>
+  .snippets {
+    display: grid;
+    grid-template-columns: repeat(var(--snippet-columns), minmax(0, 1fr));
+  }
+
+  .snippet {
+    position: relative;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .snippet:not(:last-child) {
+    border-right: 1px solid var(--color-border-default);
+  }
+
+  .stacked .snippet:not(:last-child) {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border-default);
+  }
+
+  .stacked.flow .snippet:not(:last-child)::after {
+    top: auto;
+    right: auto;
+    bottom: -0.75rem;
+    left: var(--space-inset-inline);
+    content: "↓";
+  }
+
+  /* The flow arrow sits on the divider, like the arrows in StepList. */
+  .flow .snippet:not(:last-child)::after {
+    position: absolute;
+    top: 1.1rem;
+    right: -0.5rem;
+    z-index: 1;
+    padding: 0.1rem 0;
+    background: var(--color-surface-page);
+    color: var(--color-accent-default);
+    font-family: var(--font-family-pixel);
+    content: "→";
+  }
+
+  figcaption {
+    padding: var(--space-m) var(--space-l);
+    border-bottom: 1px solid var(--color-border-subtle);
+    color: var(--color-text-muted);
+    text-transform: none;
+  }
+
+  .snippet:first-child figcaption,
+  .snippet:first-child :global(pre),
+  .stacked figcaption,
+  .stacked .snippet :global(pre) {
+    padding-left: var(--space-inset-inline);
+  }
+
+  .snippet :global(pre) {
+    --astro-code-foreground: var(--color-text-secondary);
+    --astro-code-background: transparent;
+    --astro-code-token-keyword: var(--color-accent-default);
+    --astro-code-token-constant: var(--color-accent-default);
+    --astro-code-token-string: var(--color-light-warm);
+    --astro-code-token-string-expression: var(--color-light-warm);
+    --astro-code-token-comment: var(--color-text-muted);
+    --astro-code-token-function: var(--color-text-primary);
+    --astro-code-token-parameter: var(--color-text-primary);
+    --astro-code-token-punctuation: var(--color-text-muted);
+    --astro-code-token-link: var(--color-accent-default);
+
+    margin: 0;
+    padding: var(--space-l);
+    overflow-x: auto;
+    font-family: var(--font-family-mono);
+    font-size: 0.78rem;
+    line-height: var(--font-line-height-loose);
+  }
+
+  .snippet :global(pre:focus-visible) {
+    outline: 2px solid var(--color-accent-default);
+    outline-offset: -2px;
+  }
+
+  @media (max-width: 980px) {
+    .snippets {
+      grid-template-columns: 1fr;
+    }
+
+    .snippet:not(:last-child) {
+      border-right: 0;
+      border-bottom: 1px solid var(--color-border-default);
+    }
+
+    .flow .snippet:not(:last-child)::after {
+      top: auto;
+      right: auto;
+      bottom: -0.75rem;
+      left: var(--space-inset-inline);
+      content: "↓";
+    }
+  }
+
+  @media (max-width: 680px) {
+    figcaption,
+    .snippet :global(pre),
+    .snippet:first-child figcaption,
+    .snippet:first-child :global(pre) {
+      padding-right: var(--space-m);
+      padding-left: var(--space-m);
+    }
+
+    .flow .snippet:not(:last-child)::after {
+      left: var(--space-m);
+    }
+  }
+</style>
