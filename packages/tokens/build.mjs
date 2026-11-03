@@ -42,7 +42,7 @@ dictionary.registerFormat({
             ? token.original.$value.slice(1, -1)
             : null,
         description: token.$description ?? null,
-        tier: token.filePath.includes("primitives") ? "primitive" : "semantic",
+        tier: ["primitive", "component"].find((tier) => token.filePath.includes(tier)) ?? "semantic",
       })),
       null,
       2,

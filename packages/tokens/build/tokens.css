@@ -3,6 +3,18 @@
  */
 
 :root {
+  --button-text-font-size: 0.95rem;
+  --button-m-height: 3.25rem;
+  --button-m-gap: 1.1rem;
+  --button-m-padding-inline: 1.4rem;
+  --button-m-font-size: clamp(1rem, 1.25vw, 1.15rem);
+  --button-s-height: 3rem;
+  --button-s-gap: 0.9rem;
+  --button-s-padding-inline: 1.3rem;
+  --tile-font-size: clamp(1.6rem, 3.4vw, 3.4rem); /** Pixel letter in the tile. */
+  --tag-padding-block: 0.55rem;
+  --skill-font-size: clamp(1.05rem, 1.45vw, 1.35rem);
+  --skill-min-height: clamp(8rem, 11vw, 10.5rem);
   --color-ink-400: #9ca1a4;
   --color-ink-600: #555b5f;
   --color-ink-800: #1d2023;
@@ -81,6 +93,9 @@
   --layout-gutter: 8.333%; /** Width of the side columns of the frame (1 of 12). */
   --layout-header-height: 5.25rem;
   --layout-measure: 34rem; /** Longest comfortable line for body copy. */
+  --button-s-font-size: var(--font-size-body-s);
+  --tag-padding-inline: var(--space-xs);
+  --tag-gap: var(--space-2xs); /** Space between tags in a list. */
   --color-surface-page: var(--color-ink-950); /** Default dark page and section background. */
   --color-surface-raised: var(--color-ink-900);
   --color-surface-inverse: var(--color-paper-50); /** Light bands: hero card, contact band, hovered skill. */
@@ -116,4 +131,23 @@
   --motion-duration-reveal: var(--duration-reveal);
   --motion-easing-standard: var(--easing-standard);
   --motion-easing-swing: var(--easing-swing);
+  --button-light-bg: var(--color-surface-inverse); /** Also the border, so the button keeps its size on hover. */
+  --button-light-fg: var(--color-text-inverse);
+  --button-light-bg-hover: var(--color-surface-page);
+  --button-light-fg-hover: var(--color-text-primary);
+  --button-dark-bg: var(--color-surface-page);
+  --button-dark-fg: var(--color-text-primary);
+  --button-dark-bg-hover: var(--color-surface-inverse);
+  --button-dark-fg-hover: var(--color-text-inverse);
+  --button-text-fg: var(--color-text-muted);
+  --button-text-fg-hover: var(--color-text-primary);
+  --tile-bg: var(--color-surface-inverse);
+  --tile-fg: var(--color-text-inverse);
+  --door-bg: var(--color-surface-void); /** The dark opening behind the leaf. */
+  --door-edge: var(--color-border-subtle); /** Hairline around the door leaf. */
+  --tag-border: var(--color-border-default);
+  --tag-fg: var(--color-text-secondary);
+  --skill-border: var(--color-border-default);
+  --skill-bg-hover: var(--color-surface-inverse);
+  --skill-fg-hover: var(--color-text-inverse);
 }

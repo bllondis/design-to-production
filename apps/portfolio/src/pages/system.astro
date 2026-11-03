@@ -75,8 +75,8 @@ const sections = [
       <DocSection
         id="tokens"
         label="01 / Foundations"
-        title="Tokens in two tiers."
-        intro="Primitives hold raw values. Semantic tokens say what a value is for, and only they are used in components. Changing a primitive updates every role that points to it."
+        title="Tokens in three tiers."
+        intro="Primitives hold raw values. Semantic tokens say what a value is for. Component tokens hold the decisions of one component, such as a button's hover colour, and point at semantic ones. Changing a primitive updates every role and component that points to it."
       >
         <FrameRow>
           <ol class="pipeline">
@@ -98,7 +98,7 @@ const sections = [
             <li>
               <span class="text-label-s">Design</span>
               <strong>Figma Variables</strong>
-              <small>same source, next step</small>
+              <small>Primitives · Semantic · Component</small>
             </li>
           </ol>
         </FrameRow>

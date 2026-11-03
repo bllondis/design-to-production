@@ -6,7 +6,7 @@
   margin: 0;
   padding: 0;
   border: 0;
-  background: var(--color-surface-void);
+  background: var(--door-bg);
   cursor: pointer;
   perspective: 32rem;
   image-rendering: pixelated;
@@ -29,7 +29,7 @@
   inset: 0;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' shape-rendering='crispEdges'%3E%3Crect width='10' height='10' fill='%23202328'/%3E%3Cpath fill='%2314161a' d='M0 0h10v1H0zM0 9h10v1H0zM0 1h1v8H0zM9 1h1v8H9z'/%3E%3Cpath fill='%23181a1e' d='M2 2h6v1H2zM2 5h6v1H2zM2 2h1v7H2zM7 2h1v7H7z'/%3E%3Cpath fill='%232a2e34' d='M3 3h4v2H3zM3 6h4v3H3z'/%3E%3Cpath fill='%23313640' d='M3 3h1v1H3zM5 6h1v1H5zM1 1h1v1H1zM8 8h1v1H8z'/%3E%3Cpath fill='%235b616b' d='M7 5h1v1H7z'/%3E%3C/svg%3E")
     center / 100% 100% no-repeat;
-  box-shadow: inset 0 0 0 1px var(--color-border-subtle);
+  box-shadow: inset 0 0 0 1px var(--door-edge);
   transform-origin: left center;
   transition:
     transform var(--motion-duration-swing) var(--motion-easing-swing),

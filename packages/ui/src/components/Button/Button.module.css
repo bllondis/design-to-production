@@ -10,39 +10,39 @@
 }
 
 .m {
-  min-height: 3.25rem;
-  gap: 1.1rem;
-  padding: 0 1.4rem;
-  font-size: clamp(1rem, 1.25vw, 1.15rem);
+  min-height: var(--button-m-height);
+  gap: var(--button-m-gap);
+  padding: 0 var(--button-m-padding-inline);
+  font-size: var(--button-m-font-size);
 }
 
 .s {
-  min-height: 3rem;
-  gap: 0.9rem;
-  padding: 0 1.3rem;
-  font-size: var(--font-size-body-s);
+  min-height: var(--button-s-height);
+  gap: var(--button-s-gap);
+  padding: 0 var(--button-s-padding-inline);
+  font-size: var(--button-s-font-size);
 }
 
 .light {
-  border: 1px solid var(--color-surface-inverse);
-  background: var(--color-surface-inverse);
-  color: var(--color-text-inverse);
+  border: 1px solid var(--button-light-bg);
+  background: var(--button-light-bg);
+  color: var(--button-light-fg);
 }
 
 .light:hover {
-  background: var(--color-surface-page);
-  color: var(--color-text-primary);
+  background: var(--button-light-bg-hover);
+  color: var(--button-light-fg-hover);
 }
 
 .dark {
-  border: 1px solid var(--color-surface-page);
-  background: var(--color-surface-page);
-  color: var(--color-text-primary);
+  border: 1px solid var(--button-dark-bg);
+  background: var(--button-dark-bg);
+  color: var(--button-dark-fg);
 }
 
 .dark:hover {
-  background: var(--color-surface-inverse);
-  color: var(--color-text-inverse);
+  background: var(--button-dark-bg-hover);
+  color: var(--button-dark-fg-hover);
 }
 
 .text {
@@ -50,8 +50,8 @@
   min-height: 0;
   padding: 0;
   border: 0;
-  color: var(--color-text-muted);
-  font-size: 0.95rem;
+  color: var(--button-text-fg);
+  font-size: var(--button-text-font-size);
   font-weight: var(--font-weight-regular);
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -63,5 +63,5 @@
 }
 
 .text:hover {
-  color: var(--color-text-primary);
+  color: var(--button-text-fg-hover);
 }

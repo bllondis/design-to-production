@@ -9,7 +9,7 @@ export const swatches = (items) => Object.fromEntries(items.map((token) => [toke
 # Tokens
 
 Every colour, size and motion value comes from `tokens/*.tokens.json` (W3C DTCG format).
-`npm run build -w @tetiana/tokens` builds them with Style Dictionary into `@tetiana/tokens/tokens.css`; components use only the semantic tier.
+`npm run build -w @tetiana/tokens` builds them with Style Dictionary into `@tetiana/tokens/tokens.css`; there are three tiers: primitives (raw values), semantic (what a value is for) and component (the decisions one component makes). Components use semantic and component tokens, never primitives.
 
 ## Colour roles
 

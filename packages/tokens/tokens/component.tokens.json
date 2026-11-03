@@ -1,0 +1,69 @@
+{
+  "$description": "Component tokens: the decisions one component makes. They point at semantic tokens, or hold sizes that belong to a single component.",
+  "button": {
+    "light": {
+      "$type": "color",
+      "bg": {
+        "$value": "{color.surface.inverse}",
+        "$description": "Also the border, so the button keeps its size on hover."
+      },
+      "fg": { "$value": "{color.text.inverse}" },
+      "bg-hover": { "$value": "{color.surface.page}" },
+      "fg-hover": { "$value": "{color.text.primary}" }
+    },
+    "dark": {
+      "$type": "color",
+      "bg": { "$value": "{color.surface.page}" },
+      "fg": { "$value": "{color.text.primary}" },
+      "bg-hover": { "$value": "{color.surface.inverse}" },
+      "fg-hover": { "$value": "{color.text.inverse}" }
+    },
+    "text": {
+      "fg": { "$type": "color", "$value": "{color.text.muted}" },
+      "fg-hover": { "$type": "color", "$value": "{color.text.primary}" },
+      "font-size": { "$type": "dimension", "$value": "0.95rem" }
+    },
+    "m": {
+      "$type": "dimension",
+      "height": { "$value": "3.25rem" },
+      "gap": { "$value": "1.1rem" },
+      "padding-inline": { "$value": "1.4rem" },
+      "font-size": { "$value": "clamp(1rem, 1.25vw, 1.15rem)" }
+    },
+    "s": {
+      "$type": "dimension",
+      "height": { "$value": "3rem" },
+      "gap": { "$value": "0.9rem" },
+      "padding-inline": { "$value": "1.3rem" },
+      "font-size": { "$value": "{font.size.body-s}" }
+    }
+  },
+  "tile": {
+    "bg": { "$type": "color", "$value": "{color.surface.inverse}" },
+    "fg": { "$type": "color", "$value": "{color.text.inverse}" },
+    "font-size": {
+      "$type": "dimension",
+      "$value": "clamp(1.6rem, 3.4vw, 3.4rem)",
+      "$description": "Pixel letter in the tile."
+    }
+  },
+  "door": {
+    "$type": "color",
+    "bg": { "$value": "{color.surface.void}", "$description": "The dark opening behind the leaf." },
+    "edge": { "$value": "{color.border.subtle}", "$description": "Hairline around the door leaf." }
+  },
+  "tag": {
+    "border": { "$type": "color", "$value": "{color.border.default}" },
+    "fg": { "$type": "color", "$value": "{color.text.secondary}" },
+    "padding-block": { "$type": "dimension", "$value": "0.55rem" },
+    "padding-inline": { "$type": "dimension", "$value": "{space.xs}" },
+    "gap": { "$type": "dimension", "$value": "{space.2xs}", "$description": "Space between tags in a list." }
+  },
+  "skill": {
+    "border": { "$type": "color", "$value": "{color.border.default}" },
+    "bg-hover": { "$type": "color", "$value": "{color.surface.inverse}" },
+    "fg-hover": { "$type": "color", "$value": "{color.text.inverse}" },
+    "font-size": { "$type": "dimension", "$value": "clamp(1.05rem, 1.45vw, 1.35rem)" },
+    "min-height": { "$type": "dimension", "$value": "clamp(8rem, 11vw, 10.5rem)" }
+  }
+}

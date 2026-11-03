@@ -19,9 +19,12 @@ The app imports the system only through the package names (`@tetiana/ui`, `@teti
 
 ## Rules
 
-1. **Use semantic tokens only.** In components write `var(--color-text-muted)`, `var(--space-inset)`,
-   `var(--font-size-display-4)`, never raw hex, px sizes or primitive tokens such as `--color-ink-400`.
-   If no token fits, add a semantic token in `packages/tokens/tokens/semantic.tokens.json` instead of hard-coding.
+1. **Use semantic and component tokens, never primitives.** Tokens come in three tiers, mirrored one-to-one by the
+   Figma variable collections Primitives, Semantic and Component. In components write `var(--color-text-muted)`,
+   `var(--space-inset)` or the component's own `var(--button-light-bg)`, never raw hex, px sizes or primitive tokens
+   such as `--color-ink-400`. A decision that belongs to one component goes in
+   `packages/tokens/tokens/component.tokens.json` and points at semantic tokens; a shared role goes in
+   `semantic.tokens.json`. When you add or rename a token, update the matching Figma variable too.
 2. **Reuse before you build.** Check `packages/ui/src/index.ts`, Storybook and `/system` first. Extend a component
    with a variant prop rather than copying it. New building blocks go in `@tetiana/ui` with a story and a test.
 3. **Headings go through `Heading`.** Pick `as` for the outline and `size` for the look; keep `pixel` on for display

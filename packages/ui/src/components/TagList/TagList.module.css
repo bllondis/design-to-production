@@ -1,14 +1,14 @@
 .list {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2xs);
+  gap: var(--tag-gap);
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
 .tag {
-  padding: 0.55rem var(--space-xs);
-  border: 1px solid var(--color-border-default);
-  color: var(--color-text-secondary);
+  padding: var(--tag-padding-block) var(--tag-padding-inline);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-fg);
 }

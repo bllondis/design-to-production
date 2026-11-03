@@ -1,5 +1,5 @@
 {
-  "$description": "Semantic tokens: what a value is for. Components and pages use only these.",
+  "$description": "Semantic tokens: what a value is for. Pages use these; components use these and their own component tokens.",
   "color": {
     "$type": "color",
     "surface": {
