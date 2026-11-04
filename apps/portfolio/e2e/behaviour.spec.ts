@@ -4,7 +4,7 @@ test("every capability has a door that opens to its character", async ({ page },
   test.skip(testInfo.project.name === "mobile", "Doors live in the frame gutters, which collapse on narrow screens.");
   await page.goto("/");
   const doors = page.getByRole("button", { name: "Open the pixel door" });
-  await expect(doors).toHaveCount(4);
+  await expect(doors).toHaveCount(5);
 
   const first = doors.first();
   await first.scrollIntoViewIfNeeded();
@@ -27,7 +27,7 @@ test("proof links open the case studies", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/high-stakes legal filing/);
 });
 
-for (const slug of ["design-to-production", "ted-design-system", "timeflow", "docustream", "bookit"]) {
+for (const slug of ["design-to-production", "ted-design-system", "timeflow", "dutchwaffle", "docustream", "bookit"]) {
   test(`${slug} case renders its hero and sections`, async ({ page }) => {
     await page.goto(`/work/${slug}/`);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();

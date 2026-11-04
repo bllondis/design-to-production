@@ -26,6 +26,8 @@ cover:
 character: /assets/pixel-cat.jpg
 ---
 
+import * as snippets from "./snippets/design-to-production.ts";
+
 <Section label="The problem" title="A portfolio about parity can't be built on copied values">
   This site argues that design and code should mean the same thing. Hand-copied hex values, pixel sizes and one-off
   hover colours would quietly contradict that. I wanted every visual decision to have one name, one source, and an
@@ -95,31 +97,14 @@ character: /assets/pixel-cat.jpg
     {
       file: "tokens/component.tokens.json",
       lang: "json",
-      code: `
-  "button": {
-    "light": {
-      "$type": "color",
-      "bg": { "$value": "{color.surface.inverse}" },
-      "fg": { "$value": "{color.text.inverse}" },
-      "bg-hover": { "$value": "{color.surface.page}" },
-      "fg-hover": { "$value": "{color.text.primary}" }
-    }
-  }`,
+      code: snippets.componentTokens,
     },
     {
       file: "build/tokens.css · generated",
       lang: "css",
-      code: `
-  --color-paper-50: #f4f5f0;
-  --color-surface-inverse: var(--color-paper-50);
-  --color-text-inverse: var(--color-ink-950);
-
---button-light-bg: var(--color-surface-inverse);
---button-light-fg: var(--color-text-inverse);
---button-light-bg-hover: var(--color-surface-page);
---button-light-fg-hover: var(--color-text-primary);`,
-},
-]}
+      code: snippets.tokensCss,
+    },
+  ]}
 />
 
 <Snippets
@@ -127,19 +112,9 @@ character: /assets/pixel-cat.jpg
     {
       file: "Button/Button.module.css · uses component tokens only",
       lang: "css",
-      code: `
-  .light {
-    border: 1px solid var(--button-light-bg);
-    background: var(--button-light-bg);
-    color: var(--button-light-fg);
-  }
-
-.light:hover {
-background: var(--button-light-bg-hover);
-color: var(--button-light-fg-hover);
-}`,
-},
-]}
+      code: snippets.buttonCss,
+    },
+  ]}
 />
 
 <Note>
@@ -251,36 +226,16 @@ color: var(--button-light-fg-hover);
     {
       file: "PixelDoor/PixelDoor.tsx",
       lang: "tsx",
-      code: `
-  export type DoorState = "closed" | "peek" | "open";
-
-export interface PixelDoorProps {
-/** Image shown behind the door. \*/
-character: string;
-/** Flap half a beat after neighbouring doors. _/
-offset?: boolean;
-/\*\* Ignore page scrolling (specimens). _/
-still?: boolean;
-/\*_ Starting state; "peek" holds the door ajar. _/
-initialState?: DoorState;
-}`,
+      code: snippets.pixelDoorProps,
     },
     {
       file: "PixelDoor/PixelDoor.test.tsx",
       lang: "tsx",
-      code: `
-it("starts closed and opens on click", async () => {
-render(<PixelDoor character="/cat.jpg" still />);
-const door = screen.getByRole("button", { name: "Open the pixel door" });
-expect(door).toHaveAttribute("aria-pressed", "false");
-await userEvent.click(door);
-expect(door).toHaveAttribute("aria-pressed", "true");
-expect(door).toHaveAccessibleName("Close the pixel door");
-});`,
-},
-]}
-columns={1}
-flow={false}
+      code: snippets.pixelDoorTest,
+    },
+  ]}
+  columns={1}
+  flow={false}
 />
 
 <Shots
@@ -355,19 +310,7 @@ flow={false}
     {
       file: ".github/workflows/ci.yml",
       lang: "yaml",
-      code: `
-  - run: npm ci
-  - run: npm run tokens
-  - run: npm run lint
-  - run: npm run format:check
-  - run: npm run typecheck
-  - run: npm test
-  - run: npm run build
-  - run: npx playwright install --with-deps chromium
-    working-directory: apps/portfolio
-  # Visual baselines are recorded on macOS, so CI runs behaviour and accessibility only.
-  - run: npx playwright test --grep-invert @visual
-    working-directory: apps/portfolio`,
+      code: snippets.ciSteps,
     },
   ]}
 />
@@ -422,13 +365,7 @@ flow={false}
     {
       file: "AGENTS.md",
       lang: "md",
-      code: `
-  1. **Use semantic and component tokens, never primitives.** Tokens come in three tiers,
-     mirrored one-to-one by the Figma variable collections Primitives, Semantic and Component.
-     In components write \`var(--color-text-muted)\`, \`var(--space-inset)\` or the component's
-     own \`var(--button-light-bg)\`, never raw hex, px sizes or primitive tokens.
-  2. **Reuse before you build.** Check \`packages/ui/src/index.ts\`, Storybook and \`/system\` first.
-     Extend a component with a variant prop rather than copying it.`,
+      code: snippets.agentRules,
     },
   ]}
 />

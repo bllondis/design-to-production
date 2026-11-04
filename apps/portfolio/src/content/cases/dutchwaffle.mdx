@@ -1,0 +1,282 @@
+---
+title: Learning the Dutch that textbooks leave out
+client: DutchWaffle
+kicker: Case study / AI-built mobile app
+order: 3
+summary:
+  - A mobile app for adults learning Dutch at B1–B2, the stage where vocabulary is no longer the problem and nuance is. Short themed lessons, flip flashcards, quick quizzes, and a stroopwafel called dhr. Waffle who keeps you company.
+  - I designed it in Claude Design, wrote the handoff as a spec an AI agent could build from, and directed Claude Code through the build. The lesson flow runs end to end on iOS, Android and in the browser.
+meta:
+  - 2026 · In development
+  - Product Designer · AI Design Engineer
+  - Solo project
+  - Claude Design → Claude Code
+  - Expo + React Native
+stats:
+  - { value: "5", label: Core screens in one lesson flow }
+  - { value: "1", suffix: " day", label: From developer handoff to a working build }
+  - { value: "38", label: B1–B2 expressions in the lesson bank }
+actions:
+  - { label: Try it in the browser, href: "https://bllondis.github.io/DutchWaffle/", external: true }
+  - { label: View the source on GitHub, href: "https://github.com/bllondis/DutchWaffle", external: true }
+cover:
+  src: /work/dutchwaffle/screens.jpg
+  focus: "0.5 0.62"
+  caption: Claude Design / the five core screens
+character: /assets/pixel-waffle.jpg
+---
+
+import * as snippets from "./snippets/dutchwaffle.ts";
+
+<Section label="The problem" title="At B1, the gap is nuance, not vocabulary">
+  Most language apps stop at words. At B1 a learner can already order coffee and fill in a form; what they can't yet do
+  is hedge, disagree politely or soften an opinion at work. DutchWaffle is built around those phrases. Each one comes
+  with its pronunciation, its meaning, a note on when to use it, and an example sentence in context.
+</Section>
+
+<Principle text="Teach the phrase, not the word: knowing when to say it matters as much as what it means." />
+
+<Terms
+  emphasis="detail"
+  columns={3}
+  items={[
+    { term: "B1 · Onderweg", detail: "Fluent essentials for everyday situations." },
+    { term: "B1+ · Op niveau", detail: "Bridging register: work, opinions, society." },
+    { term: "B2 · Doorstromen", detail: "Nuanced and confident, ready for the next course." },
+  ]}
+/>
+
+<Note label="Content">
+  The level structure follows the B1–B2 course book Nederlands op niveau. Every example sentence in the app is original.
+</Note>
+
+<Section label="The lesson" title="One short lesson, five screens">
+  A lesson takes about nine minutes and teaches eight phrases. It moves from recognising a phrase to recalling it, and
+  ends with a recap rather than a score alone.
+</Section>
+
+<Steps
+  items={[
+    { label: "Home", title: "Continue", detail: "The current lesson, level progress, themes and streak." },
+    { label: "Intro", title: "Theme", detail: "Level, time and the phrases you're about to learn." },
+    { label: "Study", title: "Flashcards", detail: "Dutch and IPA first; flip for meaning and an example." },
+    { label: "Check", title: "Quiz", detail: "Multiple choice with instant feedback and the reason." },
+    { label: "Finish", title: "Complete", detail: "Score, streak and a recap of today's phrases." },
+  ]}
+/>
+
+<Shot
+  src="/work/dutchwaffle/app-flow.jpg"
+  alt="Five screens of the built app: home, lesson intro, the back of a flashcard, a correctly answered quiz question and the lesson complete screen with dhr. Waffle"
+  width={2400}
+  height={1200}
+  caption="Expo build — the lesson flow as it runs today"
+/>
+
+<Section label="Key decision" title="Stack or flip">
+  The prototype tested two flashcard metaphors side by side. A stack shows the next cards behind the current one and
+  keeps momentum. A flip hides the meaning until you turn the card, which makes you try to recall it first. For phrases
+  whose whole point is when to use them, recall mattered more than speed, so flip won for v1.
+</Section>
+
+<Contrast left="More recall before the reveal." right="Less momentum between cards." />
+
+<Shot
+  src="/work/dutchwaffle/prototype.jpg"
+  alt="The clickable Claude Design prototype with screen shortcuts on the left, a phone in the middle and a Stack or Flip toggle on the right"
+  width={2400}
+  height={1500}
+  caption="Claude Design — the clickable prototype, with live tweaks for the card metaphor, theme and font scale"
+/>
+
+<Shot
+  src="/work/dutchwaffle/lesson-states.jpg"
+  alt="Four built screens: the front of a flashcard, its back with meaning and example, a quiz with an answer picked, and a wrong answer with the correct one highlighted and an explanation"
+  width={2400}
+  height={1292}
+  caption="Expo build — a wrong answer shows the right one and why, so a mistake still teaches the phrase"
+/>
+
+<Section label="Character" title="dhr. Waffle: a patient neighbour, not a strict teacher">
+  Learning a language as an adult can feel exposing. The mascot is there to lower the stakes: a friendly stroopwafel
+  from Gouda who praises the work, never rushes you and turns a wrong answer into "Net niet. Probeer nog eens."
+</Section>
+
+<Shot
+  src="/work/dutchwaffle/mascot.jpg"
+  alt="The dhr. Waffle character sheet: a round caramel stroopwafel with a smiling face, personality tags and eight expressions from neutral to oops"
+  width={2400}
+  height={2083}
+  caption="Character sheet — one body, eight expressions, each with one place in the flow"
+/>
+
+<Terms
+  emphasis="detail"
+  columns={3}
+  items={[
+    {
+      term: "Expressions with a job",
+      detail: "Focused during quizzes, oops on a wrong answer, proud at a streak milestone. Only the face changes.",
+    },
+    {
+      term: "Scale with meaning",
+      detail: "28 px and quiet in the header, 104 px and happy on completion. Below 24 px the blush is dropped.",
+    },
+    {
+      term: "Restraint",
+      detail: "At most one dhr. Waffle per screen, always round, always caramel, gentle motion only.",
+    },
+  ]}
+/>
+
+<Section label="Content" title="A lesson bank that grows by data">
+  Alongside the app sits a searchable bank of 38 idioms and expressions across six themes, from work and career to media
+  and news, ordered from B1 to B2. The phrases live in one data file, so a new theme or expression updates search,
+  filters and counts without touching the interface.
+</Section>
+
+<Shot
+  src="/work/dutchwaffle/lesson-bank.jpg"
+  alt="The lesson bank page with a search field, level and type filters, and a list of work and career idioms with their translations"
+  width={2400}
+  height={1950}
+  caption="Lesson bank — search across Dutch, translation and meaning; filter by level and type"
+/>
+
+<Section label="Design system" title="Dark, calm, one accent and one caramel">
+  A charcoal-green base, one teal accent for progress and actions, and a warm caramel borrowed from the stroopwafel for
+  the character and moments of praise. Urbanist with named type styles, an 8-point spacing scale, and no gradients
+  outside a single lesson card. Every value lives in one token file that components read through `useTheme()`.
+</Section>
+
+<Shot
+  src="/work/dutchwaffle/tokens.jpg"
+  alt="The design system section of the handoff: dark colour layers, brand accents, the Urbanist type scale and the 8-point spacing scale"
+  width={2400}
+  height={2933}
+  caption="Handoff — colour, type and spacing, mirrored one-to-one by src/theme/tokens.ts"
+/>
+
+<Snippets items={[{ file: "src/theme/tokens.ts · excerpt", lang: "ts", code: snippets.themeTokens }]} />
+
+<Section label="Handoff" title="A spec written for an AI agent to build from">
+  Before any code, the design became a developer handoff: a screen inventory with routes, transitions and gestures,
+  component APIs, tokens, every state of every screen, the data contract, and acceptance criteria per screen. It was
+  written so that a person or Claude Code could build from it without guessing, and so the result could be checked
+  against it line by line.
+</Section>
+
+<Terms
+  columns={4}
+  items={[
+    { term: "SCREENS.md", detail: "Structure, layout and content of every screen" },
+    { term: "COMPONENTS.md", detail: "Component catalogue with props and states" },
+    { term: "TOKENS.md", detail: "Design tokens, mirroring tokens.ts" },
+    { term: "ACCEPTANCE.md", detail: "One checklist per screen, plus global rules" },
+  ]}
+/>
+
+<Shot
+  src="/work/dutchwaffle/handoff-states.jpg"
+  alt="The states section of the handoff: success, loading, empty and error states for the home, flashcard and quiz screens"
+  width={2400}
+  height={2466}
+  caption="Handoff — four universal states for every screen, including the quiz's correct and wrong feedback"
+/>
+
+<Snippets
+  items={[
+    { file: "docs/handoff/ACCEPTANCE.md", lang: "md", code: snippets.flashcardAcceptance },
+    { file: "docs/handoff/HANDOFF.md · architecture rules", lang: "md", code: snippets.handoffRules },
+  ]}
+  columns={1}
+  flow={false}
+/>
+
+<Section label="Build" title="Built with Claude Code, directed and reviewed by me">
+  The first build commit, on the day the handoff was finished, implemented all five screens from it: typed file-based
+  routes, the theme, the shared components, the flip animation, the quiz and a seeded lesson. From there the work was
+  review: running the app, comparing it with the design, and correcting spacing, labels and hierarchy until it matched.
+</Section>
+
+<Steps
+  items={[
+    { label: "Design", title: "Claude Design", detail: "Clickable prototype, character sheet, lesson bank." },
+    { label: "Specify", title: "Handoff", detail: "Screens, components, tokens, states, acceptance." },
+    { label: "Build", title: "Claude Code", detail: "Expo app built from the handoff." },
+    { label: "Review", title: "On devices", detail: "Expo Go on a phone, Android, the browser." },
+    { label: "Ship", title: "GitHub Pages", detail: "Every push to main publishes the browser preview." },
+  ]}
+/>
+
+<Section label="Where it got complicated" title="The bugs only showed up on real devices" />
+
+<Cards columns={3}>
+  <Card title="A flip that mirrored the text">
+    The flip relied on `backfaceVisibility` to hide the face turned away. On Android and the web it didn't, and the back
+    of the card showed through mirrored. **The fix switches each face's opacity at exactly 90°**, so only one face can
+    ever be visible.
+  </Card>
+  <Card title="A mascot that vanished on the web">
+    dhr. Waffle is an SVG with gradients. With several on one screen, they shared gradient IDs and the browser rendered
+    some of them transparent. **Each instance now gets its own IDs.**
+  </Card>
+  <Card title="The version chain">
+    To test on a real phone in Expo Go, the project had to match the SDK that Expo Go ships with, and then every native
+    module, from Reanimated to the SVG renderer, had to match that SDK's bundled versions. **Device testing set the
+    stack, not the other way round.**
+  </Card>
+</Cards>
+
+<Snippets items={[{ file: "src/features/lesson/components/FlipCard.tsx", lang: "tsx", code: snippets.flipCard }]} />
+
+<Note label="The handoff aged">
+  The handoff specified Expo SDK 51 with React Navigation; the app now runs on a newer SDK with Expo Router. Screens,
+  components, tokens and flows still follow the spec. What held up was the behaviour it described, not the libraries it
+  named.
+</Note>
+
+<Subhead title="Stack" />
+
+<Terms
+  emphasis="detail"
+  columns={4}
+  items={[
+    { term: "Design", detail: "Claude Design · prototype, handoff, character" },
+    { term: "App", detail: "Expo · Expo Router · React Native · TypeScript" },
+    { term: "State and motion", detail: "TanStack Query · Zustand · Reanimated · Haptics" },
+    { term: "Delivery", detail: "Claude Code · GitHub Actions · GitHub Pages" },
+  ]}
+/>
+
+<Section label="Status" title="Working flow, next layers specified">
+  The lesson flow works end to end with locally seeded content and runs on iOS, Android and in the browser. The next
+  layers are already described in the handoff.
+</Section>
+
+<Checks
+  marker="number"
+  items={[
+    { title: "Audio for every phrase", detail: "Pronunciation to go with the IPA." },
+    { title: "The lesson bank inside the app", detail: "The 38 expressions become lessons." },
+    { title: "Spaced repetition", detail: "Phrases marked Lastig come back at the right time." },
+    { title: "Backend and sync", detail: "Progress saved across devices." },
+    { title: "Onboarding, profile, settings", detail: "Specified in the handoff, out of scope for v1." },
+  ]}
+/>
+
+<Section label="Learnings" title="What this taught me" />
+
+<Cards columns={3}>
+  <Card title="A handoff is a prompt">
+    The more precisely the spec described states and acceptance criteria, the less the build had to guess. Writing it
+    was design work, not documentation.
+  </Card>
+  <Card title="Review is the job">
+    AI wrote much of the code. My part was deciding what it should do, then checking that it did, screen by screen.
+  </Card>
+  <Card title="Test on every platform">
+    The same React Native code rendered differently on iOS, Android and the web. What one platform hid, another showed,
+    so each one gets checked before a change counts as done.
+  </Card>
+</Cards>

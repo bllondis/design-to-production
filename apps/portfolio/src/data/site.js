@@ -30,6 +30,7 @@ export const footerColumns = [
     links: [
       { label: "Design Systems", href: "/#systems-title" },
       { label: "AI Product Building", href: "/#ai-building-title" },
+      { label: "AI-Built Mobile Apps", href: "/#ai-mobile-title" },
       { label: "Greenfield Enterprise", href: "/#greenfield-title" },
       { label: "Mature Enterprise", href: "/#mature-title" },
     ],
@@ -40,6 +41,7 @@ export const footerColumns = [
       { label: "Design to production", href: "/work/design-to-production/" },
       { label: "TED Design System", href: "/work/ted-design-system/" },
       { label: "Timeflow", href: "/work/timeflow/" },
+      { label: "DutchWaffle", href: "/work/dutchwaffle/" },
       { label: "DocuStream", href: "/work/docustream/" },
       { label: "BookIT", href: "/work/bookit/" },
     ],

@@ -7,6 +7,7 @@ for (const path of [
   "/work/design-to-production/",
   "/work/ted-design-system/",
   "/work/timeflow/",
+  "/work/dutchwaffle/",
   "/work/docustream/",
   "/work/bookit/",
 ]) {
