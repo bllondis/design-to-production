@@ -7,7 +7,7 @@ const meta = {
   component: Figure,
   parameters: { layout: "fullscreen" },
   args: {
-    src: "/assets/docustream-dashboard.jpg",
+    src: "assets/docustream-dashboard.jpg",
     alt: "DocuStream filings dashboard",
     caption: "The dashboard connects individual filing work to the wider operational picture.",
   },

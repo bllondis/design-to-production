@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { title, description, path = "/" } = Astro.props;
-const site = Astro.site?.toString().replace(/\/$/, "") ?? "";
+const site = Astro.site ? new URL(import.meta.env.BASE_URL, Astro.site).href.replace(/\/$/, "") : "";
 const url = `${site}${path}`;
 const image = `${site}/og.png`;
 ---

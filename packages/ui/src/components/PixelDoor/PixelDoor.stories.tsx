@@ -5,17 +5,12 @@ import { PixelDoor } from "./PixelDoor";
 const meta = {
   title: "Components/PixelDoor",
   component: PixelDoor,
-  args: { character: "/assets/pixel-cat.jpg", still: true, inset: false },
+  args: { character: "assets/pixel-cat.jpg", still: true, inset: false },
   argTypes: {
     initialState: { control: "inline-radio", options: ["closed", "peek", "open"] },
     character: {
       control: "select",
-      options: [
-        "/assets/pixel-cat.jpg",
-        "/assets/pixel-waffle.jpg",
-        "/assets/pixel-beet.jpg",
-        "/assets/pixel-girl.jpg",
-      ],
+      options: ["assets/pixel-cat.jpg", "assets/pixel-waffle.jpg", "assets/pixel-beet.jpg", "assets/pixel-girl.jpg"],
     },
   },
   decorators: [
@@ -33,11 +28,11 @@ type Story = StoryObj<typeof meta>;
 export const Closed: Story = {};
 
 export const Peek: Story = {
-  args: { initialState: "peek", character: "/assets/pixel-waffle.jpg" },
+  args: { initialState: "peek", character: "assets/pixel-waffle.jpg" },
 };
 
 export const Open: Story = {
-  args: { initialState: "open", character: "/assets/pixel-girl.jpg" },
+  args: { initialState: "open", character: "assets/pixel-girl.jpg" },
 };
 
 /** Clicking toggles the door and keeps the accessible name in sync. */
