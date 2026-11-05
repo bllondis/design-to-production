@@ -2,7 +2,7 @@
 
 My portfolio site, built on a design system I designed and shipped myself: from Figma variables to tokens, React components, Storybook and a tested, deployed Astro site. The repo is the case study – it shows how a design decision travels all the way into production code.
 
-**[Live site](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site)** · **[Design system docs](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site/system/)** · **[Storybook](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site/storybook/)**
+**[Live site](https://bllondis.github.io/design-to-production)** · **[Design system docs](https://bllondis.github.io/design-to-production/system/)** · **[Storybook](https://bllondis.github.io/design-to-production/storybook/)**
 
 ![Portfolio hero](apps/portfolio/e2e/visual.spec.ts-snapshots/hero-desktop-darwin.png)
 
@@ -53,11 +53,11 @@ The site was built with AI coding agents. [`AGENTS.md`](AGENTS.md) is the rulebo
 
 ## Case studies on the site
 
-- **[Design to production](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site/work/design-to-production/)** – the story of this repo: three token tiers, Figma variables that mirror them, React components and CI
-- **[Timeflow](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site/work/timeflow/)** – AI timesheet assistant, solo from research to a deployed full-stack app
-- **[DutchWaffle](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site/work/dutchwaffle/)** – Dutch learning app, from an AI design prototype to a cross-platform Expo build
-- **[DocuStream](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site/work/docustream/)** – B2B SaaS for UCC filing management
-- **[BookIT](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site/work/bookit/)** – new admin modules for an enterprise ERP platform
+- **[Design to production](https://bllondis.github.io/design-to-production/work/design-to-production/)** – the story of this repo: three token tiers, Figma variables that mirror them, React components and CI
+- **[Timeflow](https://bllondis.github.io/design-to-production/work/timeflow/)** – AI timesheet assistant, solo from research to a deployed full-stack app
+- **[DutchWaffle](https://bllondis.github.io/design-to-production/work/dutchwaffle/)** – Dutch learning app, from an AI design prototype to a cross-platform Expo build
+- **[DocuStream](https://bllondis.github.io/design-to-production/work/docustream/)** – B2B SaaS for UCC filing management
+- **[BookIT](https://bllondis.github.io/design-to-production/work/bookit/)** – new admin modules for an enterprise ERP platform
 
 Each case is an MDX file composed from the same case components, so a new case is a content change, not new markup.
 

@@ -6,8 +6,8 @@ const meta = {
   component: Clip,
   parameters: { layout: "fullscreen" },
   args: {
-    src: "/work/timeflow/review-your-day.mp4",
-    poster: "/work/timeflow/review-your-day-don-t-log-it.jpg",
+    src: "work/timeflow/review-your-day.mp4",
+    poster: "work/timeflow/review-your-day-don-t-log-it.jpg",
     label: "Review your day - don't log it",
   },
   argTypes: { mode: { control: "inline-radio", options: ["ambient", "walkthrough"] } },

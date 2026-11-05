@@ -6,7 +6,7 @@ const meta = {
   component: MediaRow,
   parameters: { layout: "fullscreen" },
   args: {
-    src: "/work/timeflow/competitive-analysis.jpg",
+    src: "work/timeflow/competitive-analysis.jpg",
     alt: "Competitive analysis",
     label: "03 · Research",
     title: "Competitive analysis",

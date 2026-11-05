@@ -14,7 +14,7 @@
     "storybook": "npm run storybook -w @tetiana/ui",
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "build": "npm run clean && npm run tokens && npm run build -w portfolio && npm run build-storybook -w @tetiana/ui && node apps/portfolio/scripts/build-site.mjs",
-    "test": "npm test -w @tetiana/ui",
+    "test": "npm test -w @tetiana/ui && node --test apps/portfolio/scripts/*.test.mjs",
     "test:e2e": "npm run build && npm run test:e2e -w portfolio",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "eslint .",
