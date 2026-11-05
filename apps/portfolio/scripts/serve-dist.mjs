@@ -4,7 +4,7 @@ import { createServer } from "node:http";
 import { dirname, extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 
-// Serves the built site from dist/client the way the static host does, for end-to-end tests.
+// Serves the built site from dist/client the way GitHub Pages does, for end-to-end tests.
 const root = join(dirname(dirname(fileURLToPath(import.meta.url))), "..", "..", "dist", "client");
 const port = Number(process.env.PORT ?? 4322);
 const types = {
