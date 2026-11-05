@@ -78,7 +78,7 @@ const sections = [
         title="Tokens in three tiers."
         intro="Primitives hold raw values. Semantic tokens say what a value is for. Component tokens hold the decisions of one component, such as a button's hover colour, and point at semantic ones. Changing a primitive updates every role and component that points to it."
       >
-        <FrameRow>
+        <FrameRow divider="both">
           <ol class="pipeline">
             <li>
               <span class="text-label-s">Source</span>
@@ -233,12 +233,12 @@ const sections = [
         id="components"
         label="06 / Components"
         title="Every block, with its variants and states."
-        intro="Building blocks are React + TypeScript components in the @tetiana/ui package, each with its CSS module, Storybook story and tests. The portfolio app composes them into pages with Astro: layout (Frame, FrameRow, RuledSection) and sections (CapabilityBlock and friends). Interactive blocks hydrate only when they scroll into view."
+        intro="Building blocks are React + TypeScript components in the @tetiana/ui package, each with its CSS module, Storybook story and tests. The portfolio app composes them into pages with Astro: layout (Frame, FrameRow) and sections (CapabilityBlock and friends). Interactive blocks hydrate only when they scroll into view."
       >
         <Specimen
           name="Button"
           file="@tetiana/ui · Button"
-          usage={`<Button href="/work/timeflow/">See it in Timeflow</Button>\n<Button href="mailto:…" variant="dark" size="s">Get in touch</Button>\n<Button href="https://…" variant="text" external>Open live product</Button>`}
+          usage={`<Button href="/work/timeflow/">See it in Timeflow</Button>\n<Button popoverTarget="contact-links" variant="dark" size="s">Get in touch</Button>\n<Button href="https://…" variant="text" external>Open live product</Button>`}
         >
           <ul slot="notes">
             <li>
@@ -249,6 +249,9 @@ const sections = [
             </li>
             <li>
               <code>icon</code>: ↗ (default), ↓, or none
+            </li>
+            <li>
+              <code>popoverTarget</code>: opens a popover instead of following a link
             </li>
             <li>Hover inverts the fill.</li>
           </ul>
@@ -351,7 +354,10 @@ const sections = [
             <li>
               Redraws a screenshot as a coloured glyph mosaic; light UI is inverted so ink and colour carry the shape
             </li>
-            <li>Resolves from noise on first view; glyphs scramble under the pointer</li>
+            <li>
+              Resolves from noise on first view; the pointer opens a lens onto the real screenshot, with light glyphs
+              still running over it
+            </li>
             <li>
               <code>focus</code>: which part to keep when cropping
             </li>
@@ -409,12 +415,8 @@ const sections = [
                 <dt>Frame + FrameRow</dt>
                 <dd>
                   The bordered container with gutter columns. Rows take a <code>gutter</code> slot and a{" "}
-                  <code>divider</code> (top, none, both).
+                  <code>divider</code> (top, none, bottom, both). Rows with column dividers close with a bottom line.
                 </dd>
-              </div>
-              <div>
-                <dt>RuledSection</dt>
-                <dd>Editorial section with an index line, used by Working method and About.</dd>
               </div>
               <div>
                 <dt>CapabilityChapter</dt>
@@ -439,7 +441,7 @@ const sections = [
               </div>
               <div>
                 <dt>ContactBand</dt>
-                <dd>Inverse band with a light SignalField, heading-1 and a dark Button.</dd>
+                <dd>Inverse band with a light SignalField, heading-1 and a dark Button that opens ContactPopup.</dd>
               </div>
             </dl>
           </div>
@@ -522,9 +524,11 @@ const sections = [
     font-weight: var(--font-weight-regular);
   }
 
+  /* The last swatch row's bottom line sits under the next row's top line, not beside it. */
   .swatches {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    margin-bottom: -1px;
   }
 
   .swatch {

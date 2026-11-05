@@ -23,7 +23,7 @@ interface Props {
 const { items, flow = items.length > 1, columns = Math.min(items.length, 3) } = Astro.props;
 ---
 
-<FrameRow>
+<FrameRow divider="both">
   <div class:list={["snippets", { flow, stacked: columns === 1 }]} style={`--snippet-columns: ${columns}`}>
     {items.map((item) => (
       <figure class="snippet">

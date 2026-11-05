@@ -1,15 +1,29 @@
 ---
+/**
+ * SiteHeader: name and primary navigation in a bordered bar above the page.
+ *
+ * flush  sit on the top edge instead of var(--space-page) below it (the home hero)
+ */
 import { person, primaryNav } from "../../data/site.js";
+
+interface Props {
+  flush?: boolean;
+}
+
+const { flush = false } = Astro.props;
 ---
 
-<header class="header">
+<header class:list={["header", { "header--flush": flush }]}>
   <a class="identity" href="/#top" aria-label={`${person.name}, home`}>
-    <span>{person.name}</span>
-    <small class="text-label-s">{person.role}</small>
+    {person.name}
   </a>
   <nav class="nav" aria-label="Primary navigation">
     {primaryNav.map((item) => (
-      <a class="text-label-m" href={item.href}>
+      <a
+        class="text-label-l"
+        href={item.href}
+        {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      >
         {item.label}
       </a>
     ))}
@@ -21,6 +35,7 @@ import { person, primaryNav } from "../../data/site.js";
     position: absolute;
     top: var(--space-page);
     left: var(--space-page);
+    z-index: 2;
     display: flex;
     width: calc(100% - (2 * var(--space-page)));
     min-height: var(--layout-header-height);
@@ -33,17 +48,14 @@ import { person, primaryNav } from "../../data/site.js";
     color: var(--color-text-primary);
   }
 
+  .header--flush {
+    top: 0;
+  }
+
   .identity {
-    display: flex;
-    gap: 0.8rem;
-    align-items: baseline;
     font-size: clamp(1.1rem, 2vw, 1.65rem);
     letter-spacing: var(--font-tracking-tight);
     text-decoration: none;
-  }
-
-  .identity small {
-    color: var(--color-text-muted);
   }
 
   .nav {
@@ -75,12 +87,6 @@ import { person, primaryNav } from "../../data/site.js";
     transform-origin: left;
   }
 
-  @media (max-width: 980px) {
-    .identity small {
-      display: none;
-    }
-  }
-
   @media (max-width: 680px) {
     .header {
       gap: var(--space-s);
@@ -96,12 +102,13 @@ import { person, primaryNav } from "../../data/site.js";
     }
 
     .nav a:nth-child(2),
-    .nav a:nth-child(3) {
+    .nav a:nth-child(3),
+    .nav a:nth-child(4) {
       display: none;
     }
 
     .nav a {
-      font-size: 0.58rem;
+      font-size: var(--font-size-label-m);
     }
   }
 </style>

@@ -3,11 +3,14 @@
  * FrameRow: one horizontal band inside a Frame — gutter | content | gutter.
  * Put a Tile or PixelDoor in the "gutter" slot; everything else goes in the middle.
  *
- * divider  which horizontal lines to draw: "top" (default) · "none" · "both"
+ * divider  which horizontal lines to draw: "top" (default) · "none" · "bottom" · "both".
+ *          Rows whose content has column dividers close with a bottom line, so those lines never
+ *          end in empty space. A closed row overlaps whatever follows by 1px, so a top line
+ *          right below lands on the same pixel instead of doubling.
  * as       element to render, e.g. "header" for a chapter title row
  */
 interface Props {
-  divider?: "top" | "none" | "both";
+  divider?: "top" | "none" | "bottom" | "both";
   as?: "div" | "header";
 }
 
@@ -34,7 +37,9 @@ const { divider = "top", as: Tag = "div" } = Astro.props;
     border-top: 1px solid var(--color-border-default);
   }
 
+  .row--bottom,
   .row--both {
+    margin-bottom: -1px;
     border-bottom: 1px solid var(--color-border-default);
   }
 

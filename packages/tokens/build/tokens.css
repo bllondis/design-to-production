@@ -100,7 +100,7 @@
   --color-surface-raised: var(--color-ink-900);
   --color-surface-inverse: var(--color-paper-50); /** Light bands: hero card, contact band, hovered skill. */
   --color-surface-glow: var(--color-alpha-paper-8); /** Soft light in the top-left of copy panels. */
-  --color-surface-header: var(--color-alpha-ink-88);
+  --color-surface-header: var(--color-ink-950); /** Solid bar, so nothing behind it shows through. */
   --color-surface-footer-end: var(--color-ink-850);
   --color-surface-void: var(--color-ink-1000);
   --color-text-primary: var(--color-paper-50);
@@ -147,6 +147,8 @@
   --door-edge: var(--color-border-subtle); /** Hairline around the door leaf. */
   --tag-border: var(--color-border-default);
   --tag-fg: var(--color-text-secondary);
+  --tag-bg-hover: var(--color-surface-inverse); /** Tags that link somewhere. */
+  --tag-fg-hover: var(--color-text-inverse);
   --skill-border: var(--color-border-default);
   --skill-bg-hover: var(--color-surface-inverse);
   --skill-fg-hover: var(--color-text-inverse);

@@ -25,6 +25,18 @@ describe("Heading", () => {
     expect(heading).toHaveTextContent("I design calm interfaces.");
   });
 
+  it("breaks lines at \\n and names the heading with plain spaces", () => {
+    render(<Heading size="heading-1" text={"Working across\ncomplex systems."} pixel={false} />);
+    const heading = screen.getByRole("heading", { name: "Working across complex systems." });
+    expect(heading.querySelectorAll("br")).toHaveLength(1);
+  });
+
+  it("keeps forced breaks with pixel letters on", () => {
+    const { container } = render(<Heading size="heading-1" text={"Working across\ncomplex systems."} />);
+    expect(screen.getByRole("heading", { name: "Working across complex systems." })).toBeInTheDocument();
+    expect(container.querySelectorAll("[aria-hidden='true'] br")).toHaveLength(1);
+  });
+
   it("sets the measure as a custom property", () => {
     render(<Heading size="display-4" text="Design Systems" measure={16} />);
     expect(screen.getByRole("heading").style.getPropertyValue("--heading-measure")).toBe("16ch");

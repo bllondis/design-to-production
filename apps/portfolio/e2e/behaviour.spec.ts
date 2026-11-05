@@ -35,6 +35,27 @@ for (const slug of ["design-to-production", "ted-design-system", "timeflow", "du
   });
 }
 
+test("get in touch opens the contact links and Escape closes them", async ({ page }) => {
+  await page.goto("/");
+  const dialog = page.getByRole("dialog", { name: "Get in touch" });
+  await expect(dialog).toBeHidden();
+  await page.getByRole("button", { name: "Get in touch" }).click();
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("link")).toHaveCount(4);
+  await expect(dialog.getByRole("link", { name: /Email/ })).toHaveAttribute("href", /^mailto:/);
+  await expect(dialog.getByRole("link", { name: /CV/ })).toHaveAttribute("target", "_blank");
+  await dialog.getByRole("link", { name: /GitHub/ }).hover();
+  await expect(dialog.getByRole("button", { name: "Copy link: GitHub" })).toHaveCSS("opacity", "1");
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+});
+
+test("hidden cases stay out of the next-case links", async ({ page }) => {
+  await page.goto("/work/design-to-production/");
+  await expect(page.locator('a[href="/work/ted-design-system/"]')).toHaveCount(0);
+  await expect(page.locator('main a[href="/work/timeflow/"]')).not.toHaveCount(0);
+});
+
 test("old case URLs forward to the new pages", async ({ page }) => {
   await page.goto("/Cases/timeflow.html");
   await expect(page).toHaveURL(/\/work\/timeflow\/$/);

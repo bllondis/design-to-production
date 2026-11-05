@@ -1,8 +1,8 @@
 ---
 import Frame from "../layout/Frame.astro";
 import FrameRow from "../layout/FrameRow.astro";
-import { Button, Heading, SignalField } from "@tetiana/ui";
-import { person } from "../../data/site.js";
+import { Button, ContactPopup, Heading, SignalField } from "@tetiana/ui";
+import { contactLinks, person } from "../../data/site.js";
 ---
 
 <Frame id="contact" aria-labelledby="contact-title">
@@ -24,9 +24,10 @@ import { person } from "../../data/site.js";
             products, and design systems.
           </p>
           <div class="band-action">
-            <Button href={`mailto:${person.email}`} variant="dark" size="s">
+            <Button popoverTarget="contact-links" variant="dark" size="s">
               Get in touch
             </Button>
+            <ContactPopup client:idle id="contact-links" title="Get in touch" links={contactLinks} />
           </div>
         </div>
       </div>

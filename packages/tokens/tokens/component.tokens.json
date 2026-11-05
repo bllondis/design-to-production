@@ -55,6 +55,8 @@
   "tag": {
     "border": { "$type": "color", "$value": "{color.border.default}" },
     "fg": { "$type": "color", "$value": "{color.text.secondary}" },
+    "bg-hover": { "$type": "color", "$value": "{color.surface.inverse}", "$description": "Tags that link somewhere." },
+    "fg-hover": { "$type": "color", "$value": "{color.text.inverse}" },
     "padding-block": { "$type": "dimension", "$value": "0.55rem" },
     "padding-inline": { "$type": "dimension", "$value": "{space.xs}" },
     "gap": { "$type": "dimension", "$value": "{space.2xs}", "$description": "Space between tags in a list." }

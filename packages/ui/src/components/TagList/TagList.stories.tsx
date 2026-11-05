@@ -11,3 +11,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Dimensions: Story = {};
+
+export const Links: Story = {
+  args: {
+    items: [
+      { label: "Design to production", href: "/work/design-to-production/" },
+      { label: "Timeflow", href: "/work/timeflow/" },
+      { label: "DutchWaffle", href: "/work/dutchwaffle/" },
+    ],
+  },
+};

@@ -10,7 +10,7 @@
         "$description": "Light bands: hero card, contact band, hovered skill."
       },
       "glow": { "$value": "{color.alpha.paper-8}", "$description": "Soft light in the top-left of copy panels." },
-      "header": { "$value": "{color.alpha.ink-88}" },
+      "header": { "$value": "{color.ink.950}", "$description": "Solid bar, so nothing behind it shows through." },
       "footer-end": { "$value": "{color.ink.850}" },
       "void": { "$value": "{color.ink.1000}" }
     },

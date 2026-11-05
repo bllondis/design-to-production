@@ -5,6 +5,6 @@ import { StatRow, type Stat } from "@tetiana/ui";
 const { items } = Astro.props as { items: Stat[] };
 ---
 
-<FrameRow>
+<FrameRow divider="both">
   <StatRow items={items} />
 </FrameRow>

@@ -9,7 +9,7 @@ interface Props {
 const { columns = 2 } = Astro.props;
 ---
 
-<FrameRow>
+<FrameRow divider="both">
   <div class="cards" style={`--card-columns: ${columns}`}>
     <slot />
   </div>

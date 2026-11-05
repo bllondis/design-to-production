@@ -5,6 +5,6 @@ import { StepList, type Step } from "@tetiana/ui";
 const { items } = Astro.props as { items: Step[] };
 ---
 
-<FrameRow>
+<FrameRow divider="both">
   <StepList items={items} />
 </FrameRow>

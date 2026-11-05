@@ -9,18 +9,20 @@ export interface AsciiVisualProps {
   focus?: string;
   /** Small mono label in the bottom-left corner. */
   caption?: string;
+  /** Show the real screenshot under the pointer, snapped to the glyph grid. On by default. */
+  lens?: boolean;
 }
 
 /** A project screenshot redrawn as a coloured glyph mosaic. Fills its container. */
-export function AsciiVisual({ src, focus = "0.5 0.5", caption }: AsciiVisualProps) {
+export function AsciiVisual({ src, focus = "0.5 0.5", caption, lens = true }: AsciiVisualProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const [x = 0.5, y = 0.5] = focus.split(" ").map(Number);
-    return startAsciiVisual(canvas, src, [x, y]);
-  }, [src, focus]);
+    return startAsciiVisual(canvas, src, [x, y], { lens });
+  }, [src, focus, lens]);
 
   return (
     <figure className={styles.ascii}>

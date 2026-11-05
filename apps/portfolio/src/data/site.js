@@ -2,28 +2,32 @@
 
 export const person = {
   name: "Tetiana Dovgalenko",
-  role: "Product Design + Engineering",
   email: "tetiana.dovgalenko@gmail.com",
   linkedin: "https://nl.linkedin.com/in/tanya-dovgalenko",
+  github: "https://github.com/bllondis",
 };
 
-export const cvRequest = `mailto:${person.email}?subject=CV%20request`;
+export const cv = "/Tetiana_Dovgalenko_Resume.pdf";
+
+export const contactLinks = [
+  { label: "Email", detail: person.email, href: `mailto:${person.email}` },
+  { label: "LinkedIn", detail: "in/tanya-dovgalenko", href: person.linkedin, external: true },
+  { label: "GitHub", detail: "bllondis", href: person.github, external: true },
+  { label: "CV", detail: "PDF", href: cv, external: true },
+];
 
 export const primaryNav = [
   { label: "Work", href: "/#work" },
   { label: "About", href: "/#about" },
-  { label: "CV", href: cvRequest },
-  { label: "Contact", href: "/#contact" },
+  { label: "CV", href: cv, external: true },
+  { label: "GitHub", href: person.github, external: true },
+  { label: "LinkedIn", href: person.linkedin, external: true },
 ];
 
 export const footerColumns = [
   {
     title: "Contact",
-    links: [
-      { label: "Email", href: `mailto:${person.email}` },
-      { label: "LinkedIn", href: person.linkedin, external: true },
-      { label: "Request CV", href: cvRequest },
-    ],
+    links: contactLinks,
   },
   {
     title: "Capabilities",
@@ -39,7 +43,6 @@ export const footerColumns = [
     title: "Cases",
     links: [
       { label: "Design to production", href: "/work/design-to-production/" },
-      { label: "TED Design System", href: "/work/ted-design-system/" },
       { label: "Timeflow", href: "/work/timeflow/" },
       { label: "DutchWaffle", href: "/work/dutchwaffle/" },
       { label: "DocuStream", href: "/work/docustream/" },

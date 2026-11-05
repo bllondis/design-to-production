@@ -27,9 +27,10 @@ import Terms from "../../components/case/Terms.astro";
 
 export async function getStaticPaths() {
   const cases = (await getCollection("cases")).sort((a, b) => a.data.order - b.data.order);
-  return cases.map((entry, index) => ({
+  const listed = cases.filter((entry) => !entry.data.hidden);
+  return cases.map((entry) => ({
     params: { slug: entry.id },
-    props: { entry, next: cases[(index + 1) % cases.length] },
+    props: { entry, next: listed.find((other) => other.data.order > entry.data.order) ?? listed[0] },
   }));
 }
 
