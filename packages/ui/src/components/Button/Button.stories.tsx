@@ -9,6 +9,17 @@ const meta = {
     variant: { control: "inline-radio", options: ["light", "dark", "text"] },
     size: { control: "inline-radio", options: ["m", "s"] },
     icon: { control: "inline-radio", options: ["↗", "↓", ""] },
+    // Docgen drops props that live in a union, so these two are described here.
+    external: {
+      description: "Opens in a new tab with safe rel attributes.",
+      control: "boolean",
+      table: { type: { summary: "boolean" }, defaultValue: { summary: "false" } },
+    },
+    popoverTarget: {
+      description: "Id of a popover to open: renders a real button instead of a link. Use it instead of href.",
+      control: "text",
+      table: { type: { summary: "string" } },
+    },
   },
 } satisfies Meta<typeof Button>;
 
