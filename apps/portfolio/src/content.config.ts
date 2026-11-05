@@ -16,6 +16,8 @@ const cases = defineCollection({
     cover: z.object({ src: z.string(), focus: z.string().optional(), caption: z.string().optional() }),
     character: z.string(),
     order: z.number(),
+    // Hidden cases keep their page but are left out of the next-case links.
+    hidden: z.boolean().default(false),
   }),
 });
 

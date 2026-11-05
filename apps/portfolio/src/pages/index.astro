@@ -16,7 +16,7 @@ import { chapters } from "../data/capabilities.js";
   title="Tetiana Dovgalenko | Product Designer and Design Engineer"
   description="Tetiana Dovgalenko is a Product Designer and Design Engineer working across complex B2B software, AI-assisted products, and design systems."
 >
-  <SiteHeader />
+  <SiteHeader flush />
   <main id="main">
     <Hero />
     <Frame id="work" aria-label="Capabilities">
@@ -26,6 +26,7 @@ import { chapters } from "../data/capabilities.js";
           number={chapter.number}
           title={chapter.title}
           intro={chapter.intro}
+          projects={chapter.projects}
           first={chapterIndex === 0}
         >
           {chapter.blocks.map((block, blockIndex) => (
@@ -34,8 +35,10 @@ import { chapters } from "../data/capabilities.js";
         </CapabilityChapter>
       ))}
     </Frame>
-    <MethodSection />
-    <AboutSection />
+    <Frame as="div">
+      <MethodSection />
+      <AboutSection />
+    </Frame>
     <ContactBand />
   </main>
   <SiteFooter />

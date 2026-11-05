@@ -7,6 +7,7 @@ export * from "./components/AsciiVisual/AsciiVisual";
 export * from "./components/SignalField/SignalField";
 export * from "./components/Figure/Figure";
 export * from "./components/Lightbox/Lightbox";
+export * from "./components/ContactPopup/ContactPopup";
 export * from "./components/StatRow/StatRow";
 export * from "./components/InfoCard/InfoCard";
 export * from "./components/TermGrid/TermGrid";

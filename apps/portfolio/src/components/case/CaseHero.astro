@@ -18,7 +18,7 @@ interface Props {
 const { title, kicker, summary, meta, note, stats, actions, cover, character } = Astro.props;
 ---
 
-<FrameRow as="header" divider="none">
+<FrameRow as="header" divider="bottom">
   <div slot="gutter">
     <PixelDoor client:visible character={character} />
   </div>
@@ -49,7 +49,7 @@ const { title, kicker, summary, meta, note, stats, actions, cover, character } =
   </div>
 </FrameRow>
 {stats && (
-  <FrameRow>
+  <FrameRow divider="both">
     <StatRow items={stats} />
   </FrameRow>
 )}

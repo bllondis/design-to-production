@@ -27,11 +27,15 @@ One change to a token in Figma has a clear path to every page that uses it, and 
 
 Components may only use semantic and component tokens, never primitives or raw hex. Tokens are written in the W3C DTCG format and built into CSS with Style Dictionary.
 
+![The three Figma variable collections: Primitives, Semantic and Component](apps/portfolio/public/work/design-to-production/figma-variables.jpg)
+
 **A component library with its own contract**
 
-`@tetiana/ui` – React + TypeScript components, each with a CSS module, a Storybook story and tests: `Button`, `Heading`, `Tile`, `PixelDoor`, `AsciiVisual`, `SignalField`, `SkillGrid`, `StatRow`, `Lightbox`, `Figure`, `StepList` and more. Variants are props, not copies.
+`@tetiana/ui` – React + TypeScript components, each with a CSS module, a Storybook story and tests: `Button`, `Heading`, `Tile`, `PixelDoor`, `AsciiVisual`, `SignalField`, `SkillGrid`, `ContactPopup`, `StatRow`, `Lightbox`, `Figure`, `StepList` and more. Variants are props, not copies.
 
 **Documented twice** – in Storybook, and on a live `/system` page inside the site itself, where every block is shown with its variants, states and usage code.
+
+![Button docs in Storybook, with its props and stories](apps/portfolio/public/work/design-to-production/storybook-button-docs.jpg)
 
 ![Design system components page](apps/portfolio/e2e/visual.spec.ts-snapshots/system-components-desktop-darwin.png)
 
@@ -49,10 +53,11 @@ The site was built with AI coding agents. [`AGENTS.md`](AGENTS.md) is the rulebo
 
 ## Case studies on the site
 
-- **Timeflow** – AI timesheet assistant, solo from research to a deployed full-stack app
-- **TeD Design System** – design system for a project management product, Figma to React
-- **BookIT** – new admin modules for an enterprise ERP platform
-- **DocuStream** – B2B SaaS for UCC filing management
+- **[Design to production](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site/work/design-to-production/)** – the story of this repo: three token tiers, Figma variables that mirror them, React components and CI
+- **[Timeflow](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site/work/timeflow/)** – AI timesheet assistant, solo from research to a deployed full-stack app
+- **[DutchWaffle](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site/work/dutchwaffle/)** – Dutch learning app, from an AI design prototype to a cross-platform Expo build
+- **[DocuStream](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site/work/docustream/)** – B2B SaaS for UCC filing management
+- **[BookIT](https://tetiana-dovgalenko-portfolio.fairyorbit11.chatgpt.site/work/bookit/)** – new admin modules for an enterprise ERP platform
 
 Each case is an MDX file composed from the same case components, so a new case is a content change, not new markup.
 
@@ -82,6 +87,7 @@ Run from the repo root.
 | `npm run dev`       | Portfolio on http://localhost:4321 (design system docs at `/system/`)                      |
 | `npm run storybook` | Storybook on http://localhost:6006                                                         |
 | `npm run tokens`    | Rebuilds `@tetiana/tokens` after editing token source files                                |
+| `npm run cv`        | Rebuilds the CV PDF in `apps/portfolio/public` from `apps/portfolio/resume/resume.html`    |
 | `npm run build`     | Site into `dist/client`, Storybook into `dist/client/storybook`, worker into `dist/server` |
 | `npm test`          | Component unit tests (Vitest + Testing Library)                                            |
 | `npm run test:e2e`  | Builds, then Playwright: behaviour, axe accessibility, visual snapshots                    |

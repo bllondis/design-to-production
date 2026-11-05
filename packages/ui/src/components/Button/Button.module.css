@@ -1,6 +1,7 @@
 .button {
   display: inline-flex;
   align-items: center;
+  cursor: pointer;
   font-family: var(--font-family-sans);
   font-weight: var(--font-weight-strong);
   text-decoration: none;

@@ -1,6 +1,8 @@
 import { hash, monoFont, observeVisibility, onReducedMotionChange, prefersReducedMotion } from "./motion";
 
 // Project screenshots redrawn as a coloured glyph field. Light UI is inverted so ink and colour carry the shape.
+// With `lens`, the pointer opens a window onto the real screenshot, snapped to the glyph grid, so the field reads
+// as a screen and not only as a texture.
 const ramp = " .'`,:;~-_+<>i!lI?|/\\()1{}[]rcvunxzjftLCJUYXZO0Qoahkbdpqwm*#MW&8%B@$";
 
 interface Cell {
@@ -14,8 +16,17 @@ interface Cell {
   noise: number;
 }
 
+export interface AsciiVisualOptions {
+  lens?: boolean;
+}
+
 /** Samples `src` into the canvas, animates the reveal and pointer scramble, and returns a cleanup function. */
-export const startAsciiVisual = (canvas: HTMLCanvasElement, src: string, focus: [number, number]): (() => void) => {
+export const startAsciiVisual = (
+  canvas: HTMLCanvasElement,
+  src: string,
+  focus: [number, number],
+  { lens = true }: AsciiVisualOptions = {},
+): (() => void) => {
   const context = canvas.getContext("2d");
   const sampler = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
   if (!context || !sampler) return () => {};
@@ -28,6 +39,9 @@ export const startAsciiVisual = (canvas: HTMLCanvasElement, src: string, focus: 
   let height = 0;
   let cellWidth = 10;
   let cellHeight = 16;
+  // The part of the image the canvas shows, in image pixels, and whether it is light UI.
+  let crop = { x: 0, y: 0, width: 0, height: 0 };
+  let lightImage = false;
   let reveal = 0;
   let revealStart = 0;
   let animationFrame = 0;
@@ -38,7 +52,24 @@ export const startAsciiVisual = (canvas: HTMLCanvasElement, src: string, focus: 
 
   const draw = (time: number) => {
     context.clearRect(0, 0, width, height);
-    const radius = Math.max(70, width * 0.12);
+    const radius = lens ? Math.max(90, width * 0.2) : Math.max(70, width * 0.12);
+    const open = lens && pointer.active && reveal === 1;
+    if (open) {
+      context.save();
+      context.beginPath();
+      for (const cell of cells) {
+        if (Math.hypot(cell.x - pointer.x, cell.y - pointer.y) < radius)
+          context.rect(cell.x, cell.y, cellWidth, cellHeight);
+      }
+      context.clip();
+      // A slight blur keeps the screenshot behind the glyphs rather than on top of them. Light UI is inverted
+      // here too, so the lens stays as dark as the field around it.
+      context.filter = lightImage ? "blur(1.2px) invert(1) hue-rotate(180deg)" : "blur(1.2px)";
+      context.drawImage(image, crop.x, crop.y, crop.width, crop.height, 0, 0, width, height);
+      context.restore();
+    }
+    // Inside an open lens the screenshot shows under light running glyphs; the full scramble rings it.
+    const scrambleRadius = open ? radius + cellWidth * 3 : radius;
     for (const cell of cells) {
       if (cell.noise > reveal) {
         if (cell.noise < reveal + 0.18) {
@@ -47,12 +78,19 @@ export const startAsciiVisual = (canvas: HTMLCanvasElement, src: string, focus: 
         }
         continue;
       }
+      const distance = pointer.active ? Math.hypot(cell.x - pointer.x, cell.y - pointer.y) : Infinity;
+      if (open && distance < radius) {
+        // A light, thinner run of glyphs keeps moving over the screenshot, so the lens stays part of the field.
+        context.fillStyle = "rgba(244,245,240,0.3)";
+        context.fillText(ramp[Math.floor(hash(cell.x + time * 0.004, cell.y) * ramp.length)], cell.x, cell.y);
+        continue;
+      }
       if (cell.block) {
         context.fillStyle = cell.block;
         context.fillRect(cell.x, cell.y, cellWidth, cellHeight);
       }
       let glyph = cell.glyph;
-      if (pointer.active && Math.hypot(cell.x - pointer.x, cell.y - pointer.y) < radius && cell.index > 1) {
+      if (distance < scrambleRadius && cell.index > 1) {
         glyph = ramp[Math.floor(hash(cell.x + time * 0.004, cell.y) * ramp.length)];
       } else if (cell.index > 1 && hash(cell.noise, Math.floor(time / 140)) > 0.985) {
         glyph = ramp[Math.max(1, cell.index - 4 + Math.floor(hash(cell.x, time) * 8))] || glyph;
@@ -97,6 +135,17 @@ export const startAsciiVisual = (canvas: HTMLCanvasElement, src: string, focus: 
       rows,
     );
     const pixels = sampler.getImageData(0, 0, columns, rows).data;
+    crop = {
+      x: (image.naturalWidth - sourceWidth) * focusX,
+      y: (image.naturalHeight - sourceHeight) * focusY,
+      width: sourceWidth,
+      height: sourceHeight,
+    };
+    let luminance = 0;
+    for (let offset = 0; offset < pixels.length; offset += 4) {
+      luminance += 0.2126 * pixels[offset] + 0.7152 * pixels[offset + 1] + 0.0722 * pixels[offset + 2];
+    }
+    lightImage = luminance / (pixels.length / 4) > 128;
 
     cells = [];
     for (let row = 0; row < rows; row += 1) {
@@ -160,9 +209,12 @@ export const startAsciiVisual = (canvas: HTMLCanvasElement, src: string, focus: 
     pointer.x = event.clientX - bounds.left;
     pointer.y = event.clientY - bounds.top;
     pointer.active = true;
+    // Without the animation loop, the lens still follows the pointer: it is a direct response, not motion.
+    if (lens && prefersReducedMotion()) draw(0);
   };
   const onPointerLeave = () => {
     pointer.active = false;
+    if (lens && prefersReducedMotion()) draw(0);
   };
   const onLoad = () => {
     resizeObserver = new ResizeObserver(build);

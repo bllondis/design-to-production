@@ -8,6 +8,11 @@ export const chapters = [
     title: "AI Design Engineering",
     intro:
       "I design the interaction layer between people, product systems, AI, and code, then build enough of it to prove it works.",
+    projects: [
+      { label: "Design to production", href: "/work/design-to-production/" },
+      { label: "Timeflow", href: "/work/timeflow/" },
+      { label: "DutchWaffle", href: "/work/dutchwaffle/" },
+    ],
     blocks: [
       {
         id: "systems",
@@ -81,6 +86,10 @@ export const chapters = [
     title: "Product Design",
     intro:
       "I make dense enterprise domains understandable, whether the product starts from a blank page or already serves hundreds of thousands of people.",
+    projects: [
+      { label: "DocuStream", href: "/work/docustream/" },
+      { label: "BookIT", href: "/work/bookit/" },
+    ],
     blocks: [
       {
         id: "greenfield",
@@ -101,14 +110,14 @@ export const chapters = [
           "Role-based workflows",
           "Lifecycle and state design",
           "Progressive guidance",
-          "Research and validation",
+          "Complex rules and reusable patterns",
         ],
       },
       {
         id: "mature",
         title: "Extending Mature Enterprise Products",
         statement: "New behaviour, in a language people already know.",
-        body: "I add capability to established products without disrupting the mental models, component language, and operating scale people already rely on.",
+        body: "I add capability to established products with large operational datasets, without disrupting the mental models, interaction patterns and product language people already rely on.",
         proof: "Proof / BookIT, 200K+ users, 1,200+ locations",
         action: { label: "See it in BookIT", href: "/work/bookit/" },
         visual: { src: "/assets/bookit-floorplan.jpg", focus: "0.6 0.55", caption: "BookIT / Floorplan editor" },
@@ -116,10 +125,10 @@ export const chapters = [
         skills: [
           "Auditing existing systems",
           "Designing within an established language",
+          "Data-heavy workflows and retrieval patterns",
           "New features at enterprise scale",
           "Protecting user mental models",
           "Alignment with product and engineering",
-          "Incremental rollout and iteration",
         ],
       },
     ],

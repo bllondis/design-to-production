@@ -10,6 +10,14 @@ describe("Button", () => {
     expect(link.querySelector("[aria-hidden='true']")).toHaveTextContent("↗");
   });
 
+  it("renders a real button when it opens a popover", () => {
+    render(<Button popoverTarget="contact">Get in touch</Button>);
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    const button = screen.getByRole("button", { name: "Get in touch" });
+    expect(button).toHaveAttribute("popovertarget", "contact");
+    expect(button).toHaveAttribute("type", "button");
+  });
+
   it("applies variant and size classes", () => {
     render(
       <Button href="#" variant="dark" size="s">

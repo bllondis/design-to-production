@@ -3,6 +3,7 @@ dist/
 **/storybook-static/
 apps/portfolio/legacy/
 apps/portfolio/public/
+apps/portfolio/resume/
 apps/portfolio/tools/
 packages/tokens/build/
 package-lock.json

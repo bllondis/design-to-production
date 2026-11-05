@@ -44,3 +44,12 @@ export const Scale: Story = {
     </div>
   ),
 };
+
+/** "\n" in the text forces a line break, as in the home hero. */
+export const LineBreaks: Story = {
+  args: {
+    text: "Complex B2B products\nAI‑assisted workflows\nDesign systems",
+    size: "heading-1",
+    pixel: false,
+  },
+};

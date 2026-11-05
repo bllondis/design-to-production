@@ -1,7 +1,12 @@
 ---
 /**
  * Section: opens a chapter of a case — mono label and title on the left, the lead text on the right.
- * Visual rows (Shot, Cards, Terms…) follow it in the MDX.
+ * Visual rows (Shot, Cards, Terms…) follow it in the MDX. The home page uses it for its closing chapters too.
+ *
+ * size       heading size: "heading-1" (default) or "display-3" for a page-level chapter
+ * pixel      pixel letters in the heading; off for long editorial headlines
+ * measure    heading measure in ems
+ * headingId  id for the heading, so a wrapping landmark can point at it
  */
 import FrameRow from "../layout/FrameRow.astro";
 import { Heading } from "@tetiana/ui";
@@ -9,9 +14,13 @@ import { Heading } from "@tetiana/ui";
 interface Props {
   label: string;
   title: string;
+  size?: "heading-1" | "display-3";
+  pixel?: boolean;
+  measure?: number;
+  headingId?: string;
 }
 
-const { label, title } = Astro.props;
+const { label, title, size = "heading-1", pixel = true, measure = 18, headingId } = Astro.props;
 ---
 
 <div class="section">
@@ -19,7 +28,11 @@ const { label, title } = Astro.props;
     <div class="section-head">
       <div>
         <p class="section-label text-label-l">{label}</p>
-        <Heading client:visible as="h2" size="heading-1" measure={18} text={title} />
+        {pixel ? (
+          <Heading client:visible as="h2" id={headingId} size={size} measure={measure} text={title} />
+        ) : (
+          <Heading as="h2" id={headingId} size={size} pixel={false} measure={measure} text={title} />
+        )}
       </div>
       <div class="section-lead">
         <slot />

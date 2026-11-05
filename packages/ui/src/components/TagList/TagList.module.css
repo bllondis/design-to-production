@@ -12,3 +12,16 @@
   border: 1px solid var(--tag-border);
   color: var(--tag-fg);
 }
+
+.link {
+  display: block;
+  text-decoration: none;
+  transition:
+    background var(--motion-duration-hover) var(--motion-easing-standard),
+    color var(--motion-duration-hover) var(--motion-easing-standard);
+}
+
+.link:hover {
+  background: var(--tag-bg-hover);
+  color: var(--tag-fg-hover);
+}
