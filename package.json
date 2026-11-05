@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "tokens": "npm run build -w @tetiana/tokens",
+    "cv": "npm run cv -w portfolio",
     "dev": "npm run dev -w portfolio",
     "storybook": "npm run storybook -w @tetiana/ui",
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
