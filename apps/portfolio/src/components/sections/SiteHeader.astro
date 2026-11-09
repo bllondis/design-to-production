@@ -6,29 +6,121 @@
  */
 import { person, primaryNav } from "../../data/site.js";
 
-interface Props {
-  flush?: boolean;
+interface HeaderLink {
+  label: string;
+  href: string;
+  external?: boolean;
 }
 
-const { flush = false } = Astro.props;
+interface LanguageOption {
+  code: string;
+  shortLabel: string;
+  label: string;
+  flag: string;
+  href: string;
+  active?: boolean;
+}
+
+interface Props {
+  flush?: boolean;
+  homeHref?: string;
+  identityLabel?: string;
+  navLabel?: string;
+  navItems?: HeaderLink[];
+  homeAction?: HeaderLink;
+  languages?: LanguageOption[];
+  languageTrigger?: string;
+  languageMenu?: string;
+}
+
+const {
+  flush = false,
+  homeHref = "/#top",
+  identityLabel = `${person.name}, home`,
+  navLabel = "Primary navigation",
+  navItems = primaryNav,
+  homeAction,
+  languages = [],
+  languageTrigger = "Change language. Current language: {label}",
+  languageMenu = "Languages",
+} = Astro.props;
+const activeLanguage = languages.find((language) => language.active) ?? languages[0];
 ---
 
 <header class:list={["header", { "header--flush": flush }]}>
-  <a class="identity" href="/#top" aria-label={`${person.name}, home`}>
+  <a class="identity" href={homeHref} aria-label={identityLabel}>
     {person.name}
   </a>
-  <nav class="nav" aria-label="Primary navigation">
-    {primaryNav.map((item) => (
-      <a
-        class="text-label-l"
-        href={item.href}
-        {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      >
-        {item.label}
+  <div class="header-actions">
+    {homeAction && (
+      <a class="home-action text-label-l" href={homeAction.href}>
+        {homeAction.label}
       </a>
-    ))}
-  </nav>
+    )}
+    {activeLanguage && (
+      <details class="language-switcher" data-language-switcher data-current-language={activeLanguage.code}>
+        <summary
+          class="language-trigger text-label-l"
+          aria-label={languageTrigger.replace("{label}", activeLanguage.label)}
+        >
+          <span>{activeLanguage.shortLabel}</span>
+          <span class="language-flag" aria-hidden="true">
+            {activeLanguage.flag}
+          </span>
+        </summary>
+        <ul class="language-menu" aria-label={languageMenu}>
+          {languages.map((language) => (
+            <li>
+              <a
+                class="language-option text-label-m"
+                href={language.href}
+                lang={language.code}
+                aria-current={language.active ? "page" : undefined}
+              >
+                <span>{language.shortLabel}</span>
+                <span class="language-name">{language.label}</span>
+                <span class="language-mark" aria-hidden="true">
+                  ●
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    )}
+    <nav class="nav" aria-label={navLabel}>
+      {navItems.map((item) => (
+        <a
+          class="text-label-l"
+          href={item.href}
+          {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  </div>
 </header>
+
+<script>
+  const switchers = document.querySelectorAll<HTMLDetailsElement>("[data-language-switcher]");
+
+  switchers.forEach((switcher) => {
+    const trigger = switcher.querySelector<HTMLElement>("summary");
+
+    switcher.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      switcher.removeAttribute("open");
+      trigger?.focus();
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    switchers.forEach((switcher) => {
+      if (!switcher.contains(event.target as Node)) switcher.removeAttribute("open");
+    });
+  });
+</script>
 
 <style>
   .header {
@@ -56,6 +148,12 @@ const { flush = false } = Astro.props;
     font-size: clamp(1.1rem, 2vw, 1.65rem);
     letter-spacing: var(--font-tracking-tight);
     text-decoration: none;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-l);
   }
 
   .nav {
@@ -87,6 +185,104 @@ const { flush = false } = Astro.props;
     transform-origin: left;
   }
 
+  .language-switcher {
+    position: relative;
+    flex: none;
+  }
+
+  .home-action,
+  .language-trigger {
+    display: flex;
+    min-height: var(--space-xl);
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: 0 var(--space-xs);
+    border: 1px solid var(--color-border-default);
+    background: var(--color-surface-header);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    list-style: none;
+    transition:
+      background var(--motion-duration-hover) var(--motion-easing-standard),
+      color var(--motion-duration-hover) var(--motion-easing-standard);
+  }
+
+  .home-action {
+    text-decoration: none;
+  }
+
+  .language-trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .home-action:hover,
+  .home-action:focus-visible,
+  .language-trigger:hover,
+  .language-switcher[open] .language-trigger {
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+  }
+
+  .language-flag {
+    font-family: system-ui, sans-serif;
+    font-size: var(--font-size-body-s);
+    line-height: 1;
+  }
+
+  .language-menu {
+    position: absolute;
+    top: calc(100% + var(--space-2xs));
+    right: 0;
+    z-index: 3;
+    min-width: max-content;
+    margin: 0;
+    padding: var(--space-3xs);
+    border: 1px solid var(--color-border-default);
+    background: var(--color-surface-header);
+    list-style: none;
+  }
+
+  .language-option {
+    display: grid;
+    width: 100%;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-s);
+    padding: var(--space-xs);
+    border: 0;
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
+    transition:
+      background var(--motion-duration-hover) var(--motion-easing-standard),
+      color var(--motion-duration-hover) var(--motion-easing-standard);
+  }
+
+  .language-option:hover,
+  .language-option[aria-current="page"] {
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+  }
+
+  .language-name {
+    color: var(--color-text-secondary);
+  }
+
+  .language-option:hover .language-name,
+  .language-option[aria-current="page"] .language-name {
+    color: currentColor;
+  }
+
+  .language-mark {
+    color: transparent;
+  }
+
+  .language-option[aria-current="page"] .language-mark {
+    color: var(--color-accent-default);
+  }
+
   @media (max-width: 680px) {
     .header {
       gap: var(--space-s);
@@ -97,17 +293,25 @@ const { flush = false } = Astro.props;
       font-size: var(--font-size-body-s);
     }
 
+    .header-actions {
+      gap: var(--space-xs);
+    }
+
     .nav {
       gap: 0.85rem;
     }
 
-    .nav a:nth-child(2),
-    .nav a:nth-child(3),
-    .nav a:nth-child(4) {
+    .nav a:not(:first-child):not(:last-child) {
       display: none;
     }
 
     .nav a {
+      font-size: var(--font-size-label-m);
+    }
+
+    .home-action,
+    .language-trigger {
+      padding: 0 var(--space-2xs);
       font-size: var(--font-size-label-m);
     }
   }

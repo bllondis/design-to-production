@@ -16,6 +16,9 @@ export interface PixelDoorProps {
   initialState?: DoorState;
   /** Keep the top inset that lines the door up with the row's content (default on). */
   inset?: boolean;
+  /** Accessible labels for the closed and open states. */
+  openLabel?: string;
+  closeLabel?: string;
 }
 
 /**
@@ -28,6 +31,8 @@ export function PixelDoor({
   still = false,
   initialState = "closed",
   inset = true,
+  openLabel = "Open the pixel door",
+  closeLabel = "Close the pixel door",
 }: PixelDoorProps) {
   const [open, setOpen] = useState(initialState === "open");
   const scrolling = useScrollActivity(!still);
@@ -43,7 +48,7 @@ export function PixelDoor({
         scrolling && styles.flapping,
       )}
       aria-pressed={open}
-      aria-label={open ? "Close the pixel door" : "Open the pixel door"}
+      aria-label={open ? closeLabel : openLabel}
       onClick={() => setOpen((value) => !value)}
     >
       <img src={character} alt="" width={360} height={360} loading="lazy" />

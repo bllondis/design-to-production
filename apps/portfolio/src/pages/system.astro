@@ -6,8 +6,9 @@ import Frame from "../components/layout/Frame.astro";
 import FrameRow from "../components/layout/FrameRow.astro";
 import SiteFooter from "../components/sections/SiteFooter.astro";
 import SiteHeader from "../components/sections/SiteHeader.astro";
-import { AsciiVisual, Button, Heading, PixelDoor, SignalField, SkillGrid, Tile } from "@tetiana/ui";
+import { AsciiVisual, Button, ContactPopup, Heading, PixelDoor, SignalField, SkillGrid, Tile } from "@tetiana/ui";
 import tokens from "@tetiana/tokens/tokens.json";
+import { contactLinks } from "../data/site.js";
 
 const byPrefix = (...path) => tokens.filter((token) => path.every((part, index) => token.path[index] === part));
 const cssVar = (token) => `--${token.name}`;
@@ -287,10 +288,11 @@ const sections = [
             </li>
             <li>
               <code>pixel</code>: on by default; a few letters swap into Pixelify Sans, settle in on first view, then
-              flicker now and then
+              flicker now and then; Unicode letters are supported across all site languages
             </li>
           </ul>
           <Heading client:visible as="h4" size="display-4" text="Pixel on" />
+          <Heading client:visible as="h4" size="display-4" text="Піксельний текст" />
           <Heading as="h4" size="display-4" pixel={false} text="Pixel off" />
         </Specimen>
 
@@ -405,6 +407,22 @@ const sections = [
           <div class="grid-demo">
             <SkillGrid items={["Domain modelling", "Information architecture", "Role-based workflows"]} />
           </div>
+        </Specimen>
+
+        <Specimen
+          name="ContactPopup"
+          file="@tetiana/ui · ContactPopup"
+          usage={`<ContactPopup id="contact-links" title="Get in touch" links={contactLinks} />`}
+        >
+          <ul slot="notes">
+            <li>The complete row is the action: email copies, external destinations open in a new tab.</li>
+            <li>A compact tooltip follows the pointer and remains available on keyboard focus.</li>
+            <li>
+              Copy feedback changes from <code>Copy</code> to <code>Copied</code> or an error state.
+            </li>
+          </ul>
+          <Button popoverTarget="system-contact-links">Get in touch</Button>
+          <ContactPopup client:idle id="system-contact-links" title="Get in touch" links={contactLinks} />
         </Specimen>
 
         <FrameRow>

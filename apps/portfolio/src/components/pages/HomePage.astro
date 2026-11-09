@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Frame from "../layout/Frame.astro";
+import AboutSection from "../sections/AboutSection.astro";
+import CapabilityBlock from "../sections/CapabilityBlock.astro";
+import CapabilityChapter from "../sections/CapabilityChapter.astro";
+import ContactBand from "../sections/ContactBand.astro";
+import Hero from "../sections/Hero.astro";
+import MethodSection from "../sections/MethodSection.astro";
+import SiteFooter from "../sections/SiteFooter.astro";
+import SiteHeader from "../sections/SiteHeader.astro";
+import { getHomeContent } from "../../data/home.js";
+
+interface Props {
+  locale: "en" | "uk" | "nl";
+}
+
+const { locale } = Astro.props;
+const content = getHomeContent(locale);
+---
+
+<BaseLayout
+  title={content.meta.title}
+  description={content.meta.description}
+  path={content.path}
+  lang={content.locale}
+  imageAlt={content.meta.imageAlt}
+  skipToContent={content.skipToContent}
+  alternates={content.alternates}
+>
+  <SiteHeader
+    flush
+    homeHref={content.header.homeHref}
+    identityLabel={content.header.identityLabel}
+    navLabel={content.header.navLabel}
+    navItems={content.header.navItems}
+    languages={content.languages}
+    languageTrigger={content.header.languageTrigger}
+    languageMenu={content.header.languageMenu}
+  />
+  <main id="main">
+    <Hero role={content.hero.role} title={content.hero.title} />
+    <Frame id="work" aria-label={content.work.ariaLabel}>
+      {content.chapters.map((chapter, chapterIndex) => (
+        <CapabilityChapter
+          id={chapter.id}
+          number={chapter.number}
+          title={chapter.title}
+          intro={chapter.intro}
+          projects={chapter.projects}
+          first={chapterIndex === 0}
+          label={content.work.chapterLabel}
+        >
+          {chapter.blocks.map((block, blockIndex) => (
+            <CapabilityBlock
+              {...block}
+              flip={blockIndex % 2 === 1}
+              skillsLabel={content.work.skillsLabel}
+              openDoorLabel={content.work.openDoor}
+              closeDoorLabel={content.work.closeDoor}
+            />
+          ))}
+        </CapabilityChapter>
+      ))}
+    </Frame>
+    <Frame as="div">
+      <MethodSection {...content.method} />
+      <AboutSection {...content.about} />
+    </Frame>
+    <ContactBand
+      title={content.contact.title}
+      body={content.contact.body}
+      action={content.contact.action}
+      links={content.contact.links}
+      popupMessages={content.contact.popup}
+    />
+  </main>
+  <SiteFooter columns={content.footer.columns} ariaLabel={content.footer.ariaLabel} legal={content.footer.legal} />
+</BaseLayout>

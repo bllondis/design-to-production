@@ -50,7 +50,12 @@
   "door": {
     "$type": "color",
     "bg": { "$value": "{color.surface.void}", "$description": "The dark opening behind the leaf." },
-    "edge": { "$value": "{color.border.subtle}", "$description": "Hairline around the door leaf." }
+    "edge": { "$value": "{color.border.subtle}", "$description": "Hairline around the door leaf." },
+    "light-opacity": {
+      "$type": "number",
+      "$value": 0.35,
+      "$description": "A restrained hint of warm light while the door is ajar."
+    }
   },
   "tag": {
     "border": { "$type": "color", "$value": "{color.border.default}" },

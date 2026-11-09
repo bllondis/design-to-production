@@ -5,16 +5,30 @@ interface Props {
   title: string;
   description: string;
   path?: string;
+  lang?: string;
+  imageAlt?: string;
+  skipToContent?: string;
+  alternates?: { lang: string; href: string }[];
 }
 
-const { title, description, path = "/" } = Astro.props;
+const {
+  title,
+  description,
+  path = "/",
+  lang = "en",
+  imageAlt = "Tetiana Dovgalenko, Product Design and Design Engineering",
+  skipToContent = "Skip to content",
+  alternates = [],
+} = Astro.props;
 const site = Astro.site ? new URL(import.meta.env.BASE_URL, Astro.site).href.replace(/\/$/, "") : "";
 const url = `${site}${path}`;
 const image = `${site}/og.png`;
+const alternateLinks = alternates.map((alternate) => ({ ...alternate, href: `${site}${alternate.href}` }));
+const defaultAlternate = alternateLinks.find((alternate) => alternate.lang === "en");
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -27,13 +41,18 @@ const image = `${site}/og.png`;
     <meta property="og:image" content={image} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Tetiana Dovgalenko, Product Design and Design Engineering" />
+    <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
+    <meta name="twitter:image:alt" content={imageAlt} />
     <title>{title}</title>
     <link rel="canonical" href={url} />
+    {alternateLinks.map((alternate) => (
+      <link rel="alternate" hreflang={alternate.lang} href={alternate.href} />
+    ))}
+    {defaultAlternate && <link rel="alternate" hreflang="x-default" href={defaultAlternate.href} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -43,7 +62,7 @@ const image = `${site}/og.png`;
   </head>
   <body>
     <a class="skip-link text-label-m" href="#main">
-      Skip to content
+      {skipToContent}
     </a>
     <slot />
   </body>

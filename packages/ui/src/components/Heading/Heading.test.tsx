@@ -18,6 +18,15 @@ describe("Heading", () => {
     expect([...container.querySelectorAll(".pixel")].map((node) => node.textContent)).toEqual(first);
   });
 
+  it("pixelates Ukrainian letters as well as Latin ones", () => {
+    const { container } = render(
+      <Heading size="display-2" text={"Складні B2B-продукти\nРобочі процеси з ШІ\nДизайн-системи"} animate={false} />,
+    );
+    const pixelLetters = [...container.querySelectorAll(".pixel")].map((node) => node.textContent ?? "");
+    expect(pixelLetters.length).toBeGreaterThan(0);
+    expect(pixelLetters.some((character) => /[А-Яа-яІіЇїЄєҐґ]/u.test(character))).toBe(true);
+  });
+
   it("renders plain text without pixel markup when pixel is off", () => {
     render(<Heading as="h1" size="display-1" text="I design calm interfaces." pixel={false} />);
     const heading = screen.getByRole("heading", { level: 1 });
@@ -35,6 +44,11 @@ describe("Heading", () => {
     const { container } = render(<Heading size="heading-1" text={"Working across\ncomplex systems."} />);
     expect(screen.getByRole("heading", { name: "Working across complex systems." })).toBeInTheDocument();
     expect(container.querySelectorAll("[aria-hidden='true'] br")).toHaveLength(1);
+  });
+
+  it("keeps a word joined for assistive tech when a visual break follows a hyphen", () => {
+    render(<Heading size="display-2" text={"Дизайн-\nінженерія\nз ШІ"} />);
+    expect(screen.getByRole("heading", { name: "Дизайн-інженерія з ШІ" })).toBeInTheDocument();
   });
 
   it("sets the measure as a custom property", () => {

@@ -1,37 +1,70 @@
 ---
 /** AboutSection: who I am on the frame grid, closed by a highlight band with the visual practice. */
 import FrameRow from "../layout/FrameRow.astro";
-import Section from "../case/Section.astro";
+import { Heading, SkillGrid } from "@tetiana/ui";
 
-const practice = ["Photography", "Fashion", "Costume", "Visual direction"];
+interface Props {
+  label?: string;
+  title?: string;
+  paragraphs?: string[];
+  photoAlt?: string;
+  practiceLabel?: string;
+  practice?: string[];
+  bringLabel?: string;
+  bring?: string[];
+}
+
+const {
+  label = "About",
+  title = "Hello, I’m Tetiana\nNice to meet you",
+  paragraphs = [
+    "I like making products that feel clear, considered and visually strong, especially when the system underneath is complex and data-heavy.",
+    "Working with AI pushed me closer to code, prototyping and engineering tools. It changed the way I design, because I can now move further from an idea into something that actually works.",
+    "Originally from Kyiv, I’ve been based in The Hague since 2018.",
+    "Before product design, I worked with fabric, light and composition. I spent six years as a costume artist in film production, studied art history and painting, and I still carry a camera almost everywhere.",
+  ],
+  photoAlt = "Portrait of Tetiana Dovgalenko on the North Sea dunes",
+  practiceLabel = "Beyond product / Visual practice",
+  practice = ["Photography", "Fashion", "Costume", "Visual direction"],
+  bringLabel = "What I bring",
+  bring = [
+    "Ideas",
+    "Positive energy",
+    "Good questions",
+    "An eye for detail",
+    "Strong opinions about spacing",
+    "A camera, usually",
+  ],
+} = Astro.props;
 ---
 
 <section class="about" id="about" aria-labelledby="about-title">
-  <Section
-    label="About"
-    title={"Hello, I’m Tetiana\nNice to meet you"}
-    size="heading-1"
-    pixel={false}
-    measure={17}
-    headingId="about-title"
-  >
-    <p>
-      I like making products that feel clear, considered and visually strong, especially when the system underneath is
-      complex and data-heavy.
-    </p>
-    <p>
-      Working with AI pushed me closer to code, prototyping and engineering tools. It changed the way I design, because
-      I can now move further from an idea into something that actually works.
-    </p>
-    <p>Originally from Kyiv, I’ve been based in The Hague since 2018.</p>
-    <p>
-      Before product design, I worked with fabric, light and composition. I spent six years as a costume artist in film
-      production, studied art history and painting, and I still carry a camera almost everywhere.
-    </p>
-  </Section>
+  <FrameRow as="header">
+    <div class="about-head">
+      <div class="about-title">
+        <p class="text-label-l">{label}</p>
+        <Heading as="h2" id="about-title" size="heading-1" pixel={false} measure={17} text={title} />
+      </div>
+      <figure class="portrait">
+        <img
+          src="/assets/tetiana-dovgalenko-north-sea.jpg"
+          alt={photoAlt}
+          width="1179"
+          height="1167"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+      <div class="about-copy">
+        {paragraphs.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+    </div>
+  </FrameRow>
   <FrameRow divider="both">
     <div class="practice">
-      <p class="text-label-l">Beyond product / Visual practice</p>
+      <p class="text-label-l">{practiceLabel}</p>
       <ul>
         {practice.map((item) => (
           <li>{item}</li>
@@ -39,12 +72,61 @@ const practice = ["Photography", "Fashion", "Costume", "Visual direction"];
       </ul>
     </div>
   </FrameRow>
+  <FrameRow divider="both">
+    <SkillGrid items={bring} label={bringLabel} />
+  </FrameRow>
 </section>
 
 <style>
-  /* The lead runs long here, so the greeting starts level with it instead of sinking to its last line. */
-  .about :global(.section-head) {
-    align-items: start;
+  .about {
+    margin-top: var(--space-section);
+  }
+
+  .about-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+  .about-title {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    padding: var(--space-inset) var(--space-inset-inline);
+  }
+
+  .about-title > p {
+    margin: 0 0 1.4rem;
+    color: var(--color-text-muted);
+  }
+
+  .about-copy {
+    grid-column: 2;
+    grid-row: 2;
+    padding: 0 var(--space-inset-inline) var(--space-inset);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-l);
+    line-height: var(--font-line-height-relaxed);
+  }
+
+  .about-copy p {
+    margin: 0;
+  }
+
+  .about-copy p + p {
+    margin-top: var(--space-s);
+  }
+
+  .portrait {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+    padding: var(--space-2xs) var(--space-2xl) 0 0;
+  }
+
+  .portrait img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   /* Same columns as the Section head, on the highlight band the method steps use. */
@@ -80,6 +162,26 @@ const practice = ["Photography", "Fashion", "Costume", "Visual direction"];
   }
 
   @media (max-width: 980px) {
+    .about-head {
+      grid-template-columns: 1fr;
+    }
+
+    .about-title,
+    .portrait,
+    .about-copy {
+      grid-column: 1;
+      grid-row: auto;
+    }
+
+    .portrait {
+      padding: 0;
+    }
+
+    .about-copy {
+      padding: var(--space-inset) var(--space-inset-inline);
+      border-top: 1px solid var(--color-border-default);
+    }
+
     .practice {
       grid-template-columns: 1fr;
       gap: var(--space-s);
@@ -87,6 +189,11 @@ const practice = ["Photography", "Fashion", "Costume", "Visual direction"];
   }
 
   @media (max-width: 680px) {
+    .about-title,
+    .about-copy {
+      padding: var(--space-2xl) var(--space-m);
+    }
+
     .practice {
       padding: var(--space-l) var(--space-m);
     }

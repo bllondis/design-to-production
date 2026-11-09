@@ -95,7 +95,7 @@
 .peek::before,
 .peek::after,
 .peek .floor {
-  opacity: 0.85;
+  opacity: var(--door-light-opacity);
 }
 
 .door:hover .leaf,
@@ -128,7 +128,7 @@
   }
 
   50% {
-    opacity: 1;
+    opacity: var(--door-light-opacity);
   }
 }
 

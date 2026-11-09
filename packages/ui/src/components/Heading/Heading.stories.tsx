@@ -21,6 +21,15 @@ export const Chapter: Story = {
   args: { text: "AI Design Engineering", size: "display-2", as: "h2", measure: 9.5 },
 };
 
+export const Ukrainian: Story = {
+  args: {
+    text: "Дизайн-інженерія\nз ШІ",
+    size: "display-2",
+    as: "h2",
+    measure: 9.5,
+  },
+};
+
 export const WithoutPixels: Story = {
   args: {
     text: "Make the model clear before making the screen polished.",

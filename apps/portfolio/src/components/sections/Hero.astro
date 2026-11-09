@@ -1,24 +1,23 @@
 ---
 import { Heading, SignalField } from "@tetiana/ui";
+
+interface Props {
+  role?: string;
+  title?: string;
+}
+
+const {
+  role = "Product Designer / Design Engineer",
+  title = "Complex B2B products\nAI‑assisted workflows\nDesign systems",
+} = Astro.props;
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-title" data-signal-host>
   <SignalField client:load top="var(--layout-header-height)" fade opacity={0.98} />
   <div class="hero-grid" aria-hidden="true"></div>
-  <button class="hero-toggle text-label-s" type="button" data-field-toggle aria-pressed="false">
-    <span data-field-toggle-label>Pause signal</span>
-    <span aria-hidden="true">[ II ]</span>
-  </button>
   <div class="hero-card">
-    <p class="hero-kicker text-label-m">Product Designer / Design Engineer</p>
-    <Heading
-      as="h1"
-      id="hero-title"
-      size="display-4"
-      tone="inverse"
-      pixel={false}
-      text={"Complex B2B products\nAI‑assisted workflows\nDesign systems"}
-    />
+    <p class="hero-kicker text-label-m">{role}</p>
+    <Heading as="h1" id="hero-title" size="display-4" tone="inverse" pixel={false} text={title} />
   </div>
   <div class="hero-footer" aria-hidden="true"></div>
 </section>
@@ -68,32 +67,6 @@ import { Heading, SignalField } from "@tetiana/ui";
     pointer-events: none;
   }
 
-  /* Lets anyone stop the moving field (WCAG 2.2.2). It keeps the page gap under the header on the top edge. */
-  .hero-toggle {
-    position: absolute;
-    top: calc(var(--layout-header-height) + var(--space-page));
-    right: var(--space-l);
-    display: flex;
-    min-height: 2.5rem;
-    align-items: center;
-    gap: var(--space-s);
-    padding: 0.7rem 0.8rem;
-    border: 1px solid var(--color-border-default);
-    border-radius: 0;
-    background: var(--color-surface-page);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    line-height: 1;
-    transition:
-      background var(--motion-duration-hover) var(--motion-easing-standard),
-      color var(--motion-duration-hover) var(--motion-easing-standard);
-  }
-
-  .hero-toggle:hover {
-    background: var(--color-surface-inverse);
-    color: var(--color-text-inverse);
-  }
-
   .hero-card {
     align-self: end;
     width: min(68%, 55rem);
@@ -131,10 +104,6 @@ import { Heading, SignalField } from "@tetiana/ui";
   }
 
   @media (max-width: 680px) {
-    .hero-toggle {
-      right: var(--space-page);
-    }
-
     .hero {
       min-height: 47rem;
       padding-top: 7.2rem;

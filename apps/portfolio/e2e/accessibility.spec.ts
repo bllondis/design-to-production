@@ -3,6 +3,8 @@ import { expect, test } from "@playwright/test";
 
 for (const path of [
   "/",
+  "/uk/",
+  "/nl/",
   "/system/",
   "/work/design-to-production/",
   "/work/ted-design-system/",

@@ -8,6 +8,8 @@ test("moves links, images, forwards and island props under the base", () => {
   assert.equal(applyBase('<a href="/work/timeflow/">x</a>', base), `<a href="${base}/work/timeflow/">x</a>`);
   assert.equal(applyBase('<a href="/#top">x</a>', base), `<a href="${base}/#top">x</a>`);
   assert.equal(applyBase('<a href="/">x</a>', base), `<a href="${base}/">x</a>`);
+  assert.equal(applyBase('<a href="/uk/#work">x</a>', base), `<a href="${base}/uk/#work">x</a>`);
+  assert.equal(applyBase('<a href="/nl/">x</a>', base), `<a href="${base}/nl/">x</a>`);
   assert.equal(applyBase('<img src="/assets/a.jpg?v=2">', base), `<img src="${base}/assets/a.jpg?v=2">`);
   assert.equal(
     applyBase('<astro-island props="{&quot;src&quot;:[0,&quot;/assets/a.jpg&quot;]}">', base),

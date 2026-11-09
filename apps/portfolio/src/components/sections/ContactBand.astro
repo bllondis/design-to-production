@@ -1,8 +1,24 @@
 ---
 import Frame from "../layout/Frame.astro";
 import FrameRow from "../layout/FrameRow.astro";
-import { Button, ContactPopup, Heading, SignalField } from "@tetiana/ui";
+import { Button, ContactPopup, Heading, SignalField, type ContactLink, type ContactPopupMessages } from "@tetiana/ui";
 import { contactLinks, person } from "../../data/site.js";
+
+interface Props {
+  title?: string;
+  body?: string;
+  action?: string;
+  links?: ContactLink[];
+  popupMessages?: Partial<ContactPopupMessages>;
+}
+
+const {
+  title = "Have a complex system that needs to feel simple?",
+  body = "I work between product logic, interaction design, and implementation for complex B2B software, AI-assisted products, and design systems.",
+  action = "Get in touch",
+  links = contactLinks,
+  popupMessages,
+} = Astro.props;
 ---
 
 <Frame id="contact" aria-labelledby="contact-title">
@@ -10,24 +26,14 @@ import { contactLinks, person } from "../../data/site.js";
     <FrameRow divider="both">
       <div class="band" data-signal-host>
         <SignalField client:visible tone="light" text={person.name.replace(" ", "")} opacity={0.65} />
-        <Heading
-          client:visible
-          id="contact-title"
-          size="heading-1"
-          tone="inverse"
-          measure={14}
-          text="Have a complex system that needs to feel simple?"
-        />
+        <Heading client:visible id="contact-title" size="heading-1" tone="inverse" measure={14} text={title} />
         <div class="band-side">
-          <p>
-            I work between product logic, interaction design, and implementation for complex B2B software, AI-assisted
-            products, and design systems.
-          </p>
+          <p>{body}</p>
           <div class="band-action">
             <Button popoverTarget="contact-links" variant="dark" size="s">
-              Get in touch
+              {action}
             </Button>
-            <ContactPopup client:idle id="contact-links" title="Get in touch" links={contactLinks} />
+            <ContactPopup client:idle id="contact-links" title={action} links={links} messages={popupMessages} />
           </div>
         </div>
       </div>

@@ -2,12 +2,30 @@
 import Frame from "../layout/Frame.astro";
 import FrameRow from "../layout/FrameRow.astro";
 import { footerColumns, person } from "../../data/site.js";
+
+interface FooterLink {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+interface Props {
+  columns?: { title: string; links: FooterLink[] }[];
+  ariaLabel?: string;
+  legal?: string;
+}
+
+const {
+  columns = footerColumns,
+  ariaLabel = "Footer",
+  legal = `${person.name}. Product Design / Design Engineering.`,
+} = Astro.props;
 ---
 
 <Frame as="footer" tone="footer" closed>
   <FrameRow divider="none">
-    <nav class="columns" aria-label="Footer">
-      {footerColumns.map((column) => (
+    <nav class="columns" aria-label={ariaLabel}>
+      {columns.map((column) => (
         <div>
           <p>{column.title}</p>
           <ul>
@@ -24,7 +42,7 @@ import { footerColumns, person } from "../../data/site.js";
     </nav>
   </FrameRow>
   <FrameRow>
-    <p class="legal">© 2026 {person.name}. Product Design / Design Engineering.</p>
+    <p class="legal">© 2026 {legal}</p>
   </FrameRow>
 </Frame>
 

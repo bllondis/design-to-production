@@ -17,12 +17,12 @@ export const contactLinks = [
 ];
 
 export const primaryNav = [
-  { label: "Work", href: "/#work" },
-  { label: "About", href: "/#about" },
   { label: "CV", href: cv, external: true },
   { label: "GitHub", href: person.github, external: true },
   { label: "LinkedIn", href: person.linkedin, external: true },
 ];
+
+export const projectHomeAction = { label: "Home", href: "/#top" };
 
 export const footerColumns = [
   {

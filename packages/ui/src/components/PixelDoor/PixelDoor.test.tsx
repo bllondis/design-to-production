@@ -20,6 +20,13 @@ describe("PixelDoor", () => {
     expect(screen.getByRole("button")).toHaveAttribute("aria-pressed", "true");
   });
 
+  it("uses localised state labels", async () => {
+    render(<PixelDoor character="/cat.jpg" still openLabel="Відкрити" closeLabel="Закрити" />);
+    const door = screen.getByRole("button", { name: "Відкрити" });
+    await userEvent.click(door);
+    expect(door).toHaveAccessibleName("Закрити");
+  });
+
   it("flaps while the page scrolls and settles after", () => {
     vi.useFakeTimers();
     render(<PixelDoor character="/cat.jpg" />);

@@ -5,6 +5,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Frame from "../../components/layout/Frame.astro";
 import SiteFooter from "../../components/sections/SiteFooter.astro";
 import SiteHeader from "../../components/sections/SiteHeader.astro";
+import { projectHomeAction } from "../../data/site.js";
 import CaseHero from "../../components/case/CaseHero.astro";
 import CaseNext from "../../components/case/CaseNext.astro";
 import Cards from "../../components/case/Cards.astro";
@@ -66,7 +67,7 @@ const components = {
   description={data.summary[0]}
   path={`/work/${entry.id}/`}
 >
-  <SiteHeader />
+  <SiteHeader homeAction={projectHomeAction} />
   <main id="main" class="case">
     <Frame aria-labelledby="case-title">
       <CaseHero {...data} />

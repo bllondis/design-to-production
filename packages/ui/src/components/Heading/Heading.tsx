@@ -22,7 +22,8 @@ export interface HeadingProps {
   id?: string;
 }
 
-const isLetter = (character: string) => /[a-z0-9]/i.test(character);
+// Unicode properties keep the pixel treatment available to every locale, not only Latin text.
+const isLetter = (character: string) => /[\p{L}\p{N}]/u.test(character);
 
 // Each forced line, with a <br> before every line after the first.
 const byLine = (text: string, render: (line: string, lineIndex: number) => ReactNode) =>
@@ -48,7 +49,7 @@ export function Heading({
   id,
 }: HeadingProps) {
   const ref = useRef<HTMLHeadingElement>(null);
-  const spoken = text.replaceAll("\n", " ");
+  const spoken = text.replaceAll("-\n", "-").replaceAll("\n", " ");
   const letterCount = pixel ? [...text].filter(isLetter).length : 0;
   const pixels = usePixelLetters(ref, text, letterCount, pixel && animate);
   const className = cx(styles.heading, styles[size], tone === "inverse" && styles.inverse);

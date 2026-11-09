@@ -20,16 +20,40 @@ interface Props {
   character: string;
   skills: string[];
   flip?: boolean;
+  skillsLabel?: string;
+  openDoorLabel?: string;
+  closeDoorLabel?: string;
 }
 
-const { id, title, statement, body, proof, action, secondary, visual, character, skills, flip = false } = Astro.props;
+const {
+  id,
+  title,
+  statement,
+  body,
+  proof,
+  action,
+  secondary,
+  visual,
+  character,
+  skills,
+  flip = false,
+  skillsLabel = "What I bring",
+  openDoorLabel = "Open the pixel door",
+  closeDoorLabel = "Close the pixel door",
+} = Astro.props;
 const titleId = `${id}-title`;
 ---
 
 <article class:list={["capability", { "capability--flip": flip }]} aria-labelledby={titleId}>
   <FrameRow as="header">
     <div slot="gutter">
-      <PixelDoor client:visible character={character} offset={flip} />
+      <PixelDoor
+        client:visible
+        character={character}
+        offset={flip}
+        openLabel={openDoorLabel}
+        closeLabel={closeDoorLabel}
+      />
     </div>
     <div class="capability-head">
       <Heading client:visible as="h3" id={titleId} size="display-4" measure={16} text={title} />
@@ -58,7 +82,7 @@ const titleId = `${id}-title`;
     </div>
   </FrameRow>
   <FrameRow divider="both">
-    <SkillGrid items={skills} />
+    <SkillGrid items={skills} label={skillsLabel} />
   </FrameRow>
 </article>
 

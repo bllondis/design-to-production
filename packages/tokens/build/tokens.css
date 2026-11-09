@@ -12,6 +12,7 @@
   --button-s-gap: 0.9rem;
   --button-s-padding-inline: 1.3rem;
   --tile-font-size: clamp(1.6rem, 3.4vw, 3.4rem); /** Pixel letter in the tile. */
+  --door-light-opacity: 0.35; /** A restrained hint of warm light while the door is ajar. */
   --tag-padding-block: 0.55rem;
   --skill-font-size: clamp(1.05rem, 1.45vw, 1.35rem);
   --skill-min-height: clamp(8rem, 11vw, 10.5rem);

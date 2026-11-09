@@ -7,29 +7,34 @@
 import FrameRow from "../layout/FrameRow.astro";
 import Section from "../case/Section.astro";
 
-const steps = [
-  ["Understand", "Domain, rules, constraints"],
-  ["Model", "States, relationships, edge cases"],
-  ["Reduce", "Hierarchy, guidance, disclosure"],
-  ["Prototype", "Flows, behaviour, critical states"],
-  ["Build", "Components, feasibility, implementation"],
-  ["Validate", "Behaviour, edge cases, iteration"],
-];
+interface Props {
+  label?: string;
+  title?: string;
+  intro?: string;
+  steps?: string[][];
+}
+
+const {
+  label = "Working method / System to interface",
+  title = "Model the system before\npolishing the interface",
+  intro = "From understanding the domain to validating how the system behaves in the product",
+  steps = [
+    ["Understand", "Domain, rules, constraints"],
+    ["Model", "States, relationships, edge cases"],
+    ["Reduce", "Hierarchy, guidance, disclosure"],
+    ["Prototype", "Flows, behaviour, critical states"],
+    ["Build", "Components, feasibility, implementation"],
+    ["Validate", "Behaviour, edge cases, iteration"],
+  ],
+} = Astro.props;
 ---
 
 <section class="method" aria-labelledby="method-title">
-  <Section
-    label="Working method / System to interface"
-    title={"Model the system before\npolishing the interface"}
-    size="heading-1"
-    pixel={false}
-    measure={17}
-    headingId="method-title"
-  >
-    <p>From understanding the domain to validating how the system behaves in the product</p>
+  <Section label={label} title={title} size="heading-1" pixel={false} measure={17} headingId="method-title">
+    <p>{intro}</p>
   </Section>
   <FrameRow divider="both">
-    <ol class="steps" data-method-steps>
+    <ol class="steps">
       {steps.map(([step, detail], index) => (
         <li>
           <p class="step-name">
@@ -43,16 +48,6 @@ const steps = [
   </FrameRow>
 </section>
 
-<script>
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) entry.target.toggleAttribute("data-active", entry.isIntersecting);
-    },
-    { rootMargin: "-50% 0px -50% 0px" },
-  );
-  document.querySelectorAll("[data-method-steps] > li").forEach((step) => observer.observe(step));
-</script>
-
 <style>
   /* The title keeps its two set lines. Where the column is too narrow for the longer one (about 10.2em), the size
      follows the column width instead. */
@@ -63,6 +58,15 @@ const steps = [
   .method :global(h2) {
     font-size: min(var(--font-size-heading-1), 9.8cqi);
     white-space: nowrap;
+  }
+
+  /* Keep the authored two-line titles intact while fitting scripts and translations with different glyph widths. */
+  :global(html[lang="uk"]) .method :global(h2) {
+    font-size: min(var(--font-size-heading-1), 6.8cqi);
+  }
+
+  :global(html[lang="nl"]) .method :global(h2) {
+    font-size: min(var(--font-size-heading-1), 8cqi);
   }
 
   .steps {
@@ -85,14 +89,6 @@ const steps = [
     background-image: linear-gradient(90deg, var(--color-surface-glow), transparent 85%);
   }
 
-  .steps li[data-active] {
-    background-color: var(--color-surface-glow);
-  }
-
-  .steps li[data-active] .step-detail {
-    color: var(--color-text-primary);
-  }
-
   .step-name {
     display: flex;
     gap: var(--space-l);
@@ -113,6 +109,16 @@ const steps = [
     color: var(--color-text-secondary);
     font-size: var(--font-size-body-l);
     transition: color var(--motion-duration-hover) var(--motion-easing-standard);
+  }
+
+  @media (hover: hover) {
+    .steps li:hover {
+      background-color: var(--color-surface-glow);
+    }
+
+    .steps li:hover .step-detail {
+      color: var(--color-text-primary);
+    }
   }
 
   @media (max-width: 980px) {
