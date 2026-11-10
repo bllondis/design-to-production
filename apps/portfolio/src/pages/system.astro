@@ -6,7 +6,20 @@ import Frame from "../components/layout/Frame.astro";
 import FrameRow from "../components/layout/FrameRow.astro";
 import SiteFooter from "../components/sections/SiteFooter.astro";
 import SiteHeader from "../components/sections/SiteHeader.astro";
-import { AsciiVisual, Button, ContactPopup, Heading, PixelDoor, SignalField, SkillGrid, Tile } from "@tetiana/ui";
+import {
+  AsciiVisual,
+  Button,
+  ContactPopup,
+  Heading,
+  PixelBurrow,
+  PixelDoor,
+  PixelFlight,
+  PixelHang,
+  PixelWalk,
+  SignalField,
+  SkillGrid,
+  Tile,
+} from "@tetiana/ui";
 import tokens from "@tetiana/tokens/tokens.json";
 import { contactLinks } from "../data/site.js";
 
@@ -348,6 +361,126 @@ const sections = [
         </Specimen>
 
         <Specimen
+          name="PixelWalk"
+          file="@tetiana/ui · PixelWalk"
+          usage={`<PixelWalk slot="across" client:visible character="/assets/pixel-cat.jpg" sprite="/assets/pixel-cat-walk.png" />`}
+        >
+          <ul slot="notes">
+            <li>A PixelDoor at each end of a row, and the character that lives behind one of them</li>
+            <li>
+              Click its door: the character jumps out, walks the row's bottom line and hops into the door across; the
+              empty door ignores hover and clicks
+            </li>
+            <li>
+              <code>sprite</code>: a four-frame walk strip, built by <code>npm run sprites -w portfolio</code>
+            </li>
+            <li>
+              <code>route="bow"</code>: one door, a walk to the middle of the row, a bow, and back
+            </li>
+            <li>
+              <code>leap="flip"</code>: a somersault in and out of the door instead of a plain jump
+            </li>
+            <li>
+              Goes in a FrameRow's <code>across</code> slot, so the doors land in the gutters; under reduced motion the
+              doors only open
+            </li>
+          </ul>
+          <div class="walk-demo">
+            <PixelWalk
+              client:visible
+              character="/assets/pixel-cat.jpg"
+              sprite="/assets/pixel-cat-walk.png"
+              still
+              inset={false}
+            />
+          </div>
+        </Specimen>
+
+        <Specimen
+          name="PixelFlight"
+          file="@tetiana/ui · PixelFlight"
+          usage={`<PixelFlight client:visible character="/assets/pixel-pigeon.jpg" walk="/assets/pixel-pigeon-walk.png" flight="/assets/pixel-pigeon-fly.png" hinge="right" />`}
+        >
+          <ul slot="notes">
+            <li>A PixelDoor with a bird behind it: open the door and it hops down, walks two steps and takes off</li>
+            <li>
+              It flies about the page and rests on any line marked <code>data-perch</code>, as every FrameRow with a top
+              line is
+            </li>
+            <li>Now and then it walks along its line before flying on; it flees when the pointer comes close</li>
+            <li>The door shuts behind the bird; open it again and the bird flies home</li>
+            <li>
+              <code>walk</code>, <code>flight</code>: strips from <code>npm run sprites -w portfolio</code>
+            </li>
+            <li>Under reduced motion the door only opens</li>
+          </ul>
+          <div class="gutter-demo">
+            <PixelFlight
+              client:visible
+              character="/assets/pixel-pigeon.jpg"
+              walk="/assets/pixel-pigeon-walk.png"
+              flight="/assets/pixel-pigeon-fly.png"
+              still
+              inset={false}
+            />
+          </div>
+        </Specimen>
+
+        <Specimen
+          name="PixelBurrow"
+          file="@tetiana/ui · PixelBurrow"
+          usage={`<PixelBurrow client:visible character="/assets/pixel-beet.jpg" sprite="/assets/pixel-beet-walk.png" />`}
+        >
+          <ul slot="notes">
+            <li>A PixelDoor whose character jumps down, carefully, and plants itself in the cell's bottom line</li>
+            <li>
+              It digs in until only its top shows, from the <code>eyes</code> up, and the door shuts behind it
+            </li>
+            <li>Open the door again: it sinks out of sight, comes out of the top line legs kicking, and drops in</li>
+            <li>The cell is the nearest positioned ancestor: a frame gutter, with a row's lines above and below</li>
+            <li>
+              <code>sprite</code>: a four-frame leg strip, built by <code>npm run sprites -w portfolio</code>
+            </li>
+          </ul>
+          <div class="burrow-demo">
+            <PixelBurrow
+              client:visible
+              character="/assets/pixel-beet.jpg?v=2"
+              sprite="/assets/pixel-beet-walk.png"
+              still
+            />
+          </div>
+        </Specimen>
+
+        <Specimen
+          name="PixelHang"
+          file="@tetiana/ui · PixelHang"
+          usage={`<PixelHang client:visible character="/assets/pixel-sloth.jpg" sprite="/assets/pixel-sloth-hang.png" />`}
+        >
+          <ul slot="notes">
+            <li>A PixelDoor whose character climbs out over the sill, very slowly, and hangs from the door</li>
+            <li>It falls asleep there, swaying, and the door shuts above it</li>
+            <li>Open the door again: it wakes and climbs back in, just as slowly</li>
+            <li>
+              <code>sprite</code>: the character in layers, with arms that turn and stretch to keep hold of the sill
+            </li>
+            <li>
+              <code>rig</code>: where its shoulders and claws are
+            </li>
+            <li>Needs a door's height of room below the door</li>
+          </ul>
+          <div class="hang-demo">
+            <PixelHang
+              client:visible
+              character="/assets/pixel-sloth.jpg"
+              sprite="/assets/pixel-sloth-hang.png"
+              still
+              inset={false}
+            />
+          </div>
+        </Specimen>
+
+        <Specimen
           name="AsciiVisual"
           file="@tetiana/ui · AsciiVisual"
           usage={`<AsciiVisual src="/assets/bookit-floorplan.jpg" focus="0.6 0.55" caption="BookIT / Floorplan editor" />`}
@@ -656,6 +789,24 @@ const sections = [
     gap: var(--space-s);
     margin: 0;
     color: var(--color-text-muted);
+  }
+
+  .burrow-demo {
+    position: relative;
+    width: 6.5rem;
+    height: 18rem;
+    border-block: 1px solid var(--color-border-default);
+  }
+
+  .hang-demo {
+    width: 6.5rem;
+    height: 12.5rem;
+  }
+
+  .walk-demo {
+    width: 100%;
+    height: 12rem;
+    border-bottom: 1px solid var(--color-border-default);
   }
 
   .visual-demo {

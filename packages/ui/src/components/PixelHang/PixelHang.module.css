@@ -1,0 +1,152 @@
+/* The door and, exactly over it, the stage the character climbs out of. */
+.hang {
+  position: relative;
+  display: block;
+}
+
+.inset {
+  margin-top: var(--space-inset);
+}
+
+/* Lifted over a frame's guide lines, like the other characters; the door itself stays under them.
+   A size container, so the snoring can be sized to the door. */
+.stage {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  visibility: hidden;
+  container-type: size;
+  pointer-events: none;
+}
+
+.hang:not([data-phase="home"], [data-phase="greeting"]) .stage {
+  visibility: visible;
+}
+
+.swing,
+.figure,
+.layer {
+  position: absolute;
+  inset: 0;
+}
+
+/* The sill is the bottom edge of the stage: asleep, the character swings from it. */
+.swing {
+  transform-origin: 50% 100%;
+}
+
+/* One strip, six frames; the arms lie under the body, so a raised arm passes behind the head. */
+.layer {
+  background-repeat: no-repeat;
+  background-size: 600% 100%;
+  image-rendering: pixelated;
+}
+
+.body {
+  background-position-x: 0%;
+}
+
+.hang[data-phase="asleep"] .body {
+  background-position-x: 20%;
+}
+
+.upperLeft {
+  background-position-x: 40%;
+}
+
+.handLeft {
+  background-position-x: 60%;
+}
+
+.upperRight {
+  background-position-x: 80%;
+}
+
+.handRight {
+  background-position-x: 100%;
+}
+
+.left {
+  transform-origin: var(--hang-shoulder-x) var(--hang-shoulder-y);
+}
+
+.right {
+  transform-origin: calc(100% - var(--hang-shoulder-x)) var(--hang-shoulder-y);
+}
+
+.hang[data-phase="asleep"] .swing {
+  animation: hang-sway 4600ms ease-in-out infinite;
+}
+
+@keyframes hang-sway {
+  0%,
+  100% {
+    transform: rotate(-1.6deg);
+  }
+
+  50% {
+    transform: rotate(1.6deg);
+  }
+}
+
+/* Snoring: three z's drift up from the head, one after another. */
+.snore {
+  position: absolute;
+  top: 12%;
+  left: 74%;
+  visibility: hidden;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-pixel);
+  font-size: 16cqw;
+  line-height: 1;
+}
+
+.snore span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.hang[data-phase="asleep"] .snore {
+  visibility: visible;
+}
+
+.hang[data-phase="asleep"] .snore span {
+  animation: hang-snore 3600ms linear infinite;
+}
+
+.hang[data-phase="asleep"] .snore span:nth-child(2) {
+  animation-delay: 1200ms;
+}
+
+.hang[data-phase="asleep"] .snore span:nth-child(3) {
+  animation-delay: 2400ms;
+}
+
+@keyframes hang-snore {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translate(120%, -220%) scale(1.3);
+    opacity: 0;
+  }
+}
+
+/* Nothing leaves the door under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .stage {
+    display: none;
+  }
+}

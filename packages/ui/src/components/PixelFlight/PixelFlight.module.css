@@ -1,0 +1,118 @@
+.home {
+  display: block;
+}
+
+/* The bird lives on the page itself, placed in page coordinates, so it stays on its line while the page scrolls.
+   It flies over everything but dialogs and never takes the pointer. */
+.bird {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Mounted a beat early so its strips are loaded; shown once it has left the doorway. */
+.bird[data-out] {
+  visibility: visible;
+}
+
+/* The pose turns the bird to face its way and tips it into the air; the two strips sit on top of each other. */
+.pose,
+.walking,
+.flying {
+  position: absolute;
+  inset: 0;
+}
+
+.pose {
+  transform-origin: 50% var(--flight-ground);
+}
+
+.bird[data-facing="-1"] .pose {
+  scale: -1 1;
+}
+
+.walking,
+.flying {
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 400% 100%;
+  image-rendering: pixelated;
+}
+
+.flying,
+.bird[data-mode="fly"] .walking {
+  visibility: hidden;
+}
+
+.bird[data-out][data-mode="fly"] .flying {
+  visibility: visible;
+}
+
+/* Walking: stepping through the strip and swaying onto the standing foot. */
+.bird[data-mode="walk"] .walking {
+  animation: flight-frames var(--flight-cycle) steps(4, jump-none) infinite;
+}
+
+.bird[data-mode="walk"] .pose {
+  animation: flight-waddle var(--flight-cycle) linear infinite;
+}
+
+/* Flying: nose up, wings beating, bobbing a little with each beat. */
+.bird[data-mode="fly"] .flying {
+  animation: flight-frames var(--flight-flap) steps(4, jump-none) infinite;
+}
+
+.bird[data-mode="fly"] .pose {
+  animation: flight-beat var(--flight-flap) ease-in-out infinite;
+}
+
+@keyframes flight-frames {
+  from {
+    background-position-x: 0%;
+  }
+
+  to {
+    background-position-x: 100%;
+  }
+}
+
+@keyframes flight-waddle {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+
+  12.5%,
+  62.5% {
+    transform: rotate(0deg);
+  }
+
+  37.5% {
+    transform: rotate(4deg);
+  }
+
+  87.5% {
+    transform: rotate(-4deg);
+  }
+}
+
+@keyframes flight-beat {
+  0%,
+  100% {
+    transform: translateY(3%) rotate(-10deg);
+  }
+
+  50% {
+    transform: translateY(-3%) rotate(-10deg);
+  }
+}
+
+/* Nothing leaves the door under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .bird {
+    display: none;
+  }
+}

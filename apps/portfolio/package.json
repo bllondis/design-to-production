@@ -8,6 +8,7 @@
     "dev": "astro dev --port 4321",
     "build": "astro build",
     "cv": "node scripts/build-cv.mjs",
+    "sprites": "node scripts/build-sprites.mjs",
     "typecheck": "astro sync && tsc --noEmit",
     "test:e2e": "playwright test"
   },

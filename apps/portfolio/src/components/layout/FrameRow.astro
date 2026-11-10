@@ -2,6 +2,9 @@
 /**
  * FrameRow: one horizontal band inside a Frame — gutter | content | gutter.
  * Put a Tile or PixelDoor in the "gutter" slot; everything else goes in the middle.
+ * A row that draws its top line is a perch (data-perch) a PixelFlight bird can land on.
+ * The "across" slot lays one layer over the whole band, both gutters included, for a PixelWalk:
+ * its doors land in the gutters and its character crosses the row. Like the gutters, it goes below 980px.
  *
  * divider  which horizontal lines to draw: "top" (default) · "none" · "bottom" · "both".
  *          Rows whose content has column dividers close with a bottom line, so those lines never
@@ -17,13 +20,18 @@ interface Props {
 const { divider = "top", as: Tag = "div" } = Astro.props;
 ---
 
-<Tag class:list={["row", `row--${divider}`]}>
+<Tag class:list={["row", `row--${divider}`]} data-perch={divider === "top" || divider === "both" ? "" : undefined}>
   <div class="row-gutter">
     <slot name="gutter" />
   </div>
   <div class="row-main">
     <slot />
   </div>
+  {Astro.slots.has("across") && (
+    <div class="row-across">
+      <slot name="across" />
+    </div>
+  )}
 </Tag>
 
 <style>
@@ -45,16 +53,31 @@ const { divider = "top", as: Tag = "div" } = Astro.props;
 
   .row-gutter {
     position: relative;
+    grid-row: 1;
+    grid-column: 1;
     min-width: 0;
   }
 
   .row-main {
+    grid-row: 1;
     grid-column: 2;
     min-width: 0;
   }
 
+  /* No stacking context of its own: the doors sit under the frame's gutter lines like any gutter marker,
+     and the walker lifts itself over them. */
+  .row-across {
+    position: relative;
+    display: grid;
+    grid-row: 1;
+    grid-column: 1 / -1;
+    min-width: 0;
+    pointer-events: none;
+  }
+
   @media (max-width: 980px) {
-    .row-gutter {
+    .row-gutter,
+    .row-across {
       display: none;
     }
   }

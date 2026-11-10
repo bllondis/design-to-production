@@ -16,6 +16,17 @@
   margin-top: var(--space-inset);
 }
 
+/* Disabled: no pointer, and none of the hover states below. */
+.door:disabled {
+  cursor: default;
+}
+
+/* Hung on the right: the whole door mirrors, and the character is turned back the right way round. */
+.hingeRight,
+.hingeRight img {
+  transform: scaleX(-1);
+}
+
 .door img {
   width: 100%;
   height: 100%;
@@ -88,17 +99,17 @@
   filter: blur(3px);
 }
 
-/* Peek: hover, or the forced documentation state. */
-.door:hover:not([aria-pressed="true"])::before,
-.door:hover:not([aria-pressed="true"])::after,
-.door:hover:not([aria-pressed="true"]) .floor,
+/* Peek: hover, or the forced documentation state. :where keeps the weight of these rules, so open still wins. */
+.door:where(:enabled):hover:not([aria-pressed="true"])::before,
+.door:where(:enabled):hover:not([aria-pressed="true"])::after,
+.door:where(:enabled):hover:not([aria-pressed="true"]) .floor,
 .peek::before,
 .peek::after,
 .peek .floor {
   opacity: var(--door-light-opacity);
 }
 
-.door:hover .leaf,
+.door:where(:enabled):hover .leaf,
 .peek .leaf {
   transform: rotateY(-18deg);
 }

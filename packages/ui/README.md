@@ -5,15 +5,19 @@ React + TypeScript components for the portfolio design system. Styled with CSS m
 
 ## Components
 
-| Component     | What it is                                                    | Variants and states                                                         |
-| ------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `Button`      | A link styled as an action                                    | `variant` light · dark · text, `size` m · s, `icon`, `external`             |
-| `Heading`     | Every title on the site, with optional pixel letters          | `size` display-1…4 · heading-1, `as` h1–h4, `tone`, `pixel`, `measure`      |
-| `Tile`        | Square chapter marker for the frame gutter                    | `label`, `inset`                                                            |
-| `PixelDoor`   | Pixel-art door hiding a character; leaks warm light when ajar | closed · peek (hover, flapping on scroll) · open (click), `offset`, `still` |
-| `SkillGrid`   | Labelled grid of skills, inverts on hover                     | 3 → 2 → 1 columns                                                           |
-| `AsciiVisual` | Screenshot redrawn as a coloured glyph mosaic                 | `src`, `focus`, `caption`                                                   |
-| `SignalField` | Animated glyph field for hero and contact backgrounds         | `tone` dark · light, `text`, `fade`, `top`, `opacity`                       |
+| Component     | What it is                                                                      | Variants and states                                                         |
+| ------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `Button`      | A link styled as an action                                                      | `variant` light · dark · text, `size` m · s, `icon`, `external`             |
+| `Heading`     | Every title on the site, with optional pixel letters                            | `size` display-1…4 · heading-1, `as` h1–h4, `tone`, `pixel`, `measure`      |
+| `Tile`        | Square chapter marker for the frame gutter                                      | `label`, `inset`                                                            |
+| `PixelDoor`   | Pixel-art door hiding a character; leaks warm light when ajar                   | closed · peek (hover, flapping on scroll) · open (click), `offset`, `still` |
+| `PixelWalk`   | Doors and a character that walks the row between them, or out to a bow and back | `sprite`, `route`, `leap`, `ground`, `inset`                                |
+| `PixelFlight` | A door and a bird that flies about the page, perching on lines                  | `walk`, `flight`, `perches`, `hinge`, `ground`                              |
+| `PixelBurrow` | A door and a character that plants itself in the line below                     | `sprite`, `ground`, `eyes`, `inset`                                         |
+| `PixelHang`   | A door and a character that climbs out, hangs from it and sleeps                | `sprite`, `rig`, `inset`                                                    |
+| `SkillGrid`   | Labelled grid of skills, inverts on hover                                       | 3 → 2 → 1 columns                                                           |
+| `AsciiVisual` | Screenshot redrawn as a coloured glyph mosaic                                   | `src`, `focus`, `caption`                                                   |
+| `SignalField` | Animated glyph field for hero and contact backgrounds                           | `tone` dark · light, `text`, `fade`, `top`, `opacity`                       |
 
 ## Use
 
@@ -25,7 +29,7 @@ import { Button, Heading, PixelDoor } from "@tetiana/ui";
 <Button href="/Cases/timeflow.html">See it in Timeflow</Button>
 ```
 
-Components that animate (`Heading` with pixels, `PixelDoor`, `AsciiVisual`, `SignalField`) need to run on the
+Components that animate (`Heading` with pixels, `PixelDoor`, `PixelWalk`, `PixelFlight`, `PixelBurrow`, `PixelHang`, `AsciiVisual`, `SignalField`) need to run on the
 client. In Astro, render them with `client:visible` (or `client:load` above the fold); the rest render as static HTML.
 Every animation stops under `prefers-reduced-motion`.
 

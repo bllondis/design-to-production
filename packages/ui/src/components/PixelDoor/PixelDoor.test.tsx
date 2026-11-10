@@ -27,6 +27,32 @@ describe("PixelDoor", () => {
     expect(door).toHaveAccessibleName("Закрити");
   });
 
+  it("shows nobody when vacant", () => {
+    const { container } = render(<PixelDoor character="/cat.jpg" still vacant />);
+    expect(container.querySelector("img")).toBeNull();
+    expect(screen.getByRole("button")).toBeEnabled();
+  });
+
+  it("cannot be opened, and is hidden from assistive tech, when disabled", () => {
+    const { container } = render(<PixelDoor character="/cat.jpg" still disabled />);
+    expect(container.querySelector("button")).toBeDisabled();
+    expect(screen.queryByRole("button")).toBeNull();
+  });
+
+  it("hangs on the right when asked", () => {
+    render(<PixelDoor character="/cat.jpg" still hinge="right" />);
+    expect(screen.getByRole("button")).toHaveClass("hingeRight");
+  });
+
+  it("lets a parent drive it", async () => {
+    const onToggle = vi.fn();
+    render(<PixelDoor character="/cat.jpg" still open={false} onToggle={onToggle} />);
+    const door = screen.getByRole("button");
+    await userEvent.click(door);
+    expect(onToggle).toHaveBeenCalledOnce();
+    expect(door).toHaveAttribute("aria-pressed", "false");
+  });
+
   it("flaps while the page scrolls and settles after", () => {
     vi.useFakeTimers();
     render(<PixelDoor character="/cat.jpg" />);

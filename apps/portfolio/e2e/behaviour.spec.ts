@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 test("every capability has a door that opens to its character", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name === "mobile", "Doors live in the frame gutters, which collapse on narrow screens.");
   await page.goto("/");
+  // One per capability: the empty door across the first row is not a button until the cat moves in.
   const doors = page.getByRole("button", { name: "Open the pixel door" });
   await expect(doors).toHaveCount(5);
 
@@ -10,6 +11,95 @@ test("every capability has a door that opens to its character", async ({ page },
   await first.scrollIntoViewIfNeeded();
   await first.click();
   await expect(page.getByRole("button", { name: "Close the pixel door" })).toHaveAttribute("aria-pressed", "true");
+});
+
+test("the cat walks from its door to the one across the row", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === "mobile", "Doors live in the frame gutters, which collapse on narrow screens.");
+  // The suite runs with reduced motion, under which nothing travels.
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const row = page.locator("article[aria-labelledby='systems-title'] > header");
+  const doors = row.locator("button");
+  await expect(doors).toHaveCount(2);
+  await expect(doors.first().locator("img")).toHaveCount(1);
+  await expect(doors.last().locator("img")).toHaveCount(0);
+  await expect(doors.last()).toBeDisabled();
+
+  await doors.first().scrollIntoViewIfNeeded();
+  await doors.first().click();
+  await expect(row.locator("[data-phase='strolling']")).toBeVisible();
+  await expect(row.locator("[data-phase='home'][data-from='end']")).toBeVisible({ timeout: 10_000 });
+  await expect(doors.last().locator("img")).toHaveCount(1);
+  await expect(doors.first().locator("img")).toHaveCount(0);
+  await expect(doors.last()).toBeEnabled();
+  await expect(doors.first()).toBeDisabled();
+});
+
+test("the pigeon leaves its door, and flies home when the door is opened again", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === "mobile", "Doors live in the frame gutters, which collapse on narrow screens.");
+  // The suite runs with reduced motion, under which nothing leaves.
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const row = page.locator("article[aria-labelledby='mature-title'] > header");
+  const door = row.getByRole("button");
+  const bird = page.locator("body > span[data-mode]");
+  await expect(bird).toHaveCount(0);
+
+  await door.scrollIntoViewIfNeeded();
+  await door.click();
+  await expect(row.locator("[data-phase='out']")).toBeVisible();
+  await expect(bird).toBeVisible();
+  // The door shuts behind it, empty.
+  await expect(door).toHaveAttribute("aria-pressed", "false");
+  await expect(door.locator("img")).toHaveCount(0);
+
+  await door.click();
+  await expect(row.locator("[data-phase='home']")).toBeVisible({ timeout: 10_000 });
+  await expect(bird).toHaveCount(0);
+  await expect(door).toHaveAttribute("aria-pressed", "false");
+  await expect(door.locator("img")).toHaveCount(1);
+});
+
+test("the beet plants itself under its door, and comes back when the door is opened again", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name === "mobile", "Doors live in the frame gutters, which collapse on narrow screens.");
+  // The suite runs with reduced motion, under which nothing leaves.
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const row = page.locator("article[aria-labelledby='greenfield-title'] > header");
+  const door = row.getByRole("button");
+
+  await door.scrollIntoViewIfNeeded();
+  await door.click();
+  await expect(row.locator("[data-phase='planted']")).toBeVisible({ timeout: 10_000 });
+  await expect(door).toHaveAttribute("aria-pressed", "false");
+  await expect(door.locator("img")).toHaveCount(0);
+
+  await door.click();
+  await expect(row.locator("[data-phase='home']")).toBeVisible({ timeout: 10_000 });
+  await expect(door.locator("img")).toHaveCount(1);
+});
+
+test("the sloth climbs out of its door and falls asleep hanging from it", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === "mobile", "Doors live in the frame gutters, which collapse on narrow screens.");
+  // The suite runs with reduced motion, under which nothing leaves.
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const row = page.locator("article[aria-labelledby='ai-building-title'] > header");
+  const door = row.getByRole("button");
+
+  await door.scrollIntoViewIfNeeded();
+  await door.click();
+  await expect(row.locator("[data-phase='climbing']")).toBeVisible();
+  // It is in no hurry.
+  await expect(row.locator("[data-phase='asleep']")).toBeVisible({ timeout: 15_000 });
+  await expect(door).toHaveAttribute("aria-pressed", "false");
+  await expect(door.locator("img")).toHaveCount(0);
+
+  await door.click();
+  await expect(row.locator("[data-phase='waking']")).toBeVisible();
+  await expect(door).toHaveAttribute("aria-pressed", "true");
 });
 
 test("capability headings read as plain text to assistive tech", async ({ page }) => {

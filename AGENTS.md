@@ -33,10 +33,11 @@ The app imports the system only through the package names (`@tetiana/ui`, `@teti
    contact details from `apps/portfolio/src/data/site.js`; case studies are MDX files. Adding a capability or a case
    is a content change, not new markup — compose existing case components before inventing new ones.
 5. **Hydrate only what moves.** Static components render without a client directive. Interactive ones
-   (`PixelDoor`, `Heading` with pixels, `AsciiVisual`, `SignalField`) use `client:visible`, or `client:load` above the fold.
+   (`PixelDoor`, `PixelWalk`, `PixelFlight`, `PixelBurrow`, `PixelHang`, `Heading` with pixels, `AsciiVisual`,
+   `SignalField`) use `client:visible`, or `client:load` above the fold.
 6. **Respect reduced motion.** Every animation must stop under `prefers-reduced-motion`; canvases draw a still frame.
 7. **Keep the frame.** Full-width content sits in `Frame` → `FrameRow`; markers (Tile, PixelDoor) go in the
-   `gutter` slot so they keep the 1-of-12 rhythm.
+   `gutter` slot so they keep the 1-of-12 rhythm. A `PixelWalk` goes in the `across` slot, which spans both gutters.
 8. **Accessibility is a requirement.** Visible text must have a real accessible name; decorative canvases are
    `aria-hidden`; interactive elements are buttons or links with clear labels.
 

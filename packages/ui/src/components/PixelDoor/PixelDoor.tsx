@@ -16,6 +16,16 @@ export interface PixelDoorProps {
   initialState?: DoorState;
   /** Keep the top inset that lines the door up with the row's content (default on). */
   inset?: boolean;
+  /** Edge the leaf hangs on. A door in the right-hand gutter hangs on the right, so both sides swing outwards. */
+  hinge?: "left" | "right";
+  /** Nobody home: the door opens onto the empty dark. */
+  vacant?: boolean;
+  /** Nothing to open: the door ignores the pointer and keyboard and is hidden from assistive tech. */
+  disabled?: boolean;
+  /** Open state when a parent drives the door (PixelWalk); leave out and the door toggles itself. */
+  open?: boolean;
+  /** Called on every click. */
+  onToggle?: () => void;
   /** Accessible labels for the closed and open states. */
   openLabel?: string;
   closeLabel?: string;
@@ -31,10 +41,16 @@ export function PixelDoor({
   still = false,
   initialState = "closed",
   inset = true,
+  hinge = "left",
+  vacant = false,
+  disabled = false,
+  open: controlledOpen,
+  onToggle,
   openLabel = "Open the pixel door",
   closeLabel = "Close the pixel door",
 }: PixelDoorProps) {
-  const [open, setOpen] = useState(initialState === "open");
+  const [ownOpen, setOwnOpen] = useState(initialState === "open");
+  const open = controlledOpen ?? ownOpen;
   const scrolling = useScrollActivity(!still);
 
   return (
@@ -44,14 +60,20 @@ export function PixelDoor({
         styles.door,
         inset && styles.inset,
         offset && styles.offset,
+        hinge === "right" && styles.hingeRight,
         initialState === "peek" && styles.peek,
         scrolling && styles.flapping,
       )}
       aria-pressed={open}
+      aria-hidden={disabled || undefined}
+      disabled={disabled}
       aria-label={open ? closeLabel : openLabel}
-      onClick={() => setOpen((value) => !value)}
+      onClick={() => {
+        setOwnOpen((value) => !value);
+        onToggle?.();
+      }}
     >
-      <img src={character} alt="" width={360} height={360} loading="lazy" />
+      {!vacant && <img src={character} alt="" width={360} height={360} loading="lazy" />}
       <span className={styles.floor} aria-hidden="true" />
       <span className={styles.leaf} aria-hidden="true" />
     </button>

@@ -1,0 +1,372 @@
+/* The stage fills its row and lets clicks through; only the two doors take the pointer.
+   It is a size container, so the walker can measure the row in cqw and cqh without any script. */
+.walk {
+  --walk-top: 0px;
+  --walk-drop: calc(100cqh - var(--walk-top) - var(--walk-ground));
+
+  position: relative;
+  height: 100%;
+  container-type: size;
+  pointer-events: none;
+}
+
+.inset {
+  --walk-top: var(--space-inset);
+}
+
+/* Where the walker stands, as offsets from the start door. Percentages are of its own width, a door's worth. */
+.walk[data-from="start"] {
+  --walk-from-door: 0%;
+  --walk-from-floor: 105%;
+  --walk-to-floor: calc(100cqw - 205%);
+  --walk-to-door: calc(100cqw - 100%);
+  --walk-facing: 1;
+}
+
+.walk[data-from="end"] {
+  --walk-from-door: calc(100cqw - 100%);
+  --walk-from-floor: calc(100cqw - 205%);
+  --walk-to-floor: 105%;
+  --walk-to-door: 0%;
+  --walk-facing: -1;
+}
+
+/* The bow route has one door: out to the middle of the row, then the same way back. */
+.walk[data-route="bow"] {
+  --walk-to-floor: calc(50cqw - 50%);
+}
+
+.walk[data-route="bow"][data-leg="back"] {
+  --walk-from-floor: calc(50cqw - 50%);
+  --walk-to-floor: 105%;
+  --walk-to-door: 0%;
+  --walk-facing: -1;
+}
+
+.slot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--layout-gutter);
+  pointer-events: auto;
+}
+
+.slotEnd {
+  right: 0;
+  left: auto;
+}
+
+/* Three nested boxes, one job each: the walker travels sideways, the hop moves up and down, the sprite poses.
+   The walker is lifted over a frame's guide lines; the doors stay under them, so an open door never breaks a line. */
+.walker {
+  position: absolute;
+  z-index: 3;
+  top: var(--walk-top);
+  left: 0;
+  width: var(--layout-gutter);
+  aspect-ratio: 1;
+  visibility: hidden;
+}
+
+.hop,
+.sprite {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sprite {
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 400% 100%;
+  transform-origin: 50% var(--walk-ground);
+  image-rendering: pixelated;
+}
+
+.walk:not([data-phase="home"], [data-phase="greeting"]) .walker {
+  visibility: visible;
+}
+
+/* On the way the character faces where it is going; behind a door it faces out, like its picture.
+   The flip sits on the hop, inside the sideways travel, so it mirrors the pose and not the route. */
+.walk:is([data-phase="leaping"], [data-phase="strolling"], [data-phase="entering"]) .hop {
+  scale: var(--walk-facing) 1;
+}
+
+/* Leaping: crouch in the doorway, jump out, land on the bottom line. A flip turns the jump into a somersault. */
+.walk[data-phase="leaping"] .walker {
+  animation: walk-leap-across var(--walk-leap) linear both;
+}
+
+.walk[data-phase="leaping"] .hop {
+  animation: walk-leap-down var(--walk-leap) linear both;
+}
+
+.walk[data-phase="leaping"] .sprite {
+  animation: walk-leap-pose var(--walk-leap) linear both;
+}
+
+.walk[data-leap="flip"][data-phase="leaping"] .sprite {
+  animation:
+    walk-leap-pose var(--walk-leap) linear both,
+    walk-flip-out var(--walk-leap) linear both;
+}
+
+@keyframes walk-flip-out {
+  0%,
+  20% {
+    rotate: 0deg;
+  }
+
+  82%,
+  100% {
+    rotate: 360deg;
+  }
+}
+
+@keyframes walk-leap-across {
+  0%,
+  20% {
+    transform: translateX(var(--walk-from-door));
+  }
+
+  82%,
+  100% {
+    transform: translateX(var(--walk-from-floor));
+  }
+}
+
+@keyframes walk-leap-down {
+  0%,
+  20% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+
+  42% {
+    transform: translateY(-26%);
+    animation-timing-function: ease-in;
+  }
+
+  82%,
+  100% {
+    transform: translateY(var(--walk-drop));
+  }
+}
+
+@keyframes walk-leap-pose {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+
+  12% {
+    transform: scale(1.14, 0.82);
+  }
+
+  20% {
+    transform: scale(1.08, 0.9);
+  }
+
+  34% {
+    transform: scale(0.88, 1.14);
+  }
+
+  74% {
+    transform: scale(0.94, 1.08);
+  }
+
+  82% {
+    transform: scale(1.18, 0.78);
+  }
+
+  92% {
+    transform: scale(0.97, 1.04);
+  }
+}
+
+/* Strolling: a steady walk along the line, stepping through the strip and swaying onto the standing foot. */
+.walk[data-phase="strolling"] .walker {
+  animation: walk-stroll var(--walk-stroll) linear both;
+}
+
+.walk[data-phase="strolling"] .hop {
+  transform: translateY(var(--walk-drop));
+}
+
+.walk[data-phase="strolling"] .sprite {
+  animation:
+    walk-frames var(--walk-cycle) steps(4, jump-none) infinite,
+    walk-waddle var(--walk-cycle) linear infinite;
+}
+
+@keyframes walk-stroll {
+  from {
+    transform: translateX(var(--walk-from-floor));
+  }
+
+  to {
+    transform: translateX(var(--walk-to-floor));
+  }
+}
+
+@keyframes walk-frames {
+  from {
+    background-position-x: 0%;
+  }
+
+  to {
+    background-position-x: 100%;
+  }
+}
+
+@keyframes walk-waddle {
+  0%,
+  100% {
+    transform: rotate(-2.5deg);
+  }
+
+  12.5%,
+  62.5% {
+    transform: rotate(0deg);
+  }
+
+  37.5% {
+    transform: rotate(5deg);
+  }
+
+  87.5% {
+    transform: rotate(-5deg);
+  }
+}
+
+/* Entering: crouch under the far door, spring up into it, settle. */
+.walk[data-phase="entering"] .walker {
+  animation: walk-enter-across var(--walk-leap) linear both;
+}
+
+.walk[data-phase="entering"] .hop {
+  animation: walk-enter-up var(--walk-leap) linear both;
+}
+
+.walk[data-phase="entering"] .sprite {
+  animation: walk-enter-pose var(--walk-leap) linear both;
+}
+
+.walk[data-leap="flip"][data-phase="entering"] .sprite {
+  animation:
+    walk-enter-pose var(--walk-leap) linear both,
+    walk-flip-in var(--walk-leap) linear both;
+}
+
+@keyframes walk-flip-in {
+  0%,
+  20% {
+    rotate: 0deg;
+  }
+
+  78%,
+  100% {
+    rotate: 360deg;
+  }
+}
+
+@keyframes walk-enter-across {
+  0%,
+  20% {
+    transform: translateX(var(--walk-to-floor));
+  }
+
+  78%,
+  100% {
+    transform: translateX(var(--walk-to-door));
+  }
+}
+
+@keyframes walk-enter-up {
+  0%,
+  20% {
+    transform: translateY(var(--walk-drop));
+    animation-timing-function: ease-out;
+  }
+
+  62% {
+    transform: translateY(-14%);
+    animation-timing-function: ease-in;
+  }
+
+  78%,
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes walk-enter-pose {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+
+  12% {
+    transform: scale(1.14, 0.82);
+  }
+
+  20% {
+    transform: scale(1.08, 0.9);
+  }
+
+  36% {
+    transform: scale(0.88, 1.14);
+  }
+
+  62% {
+    transform: scale(0.96, 1.05);
+  }
+
+  78% {
+    transform: scale(1.12, 0.86);
+  }
+
+  90% {
+    transform: scale(0.98, 1.03);
+  }
+}
+
+/* Bowing: stopped in the middle of the row, facing out, one deep bow. */
+.walk[data-phase="bowing"] .walker {
+  transform: translateX(var(--walk-to-floor));
+}
+
+.walk[data-phase="bowing"] .hop {
+  transform: translateY(var(--walk-drop));
+}
+
+.walk[data-phase="bowing"] .sprite {
+  animation: walk-bow var(--walk-bow) ease-in-out both;
+}
+
+@keyframes walk-bow {
+  0%,
+  12%,
+  88%,
+  100% {
+    transform: scale(1, 1);
+  }
+
+  40%,
+  62% {
+    transform: scale(1.08, 0.66);
+  }
+}
+
+/* Settling: standing in the far doorway, exactly over the picture that takes its place. */
+.walk[data-phase="settling"] .walker {
+  transform: translateX(var(--walk-to-door));
+}
+
+/* Nothing travels under reduced motion; the doors still open on their own. */
+@media (prefers-reduced-motion: reduce) {
+  .walker {
+    display: none;
+  }
+}

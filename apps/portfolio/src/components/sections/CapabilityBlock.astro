@@ -3,10 +3,33 @@
  * CapabilityBlock: one capability — title and statement, a short case for it with a link to
  * the proof project, the project rendered as an AsciiVisual, and the skills it involves.
  *
- * flip  put the visual on the left; the home page alternates this so blocks zig-zag
+ * flip    put the visual on the left; the home page alternates this so blocks zig-zag
+ * motion  what the character does when its door opens; without one it waits behind a PixelDoor
+ *         walk    PixelWalk: a second door across the title row, and the character walks between them
+ *         bow     PixelWalk on its bow route: a somersault out, a bow in the middle of the row, and back
+ *         fly     PixelFlight: a bird that leaves its door and flies about the page
+ *         burrow  PixelBurrow: it jumps down and plants itself in the row's bottom line
+ *         hang    PixelHang: it climbs out, very slowly, and falls asleep hanging from the door
  */
 import FrameRow from "../layout/FrameRow.astro";
-import { AsciiVisual, Button, Heading, PixelDoor, SkillGrid } from "@tetiana/ui";
+import {
+  AsciiVisual,
+  Button,
+  Heading,
+  PixelBurrow,
+  PixelDoor,
+  PixelFlight,
+  PixelHang,
+  PixelWalk,
+  SkillGrid,
+} from "@tetiana/ui";
+
+type Motion =
+  | { kind: "walk"; sprite: string }
+  | { kind: "bow"; sprite: string }
+  | { kind: "fly"; walk: string; flight: string }
+  | { kind: "burrow"; sprite: string }
+  | { kind: "hang"; sprite: string };
 
 interface Props {
   id: string;
@@ -18,6 +41,7 @@ interface Props {
   secondary?: { label: string; href: string };
   visual: { src: string; focus?: string; caption?: string };
   character: string;
+  motion?: Motion;
   skills: string[];
   flip?: boolean;
   skillsLabel?: string;
@@ -35,6 +59,7 @@ const {
   secondary,
   visual,
   character,
+  motion,
   skills,
   flip = false,
   skillsLabel = "What I bring",
@@ -46,15 +71,59 @@ const titleId = `${id}-title`;
 
 <article class:list={["capability", { "capability--flip": flip }]} aria-labelledby={titleId}>
   <FrameRow as="header">
-    <div slot="gutter">
-      <PixelDoor
+    {motion?.kind === "walk" || motion?.kind === "bow" ? (
+      <PixelWalk
+        slot="across"
         client:visible
         character={character}
+        sprite={motion.sprite}
+        route={motion.kind === "bow" ? "bow" : "across"}
+        leap={motion.kind === "bow" ? "flip" : "jump"}
         offset={flip}
         openLabel={openDoorLabel}
         closeLabel={closeDoorLabel}
       />
-    </div>
+    ) : (
+      <div slot="gutter">
+        {motion?.kind === "fly" ? (
+          <PixelFlight
+            client:visible
+            character={character}
+            walk={motion.walk}
+            flight={motion.flight}
+            offset={flip}
+            openLabel={openDoorLabel}
+            closeLabel={closeDoorLabel}
+          />
+        ) : motion?.kind === "burrow" ? (
+          <PixelBurrow
+            client:visible
+            character={character}
+            sprite={motion.sprite}
+            offset={flip}
+            openLabel={openDoorLabel}
+            closeLabel={closeDoorLabel}
+          />
+        ) : motion?.kind === "hang" ? (
+          <PixelHang
+            client:visible
+            character={character}
+            sprite={motion.sprite}
+            offset={flip}
+            openLabel={openDoorLabel}
+            closeLabel={closeDoorLabel}
+          />
+        ) : (
+          <PixelDoor
+            client:visible
+            character={character}
+            offset={flip}
+            openLabel={openDoorLabel}
+            closeLabel={closeDoorLabel}
+          />
+        )}
+      </div>
+    )}
     <div class="capability-head">
       <Heading client:visible as="h3" id={titleId} size="display-4" measure={16} text={title} />
       <p class="capability-statement">{statement}</p>

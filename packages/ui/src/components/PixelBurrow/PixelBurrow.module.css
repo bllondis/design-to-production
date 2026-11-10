@@ -1,0 +1,263 @@
+/* Where the character stands, as distances down the cell from its top line. Percentages are of its own height,
+   a door's worth; cqh is the height of the cell. */
+.burrow {
+  --burrow-top: 0px;
+  --burrow-at-door: var(--burrow-top);
+  --burrow-on-line: calc(100cqh - var(--burrow-ground));
+  --burrow-planted: calc(100cqh - var(--burrow-eyes));
+  --burrow-through: calc(100cqh - var(--burrow-eyes) + 100%);
+  --burrow-back: calc(100cqh - var(--burrow-eyes) + 100% + var(--burrow-top));
+
+  display: block;
+}
+
+.inset {
+  --burrow-top: var(--space-inset);
+}
+
+/* The plot covers the whole cell and cuts the character off at its top and bottom lines: what goes below the
+   bottom line is in the ground. It is a size container, so the cell can be measured without any script. */
+.plot {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 -25%);
+  container-type: size;
+  pointer-events: none;
+}
+
+.mover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  visibility: hidden;
+}
+
+.burrow:not([data-phase="home"], [data-phase="greeting"]) .mover {
+  visibility: visible;
+}
+
+.sprite {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 400% 100%;
+  transform-origin: 50% var(--burrow-ground);
+  image-rendering: pixelated;
+}
+
+/* A second self, one lap of the cell higher: its foot reaches the top line just as the first goes under for good,
+   so what sinks into the bottom line comes out of the top one. */
+.above {
+  top: calc(var(--burrow-eyes) - 100% - 100cqh);
+}
+
+/* Dropping: a look to each side from the doorway, then a small, careful jump down onto the line. */
+.burrow[data-phase="dropping"] .mover {
+  animation: burrow-drop var(--burrow-drop) linear both;
+}
+
+.burrow[data-phase="dropping"] .sprite {
+  animation: burrow-drop-pose var(--burrow-drop) linear both;
+}
+
+@keyframes burrow-drop {
+  0%,
+  46% {
+    transform: translateY(var(--burrow-at-door));
+    animation-timing-function: ease-out;
+  }
+
+  58% {
+    transform: translateY(calc(var(--burrow-at-door) - 10%));
+    animation-timing-function: ease-in;
+  }
+
+  88%,
+  100% {
+    transform: translateY(var(--burrow-on-line));
+  }
+}
+
+@keyframes burrow-drop-pose {
+  0%,
+  30%,
+  100% {
+    transform: rotate(0deg) scale(1, 1);
+  }
+
+  10% {
+    transform: rotate(-6deg) scale(1, 1);
+  }
+
+  22% {
+    transform: rotate(6deg) scale(1, 1);
+  }
+
+  42% {
+    transform: rotate(0deg) scale(1.1, 0.88);
+  }
+
+  58% {
+    transform: rotate(0deg) scale(0.95, 1.06);
+  }
+
+  88% {
+    transform: rotate(0deg) scale(1.12, 0.86);
+  }
+
+  94% {
+    transform: rotate(0deg) scale(0.98, 1.03);
+  }
+}
+
+/* Sinking: slowly into the line, twisting a little from side to side. */
+.burrow[data-phase="sinking"] .mover {
+  animation: burrow-sink var(--burrow-sink) ease-in-out both;
+}
+
+.burrow[data-phase="sinking"] .sprite {
+  animation: burrow-twist 700ms ease-in-out infinite;
+}
+
+@keyframes burrow-sink {
+  from {
+    transform: translateY(var(--burrow-on-line));
+  }
+
+  to {
+    transform: translateY(var(--burrow-planted));
+  }
+}
+
+@keyframes burrow-twist {
+  0%,
+  100% {
+    transform: rotate(-3.5deg);
+  }
+
+  50% {
+    transform: rotate(3.5deg);
+  }
+}
+
+/* Planted: only the top shows; it sways about the point where it meets the line. */
+.burrow[data-phase="planted"] .mover {
+  transform: translateY(var(--burrow-planted));
+}
+
+.burrow[data-phase="planted"] .sprite {
+  transform-origin: 50% var(--burrow-eyes);
+  animation: burrow-sway 3400ms ease-in-out infinite;
+}
+
+@keyframes burrow-sway {
+  0%,
+  100% {
+    transform: rotate(-2.5deg);
+  }
+
+  50% {
+    transform: rotate(2.5deg);
+  }
+}
+
+/* Rising: down through the bottom line and, by the same measure, out of the top one, feet first:
+   the legs kick in the air and the body jerks with them. */
+.burrow[data-phase="rising"] .mover {
+  animation: burrow-rise var(--burrow-rise) ease-in-out both;
+}
+
+.burrow[data-phase="rising"] .sprite {
+  animation:
+    burrow-kick var(--burrow-kick) steps(4, jump-none) infinite,
+    burrow-jerk var(--burrow-kick) ease-in-out infinite;
+}
+
+@keyframes burrow-rise {
+  from {
+    transform: translateY(var(--burrow-planted));
+  }
+
+  to {
+    transform: translateY(var(--burrow-through));
+  }
+}
+
+@keyframes burrow-kick {
+  from {
+    background-position-x: 0%;
+  }
+
+  to {
+    background-position-x: 100%;
+  }
+}
+
+@keyframes burrow-jerk {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+/* Falling: all of it out of the top line, it simply drops into the doorway and lands with a squash. */
+.burrow[data-phase="falling"] .mover {
+  animation: burrow-fall var(--burrow-fall) linear both;
+}
+
+.burrow[data-phase="falling"] .sprite {
+  animation: burrow-fall-pose var(--burrow-fall) linear both;
+}
+
+@keyframes burrow-fall {
+  0% {
+    transform: translateY(var(--burrow-through));
+    animation-timing-function: ease-in;
+  }
+
+  55%,
+  100% {
+    transform: translateY(var(--burrow-back));
+  }
+}
+
+@keyframes burrow-fall-pose {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+
+  40% {
+    transform: scale(0.94, 1.08);
+  }
+
+  55% {
+    transform: scale(1.14, 0.84);
+  }
+
+  78% {
+    transform: scale(0.97, 1.04);
+  }
+}
+
+/* Settling: standing in the doorway, exactly over the picture that takes its place. */
+.burrow[data-phase="settling"] .mover {
+  transform: translateY(var(--burrow-back));
+}
+
+/* Nothing leaves the door under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .plot {
+    display: none;
+  }
+}
