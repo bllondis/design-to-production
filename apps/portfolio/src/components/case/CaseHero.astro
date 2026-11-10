@@ -1,7 +1,7 @@
 ---
 /** CaseHero: title, summary and context for a case, its cover as an AsciiVisual, and the headline numbers. */
 import FrameRow from "../layout/FrameRow.astro";
-import { AsciiVisual, Button, Heading, PixelDoor, StatRow, TagList, type Stat } from "@tetiana/ui";
+import { AsciiVisual, Button, Heading, StatRow, TagList, type Stat } from "@tetiana/ui";
 
 interface Props {
   title: string;
@@ -12,16 +12,12 @@ interface Props {
   stats?: Stat[];
   actions?: Array<{ label: string; href: string; external?: boolean }>;
   cover: { src: string; focus?: string; caption?: string };
-  character: string;
 }
 
-const { title, kicker, summary, meta, note, stats, actions, cover, character } = Astro.props;
+const { title, kicker, summary, meta, note, stats, actions, cover } = Astro.props;
 ---
 
 <FrameRow as="header" divider="bottom">
-  <div slot="gutter">
-    <PixelDoor client:visible character={character} />
-  </div>
   <div class="hero">
     <div class="hero-copy">
       <p class="hero-kicker text-label-l">{kicker}</p>

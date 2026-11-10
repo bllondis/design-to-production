@@ -17,8 +17,8 @@ stats:
   - { value: "17", label: React components in @tetiana/ui }
   - { value: "59", label: "Automated tests, from unit to visual" }
 actions:
-  - { label: Open the system page, href: /system/ }
-  - { label: View the source on GitHub, href: "https://github.com/bllondis/design-to-production", external: true }
+  - { label: Explore the design system, href: /system/, external: true }
+  - { label: Open Storybook, href: /storybook/, external: true }
 cover:
   src: /work/design-to-production/storybook-tokens.jpg
   focus: "0.6 0.35"
@@ -44,7 +44,7 @@ import * as snippets from "./snippets/design-to-production.ts";
 
 <Steps
   items={[
-    { label: "Source", title: "tokens/*.tokens.json", detail: "W3C DTCG format, three tiers." },
+    { label: "Source", title: "/*.tokens.json", detail: "W3C DTCG format, three tiers." },
     { label: "Build", title: "Style Dictionary", detail: "tokens.css for code, tokens.json for docs." },
     { label: "Design", title: "Figma variables", detail: "Same names, same tiers, CSS code syntax attached." },
     { label: "Components", title: "@tetiana/ui", detail: "React + TypeScript, CSS modules, stories, tests." },

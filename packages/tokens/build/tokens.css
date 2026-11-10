@@ -150,6 +150,12 @@
   --tag-fg: var(--color-text-secondary);
   --tag-bg-hover: var(--color-surface-inverse); /** Tags that link somewhere. */
   --tag-fg-hover: var(--color-text-inverse);
+  --note-marker: var(--color-accent-default); /** Short rule above a margin note, and its label. */
+  --note-fg: var(--color-text-muted);
+  --notice-bg: var(--color-surface-raised); /** Panel behind a notice about the demo or its limits. */
+  --notice-border: var(--color-border-subtle);
+  --notice-marker: var(--color-accent-default); /** Leading rule, icon and label of a notice. */
+  --notice-fg: var(--color-text-secondary);
   --skill-border: var(--color-border-default);
   --skill-bg-hover: var(--color-surface-inverse);
   --skill-fg-hover: var(--color-text-inverse);

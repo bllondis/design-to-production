@@ -1,0 +1,13 @@
+---
+/** Link: every link written in a case's MDX. Links that leave the site open in a new tab, like external Buttons. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"a">;
+
+const { href, ...rest } = Astro.props;
+const external = /^https?:\/\//.test(String(href ?? ""));
+---
+
+<a href={href} {...rest} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+  <slot />
+</a>

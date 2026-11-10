@@ -66,6 +66,18 @@
     "padding-inline": { "$type": "dimension", "$value": "{space.xs}" },
     "gap": { "$type": "dimension", "$value": "{space.2xs}", "$description": "Space between tags in a list." }
   },
+  "note": {
+    "$type": "color",
+    "marker": { "$value": "{color.accent.default}", "$description": "Short rule above a margin note, and its label." },
+    "fg": { "$value": "{color.text.muted}" }
+  },
+  "notice": {
+    "$type": "color",
+    "bg": { "$value": "{color.surface.raised}", "$description": "Panel behind a notice about the demo or its limits." },
+    "border": { "$value": "{color.border.subtle}" },
+    "marker": { "$value": "{color.accent.default}", "$description": "Leading rule, icon and label of a notice." },
+    "fg": { "$value": "{color.text.secondary}" }
+  },
   "skill": {
     "border": { "$type": "color", "$value": "{color.border.default}" },
     "bg-hover": { "$type": "color", "$value": "{color.surface.inverse}" },

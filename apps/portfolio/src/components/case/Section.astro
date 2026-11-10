@@ -7,9 +7,11 @@
  * pixel      pixel letters in the heading; off for long editorial headlines
  * measure    heading measure in ems
  * headingId  id for the heading, so a wrapping landmark can point at it
+ * action     a button under the lead, the same as the hero's main action (in MDX: `frontmatter.actions[0]`);
+ *            external ones open in a new tab
  */
 import FrameRow from "../layout/FrameRow.astro";
-import { Heading } from "@tetiana/ui";
+import { Button, Heading } from "@tetiana/ui";
 
 interface Props {
   label: string;
@@ -18,9 +20,10 @@ interface Props {
   pixel?: boolean;
   measure?: number;
   headingId?: string;
+  action?: { label: string; href: string; external?: boolean };
 }
 
-const { label, title, size = "heading-1", pixel = true, measure = 18, headingId } = Astro.props;
+const { label, title, size = "heading-1", pixel = true, measure = 18, headingId, action } = Astro.props;
 ---
 
 <div class="section">
@@ -36,6 +39,13 @@ const { label, title, size = "heading-1", pixel = true, measure = 18, headingId 
       </div>
       <div class="section-lead">
         <slot />
+        {action && (
+          <div class="section-action">
+            <Button href={action.href} external={action.external}>
+              {action.label}
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   </FrameRow>
@@ -74,13 +84,17 @@ const { label, title, size = "heading-1", pixel = true, measure = 18, headingId 
     margin-top: var(--space-s);
   }
 
-  .section-lead :global(a) {
+  .section-action {
+    margin-top: var(--space-xl);
+  }
+
+  .section-lead :global(p a) {
     color: var(--color-text-primary);
     text-decoration-thickness: 1px;
     text-underline-offset: 0.3rem;
   }
 
-  .section-lead :global(a:hover) {
+  .section-lead :global(p a:hover) {
     color: var(--color-accent-default);
   }
 

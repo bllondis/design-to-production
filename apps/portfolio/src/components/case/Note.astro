@@ -1,51 +1,153 @@
 ---
-/** Note: a quiet aside about the evidence or limits of what a case shows. */
+/**
+ * Note: a quiet aside about the evidence or limits of what a case shows, set like a margin note: it sits in the
+ * column where Section leads run, under a short accent rule, with its label running into the text.
+ * `notice` turns it into an alert bar for what the reader would otherwise run into, such as a disabled demo.
+ * Place it right after the Shot it describes: it drops the row line and sits just under the screenshot, edge to edge.
+ */
 import FrameRow from "../layout/FrameRow.astro";
 
 interface Props {
   label?: string;
+  variant?: "aside" | "notice";
 }
 
-const { label = "Note" } = Astro.props;
+const { label = "Note", variant = "aside" } = Astro.props;
 ---
 
-<FrameRow>
-  <aside class="note">
-    <p class="note-label text-label-m">{label}</p>
-    <div class="note-body">
-      <slot />
+<FrameRow divider={variant === "notice" ? "none" : "top"}>
+  {variant === "notice" ? (
+    <div class="notice-row">
+      <div class="notice" role="note" aria-label={label}>
+        <span class="notice-icon text-label-m" aria-hidden="true">
+          i
+        </span>
+        <div class="notice-text">
+          <p class="note-label text-label-m">{label}</p>
+          <div class="note-body notice-body">
+            <slot />
+          </div>
+        </div>
+      </div>
     </div>
-  </aside>
+  ) : (
+    <div class="note-row">
+      <aside class="note">
+        <p class="note-label note-inline text-label-m">{label}</p>
+        <div class="note-body">
+          <slot />
+        </div>
+      </aside>
+    </div>
+  )}
 </FrameRow>
 
 <style>
-  .note {
+  /* Same columns as Section's head, so the note lines up with the lead text above and below it. */
+  .note-row {
     display: grid;
-    grid-template-columns: minmax(10rem, 0.3fr) minmax(0, 1fr);
-    gap: var(--space-xl);
-    padding: var(--space-l) var(--space-inset-inline);
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    padding: var(--space-xl) var(--space-inset-inline);
+  }
+
+  .note {
+    grid-column: 2;
+    max-width: var(--layout-measure);
+  }
+
+  .note::before {
+    display: block;
+    width: 2.5rem;
+    height: 1px;
+    margin-bottom: var(--space-s);
+    background: var(--note-marker);
+    content: "";
   }
 
   .note-label {
     margin: 0;
-    color: var(--color-accent-default);
+  }
+
+  .note-inline {
+    display: inline;
+    margin-right: var(--space-xs);
+    color: var(--note-marker);
   }
 
   .note-body {
-    max-width: 44rem;
-    color: var(--color-text-muted);
+    color: var(--note-fg);
     font-size: 0.95rem;
     line-height: var(--font-line-height-relaxed);
+  }
+
+  .note .note-body,
+  .note .note-body :global(p:first-child) {
+    display: inline;
   }
 
   .note-body :global(p) {
     margin: 0;
   }
 
-  @media (max-width: 680px) {
-    .note {
+  /* Pulled up over the Shot's bottom padding, leaving a small gap under the image. */
+  .notice-row {
+    margin-top: calc(var(--space-s) - var(--space-xl));
+    padding: 0 var(--space-inset-inline) var(--space-xl);
+  }
+
+  .notice {
+    display: flex;
+    gap: var(--space-s);
+    align-items: flex-start;
+    padding: var(--space-s) var(--space-m);
+    border: 1px solid var(--notice-border);
+    border-left: 2px solid var(--notice-marker);
+    background: var(--notice-bg);
+  }
+
+  .notice-icon {
+    display: grid;
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    place-items: center;
+    border: 1px solid var(--notice-marker);
+    color: var(--notice-marker);
+    text-transform: none;
+  }
+
+  .notice-text {
+    display: grid;
+    gap: var(--space-3xs);
+    padding-top: 0.1rem;
+  }
+
+  .notice .note-label {
+    color: var(--notice-marker);
+  }
+
+  .notice-body {
+    color: var(--notice-fg);
+  }
+
+  @media (max-width: 980px) {
+    .note-row {
       grid-template-columns: 1fr;
-      gap: var(--space-2xs);
+    }
+
+    .note {
+      grid-column: 1;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .notice-row {
+      margin-top: calc(var(--space-s) - var(--space-l));
+      padding: 0 var(--space-m) var(--space-l);
+    }
+
+    .note-row {
       padding: var(--space-l) var(--space-m);
     }
   }

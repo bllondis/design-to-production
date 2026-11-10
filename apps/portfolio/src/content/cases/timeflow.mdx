@@ -88,56 +88,58 @@ character: /assets/pixel-waffle.jpg
   text="A scan of ten time-tracking products exposed recurring patterns and a gap for transparent, review-first interaction."
 />
 
-<More summary="View supporting research artifacts">
-  <Research
-    src="/work/timeflow/ux-literature-review.jpg"
-    alt="UX literature review"
-    width={1500}
-    height={1193}
-    label="04 · Research"
-    title="UX literature review"
-    text="Ten key articles from UX Collective, NN/g and Smashing distilled into core insights and their direct relevance to time tracking."
-    flip
-  />
-  <Research
-    src="/work/timeflow/synthesized-patterns.jpg"
-    alt="Synthesized patterns"
-    width={1500}
-    height={1243}
-    label="05 · Research"
-    title="Synthesized patterns"
-    text="Six recurring market patterns - AI categorization, macOS-first niching, wellness framing, frictionless entry, dark-vs-glass aesthetics."
-  />
-  <Research
-    src="/work/timeflow/product-hypotheses.jpg"
-    alt="Product hypotheses"
-    width={1500}
-    height={716}
-    label="06 · Research"
-    title="Product hypotheses"
-    text="Two sharp bets: an anti-surveillance tracker for remote teams, and one built for ADHD / neurodivergent professionals."
-    flip
-  />
-  <Research
-    src="/work/timeflow/jobs-to-be-done.jpg"
-    alt="Jobs-To-Be-Done"
-    width={1500}
-    height={1500}
-    label="07 · Research"
-    title="Jobs-To-Be-Done"
-    text="Four recurring jobs mapped the situations, desired progress, and obstacles around late logging, concurrent work, and team oversight."
-  />
-  <Research
-    src="/work/timeflow/insights-how-might-we.jpg"
-    alt="Insights & How-Might-We"
-    width={1500}
-    height={1523}
-    label="08 · Research"
-    title="Insights & How-Might-We"
-    text="Four research insights reframed into HMW questions - the lead one: logging is a memory problem, not a motivation problem."
-    flip
-  />
-</More>
+<Research
+  src="/work/timeflow/ux-literature-review.jpg"
+  alt="UX literature review"
+  width={1500}
+  height={1193}
+  label="04 · Research"
+  title="UX literature review"
+  text="Ten key articles from UX Collective, NN/g and Smashing distilled into core insights and their direct relevance to time tracking."
+  flip
+/>
+
+<Research
+  src="/work/timeflow/synthesized-patterns.jpg"
+  alt="Synthesized patterns"
+  width={1500}
+  height={1243}
+  label="05 · Research"
+  title="Synthesized patterns"
+  text="Six recurring market patterns - AI categorization, macOS-first niching, wellness framing, frictionless entry, dark-vs-glass aesthetics."
+/>
+
+<Research
+  src="/work/timeflow/product-hypotheses.jpg"
+  alt="Product hypotheses"
+  width={1500}
+  height={716}
+  label="06 · Research"
+  title="Product hypotheses"
+  text="Two sharp bets: an anti-surveillance tracker for remote teams, and one built for ADHD / neurodivergent professionals."
+  flip
+/>
+
+<Research
+  src="/work/timeflow/jobs-to-be-done.jpg"
+  alt="Jobs-To-Be-Done"
+  width={1500}
+  height={1500}
+  label="07 · Research"
+  title="Jobs-To-Be-Done"
+  text="Four recurring jobs mapped the situations, desired progress, and obstacles around late logging, concurrent work, and team oversight."
+/>
+
+<Research
+  src="/work/timeflow/insights-how-might-we.jpg"
+  alt="Insights & How-Might-We"
+  width={1500}
+  height={1523}
+  label="08 · Research"
+  title="Insights & How-Might-We"
+  text="Four research insights reframed into HMW questions - the lead one: logging is a memory problem, not a motivation problem."
+  flip
+/>
 
 <Section label="Product architecture" title="How the product is intended to work">
   The concept separates signal collection from interpretation and keeps a person in control of the final record. That
@@ -229,7 +231,7 @@ character: /assets/pixel-waffle.jpg
   height={902}
 />
 
-<Note label="Demo note">
+<Note label="Demo note" variant="notice">
   Connected-account controls are disabled in the public demo; this screen documents the intended permission model.
 </Note>
 
@@ -305,12 +307,14 @@ The next step is adding the LLM layer that turns those signals into structured t
   </Card>
 </Cards>
 
-<Section label="Results" title="Working product. Real data.">
+<Section
+  label="Results"
+  title="Working product. Real data."
+  action={frontmatter.actions[0]}
+>
   In four weeks, Timeflow moved from concept to a deployed working MVP. The application includes authentication, database infrastructure, and an end-to-end Google Calendar integration. Real Calendar events can be retrieved and surfaced inside the product with source attribution.
 
 This validates the signal and infrastructure layer needed for the larger product vision. The next milestone is adding AI-assisted structuring so those signals can become reviewable timesheet suggestions.
-
-[View the live demo version ↗](https://timeflow-assistant-main.vercel.app/)
 
 </Section>
 

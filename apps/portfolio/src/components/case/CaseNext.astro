@@ -1,5 +1,8 @@
 ---
-/** CaseNext: the closing row of a case, pointing to the next one and back to the overview. */
+/**
+ * CaseNext: the closing row of a case, pointing to the next one and back to the overview.
+ * A light band, like the contact band, so the end of the case reads as a break and not as one more section.
+ */
 import FrameRow from "../layout/FrameRow.astro";
 import { Button, Heading } from "@tetiana/ui";
 
@@ -15,10 +18,10 @@ const { next } = Astro.props;
     <div class="next-row">
       <div>
         <p class="next-label text-label-l">Next case / {next.client}</p>
-        <Heading client:visible as="h2" size="heading-1" measure={20} text={next.title} />
+        <Heading client:visible as="h2" size="heading-1" tone="inverse" measure={20} text={next.title} />
       </div>
       <div class="next-actions">
-        <Button href={next.href} icon="→">
+        <Button href={next.href} variant="dark" icon="→">
           Read the case
         </Button>
         <Button href="/#work" variant="text" icon="">
@@ -42,11 +45,16 @@ const { next } = Astro.props;
     gap: var(--space-2xl);
     align-items: end;
     padding: var(--space-inset) var(--space-inset-inline);
+    background: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+    /* The text link is styled for dark surfaces; point it at the inverse roles on this band. */
+    --button-text-fg: var(--color-text-inverse-muted);
+    --button-text-fg-hover: var(--color-text-inverse);
   }
 
   .next-label {
     margin: 0 0 1.4rem;
-    color: var(--color-text-muted);
+    color: var(--color-text-inverse-muted);
   }
 
   .next-actions {

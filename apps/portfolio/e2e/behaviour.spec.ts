@@ -121,9 +121,30 @@ for (const slug of ["design-to-production", "ted-design-system", "timeflow", "du
   test(`${slug} case renders its hero and sections`, async ({ page }) => {
     await page.goto(`/work/${slug}/`);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.getByRole("button", { name: /pixel door/i })).toHaveCount(0);
     expect(await page.getByRole("heading", { level: 2 }).count()).toBeGreaterThan(3);
   });
 }
+
+test("links that leave the site open in a new tab", async ({ page }) => {
+  await page.goto("/work/timeflow/");
+  const live = page.getByRole("link", { name: "Open the live product" });
+  await expect(live).toHaveCount(2);
+  for (const link of await live.all()) {
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  }
+});
+
+test("the system page and Storybook open in a new tab from their case", async ({ page }) => {
+  await page.goto("/work/design-to-production/");
+  for (const name of ["Explore the design system", "Open Storybook"]) {
+    const link = page.getByRole("link", { name });
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  }
+  await expect(page.getByRole("link", { name: "Open Storybook" })).toHaveAttribute("href", "/storybook/");
+});
 
 test("get in touch opens the contact links and Escape closes them", async ({ page }) => {
   await page.goto("/");

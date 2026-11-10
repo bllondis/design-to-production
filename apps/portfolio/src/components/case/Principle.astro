@@ -1,5 +1,8 @@
 ---
-/** Principle: the one sentence a case is built around, set large on the inverse band. */
+/**
+ * Principle: the one sentence a case is built around, set large on a dark panel lit from the top-left corner, the
+ * same glow as the capability copy. Light bands are kept for CaseNext and the contact band.
+ */
 import FrameRow from "../layout/FrameRow.astro";
 import { Heading } from "@tetiana/ui";
 
@@ -13,10 +16,10 @@ const { label = "Central design principle", text } = Astro.props;
 
 <div class="principle">
   <FrameRow divider="both">
-    <figure class="band">
+    <figure class="panel">
       <figcaption class="text-label-l">{label}</figcaption>
       <blockquote>
-        <Heading client:visible as="h2" size="display-3" tone="inverse" measure={16} text={text} />
+        <Heading client:visible as="h2" size="display-4" measure={16} text={text} />
       </blockquote>
     </figure>
   </FrameRow>
@@ -27,17 +30,16 @@ const { label = "Central design principle", text } = Astro.props;
     margin-top: var(--space-section);
   }
 
-  .band {
+  .panel {
     display: grid;
-    gap: var(--space-2xl);
+    gap: var(--space-xl);
     margin: 0;
-    padding: clamp(3rem, 6vw, 5.5rem) var(--space-inset-inline);
-    background: var(--color-surface-inverse);
-    color: var(--color-text-inverse);
+    padding: var(--space-inset) var(--space-inset-inline);
+    background: radial-gradient(130% 90% at 0% 0%, var(--color-surface-glow), transparent 62%);
   }
 
   figcaption {
-    color: var(--color-text-inverse-muted);
+    color: var(--color-text-muted);
   }
 
   blockquote {
@@ -45,7 +47,7 @@ const { label = "Central design principle", text } = Astro.props;
   }
 
   @media (max-width: 680px) {
-    .band {
+    .panel {
       padding: var(--space-2xl) var(--space-m);
     }
   }
