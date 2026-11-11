@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { hangTiming, PixelHang } from "./PixelHang";
+import { climbFrames, hangTiming, PixelHang, slothRig } from "./PixelHang";
 
 const setup = () => {
   const { container } = render(<PixelHang character="/sloth.jpg" sprite="/sloth-hang.png" still />);
@@ -63,6 +63,35 @@ describe("PixelHang", () => {
     expect(turn).toBeLessThan(170);
     expect(stretch).toBeGreaterThan(2);
     expect(right).toContain(`rotate(${-turn}deg)`);
+  });
+
+  it("goes down on its left arm and only then reaches up with the right", () => {
+    const out = climbFrames(slothRig, "out");
+    const stretchOf = (frame: Keyframe) => Number(/scaleY\(([\d.]+)\)/.exec(String(frame.transform))?.[1]);
+    const tiltOf = (frame: Keyframe) => Number(/rotate\(([-\d.]+)deg\)/.exec(String(frame.transform))?.[1]);
+    const late = Math.round(out.body.length * 0.7);
+
+    // Most of the way down: the left arm at full stretch, the right still at the side, the body swung in under.
+    expect(parseFloat(String(out.body[late].translate).split(" ")[1])).toBeGreaterThan(79);
+    expect(stretchOf(out.upper[0][late])).toBeGreaterThan(2);
+    expect(stretchOf(out.upper[1][late])).toBe(1);
+    expect(tiltOf(out.lean[late])).toBeGreaterThan(5);
+
+    // At the end both arms hold and the body hangs straight.
+    const last = out.body.length - 1;
+    expect(stretchOf(out.upper[1][last])).toBe(stretchOf(out.upper[0][last]));
+    expect(tiltOf(out.lean[last])).toBe(0);
+  });
+
+  it("climbs back in with both arms together", () => {
+    const back = climbFrames(slothRig, "in");
+    back.upper[0].forEach((frame, index) => {
+      const mirrored = String(frame.transform).replace(/rotate\((-?)([\d.]+)deg\)/g, (_, sign, turn) =>
+        Number(turn) === 0 ? "rotate(0deg)" : `rotate(${sign ? "" : "-"}${turn}deg)`,
+      );
+      expect(String(back.upper[1][index].transform)).toBe(mirrored);
+    });
+    expect(back.lean.every((frame) => frame.transform === "rotate(0deg)")).toBe(true);
   });
 
   it("wakes and climbs back in when the door is opened again", () => {

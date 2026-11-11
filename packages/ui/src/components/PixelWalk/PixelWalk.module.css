@@ -75,10 +75,14 @@
   height: 100%;
 }
 
+/* The flourish strip rides along unseen behind the walk strip, so it is loaded by the time the bow needs it. */
 .sprite {
+  background-image: var(--walk-sprite), var(--walk-flourish, none);
   background-repeat: no-repeat;
   background-position: 0 0;
-  background-size: 400% 100%;
+  background-size:
+    400% 100%,
+    0 0;
   transform-origin: 50% var(--walk-ground);
   image-rendering: pixelated;
 }
@@ -332,7 +336,8 @@
   }
 }
 
-/* Bowing: stopped in the middle of the row, facing out, one deep bow. */
+/* Bowing: stopped in the middle of the row, facing out, the full stage routine — a hop with a flourish,
+   a bow to the left, a bow to the right, and a deep one towards the audience. */
 .walk[data-phase="bowing"] .walker {
   transform: translateX(var(--walk-to-floor));
 }
@@ -345,17 +350,70 @@
   animation: walk-bow var(--walk-bow) ease-in-out both;
 }
 
+.walk[data-flourish][data-phase="bowing"] .sprite {
+  background-image: var(--walk-flourish);
+  animation:
+    walk-bow var(--walk-bow) ease-in-out both,
+    walk-bow-arms var(--walk-bow) step-end both;
+}
+
+/* Every step names the same moves, so the browser can blend them: up and down, the lean towards the audience
+   (seen in perspective, which is what makes it a bow and not a squash), the lean to the side, the stretch. */
 @keyframes walk-bow {
   0%,
-  12%,
-  88%,
+  21%,
+  45%,
+  69%,
   100% {
-    transform: scale(1, 1);
+    transform: perspective(14rem) translateY(0%) rotateX(0deg) rotate(0deg) scale(1, 1);
   }
 
-  40%,
+  5% {
+    transform: perspective(14rem) translateY(0%) rotateX(0deg) rotate(0deg) scale(1.1, 0.86);
+  }
+
+  11% {
+    transform: perspective(14rem) translateY(-18%) rotateX(0deg) rotate(0deg) scale(0.94, 1.08);
+  }
+
+  17% {
+    transform: perspective(14rem) translateY(0%) rotateX(0deg) rotate(0deg) scale(1.08, 0.9);
+  }
+
+  31%,
+  38% {
+    transform: perspective(14rem) translateY(0%) rotateX(-18deg) rotate(-24deg) scale(1, 1);
+  }
+
+  55%,
   62% {
-    transform: scale(1.08, 0.66);
+    transform: perspective(14rem) translateY(0%) rotateX(-18deg) rotate(24deg) scale(1, 1);
+  }
+
+  79%,
+  90% {
+    transform: perspective(14rem) translateY(0%) rotateX(-62deg) rotate(0deg) scale(1, 1);
+  }
+}
+
+/* Arms up for the hop, wide for the bows to the sides, one across the middle for the deep bow. */
+@keyframes walk-bow-arms {
+  0%,
+  95%,
+  100% {
+    background-position-x: 100%;
+  }
+
+  4% {
+    background-position-x: 0%;
+  }
+
+  21% {
+    background-position-x: 33.333%;
+  }
+
+  69% {
+    background-position-x: 66.667%;
   }
 }
 

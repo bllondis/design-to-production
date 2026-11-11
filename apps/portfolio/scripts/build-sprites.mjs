@@ -1,6 +1,7 @@
 // Builds the sprite strips the moving characters play, from their door pictures in public/assets:
 //   <name>-walk.png  for PixelWalk, PixelFlight and PixelBurrow: stand, one foot up, stand, the other foot up
 //   <name>-fly.png   for PixelFlight: four wing positions of one flap, feet tucked away
+//   <name>-bow.png   for PixelWalk's bow: arms up, arms wide, one arm across the middle, then standing again
 //   <name>-hang.png  for PixelHang: the character in layers — body, body asleep, then each arm as upper arm and hand
 // Run with `npm run sprites -w portfolio` after adding or redrawing a character. Uses the sharp that Astro installs.
 //
@@ -15,6 +16,8 @@ const assets = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../pu
 
 // All positions are in source pixels.
 // legs   the columns each leg occupies and the row where it starts; lift is how far a foot rises.
+// bow    for characters that take a bow: each arm is cut along its `outline` and swung about its `shoulder`,
+//        `reach` times its size, to the pair of angles (degrees, clockwise) each of `poses` gives.
 // arms   for characters that hang: the left arm is cut along `outline` and split into upper arm and hand at row
 //        `wrist`; the right arm is the same shape mirrored about column `axis`. For the sleeping body each eye,
 //        a disc of `radius` about its centre in `eyes`, is filled with the colour found at `lids` and closed
@@ -74,6 +77,44 @@ const characters = [
       { from: 205, to: 242, top: 304 },
     ],
     lift: 12,
+    bow: {
+      arms: [
+        {
+          outline: [
+            [86, 236],
+            [93, 240],
+            [97, 252],
+            [99, 262],
+            [92, 268],
+            [80, 288],
+            [44, 288],
+            [44, 254],
+            [66, 244],
+            [74, 238],
+          ],
+          shoulder: [92, 248],
+        },
+        {
+          outline: [
+            [297, 238],
+            [306, 244],
+            [328, 254],
+            [330, 284],
+            [296, 284],
+            [290, 266],
+            [292, 254],
+            [293, 244],
+          ],
+          shoulder: [295, 252],
+        },
+      ],
+      poses: [
+        [86, -94],
+        [35, -43],
+        [-128, -62],
+      ],
+      reach: 1.3,
+    },
   },
   {
     name: "pixel-sloth",
@@ -181,6 +222,26 @@ const sample = (pixels, width, [x, y]) => {
   return sum.map((total) => Math.round(total / 25));
 };
 
+// Draws the part of the picture inside `limb.outline` onto the frame, turned about `limb.shoulder` and `spread`
+// times its size. Each pixel of the frame looks back to where it sat before the turn.
+const swing = (frame, pixels, width, rows, limb, degrees, spread) => {
+  const angle = (-degrees * Math.PI) / 180;
+  const [pivotX, pivotY] = limb.shoulder;
+  for (let y = 0; y < rows; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const dx = (x - pivotX) / spread;
+      const dy = (y - pivotY) / spread;
+      const sourceX = Math.round(pivotX + dx * Math.cos(angle) - dy * Math.sin(angle));
+      const sourceY = Math.round(pivotY + dx * Math.sin(angle) + dy * Math.cos(angle));
+      if (sourceX < 0 || sourceX >= width || sourceY < 0 || sourceY >= rows) continue;
+      if (!inside(limb.outline, sourceX, sourceY)) continue;
+      const source = (sourceY * width + sourceX) * 4;
+      if (pixels[source + 3] > 0) pixels.copy(frame, (y * width + x) * 4, source, source + 4);
+    }
+  }
+  return frame;
+};
+
 // One frame of a flap: the body with its feet tucked and the wing swung to `stroke` about the shoulder.
 const swingWing = (pixels, width, height, wing, stroke) => {
   const frame = Buffer.from(pixels);
@@ -200,21 +261,19 @@ const swingWing = (pixels, width, height, wing, stroke) => {
     }
   }
 
-  // Each pixel of the frame looks back to where it sat on the folded wing.
-  const angle = (-stroke * Math.PI) / 180;
-  const [pivotX, pivotY] = wing.shoulder;
-  for (let y = 0; y < wing.tuck; y += 1) {
+  return swing(frame, pixels, width, wing.tuck, wing, stroke, wing.spread);
+};
+
+// One frame of a bow: the arms taken off the picture and put back at the angles the pose gives.
+const poseArms = (pixels, width, height, bow, pose) => {
+  const frame = Buffer.from(pixels);
+  for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
-      const dx = (x - pivotX) / wing.spread;
-      const dy = (y - pivotY) / wing.spread;
-      const sourceX = Math.round(pivotX + dx * Math.cos(angle) - dy * Math.sin(angle));
-      const sourceY = Math.round(pivotY + dx * Math.sin(angle) + dy * Math.cos(angle));
-      if (sourceX < 0 || sourceX >= width || sourceY < 0 || sourceY >= height) continue;
-      if (!inside(wing.outline, sourceX, sourceY)) continue;
-      const source = (sourceY * width + sourceX) * 4;
-      if (pixels[source + 3] > 0) pixels.copy(frame, (y * width + x) * 4, source, source + 4);
+      if (bow.arms.some((arm) => inside(arm.outline, x, y)))
+        frame.fill(0, (y * width + x) * 4, (y * width + x) * 4 + 4);
     }
   }
+  bow.arms.forEach((arm, index) => swing(frame, pixels, width, height, arm, pose[index], bow.reach));
   return frame;
 };
 
@@ -268,7 +327,7 @@ const writeStrip = async (frames, width, height, output) => {
   console.log(`${path.relative(process.cwd(), output)}: ${frames.length} frames of ${width}×${height}`);
 };
 
-for (const { name, legs, lift, wing, arms } of characters) {
+for (const { name, legs, lift, wing, arms, bow } of characters) {
   const { data, info } = await sharp(path.join(assets, `${name}.jpg`))
     .ensureAlpha()
     .raw()
@@ -284,6 +343,11 @@ for (const { name, legs, lift, wing, arms } of characters) {
   if (wing) {
     const flap = wing.strokes.map((stroke) => swingWing(stand, width, height, wing, stroke));
     await writeStrip(flap, width, height, path.join(assets, `${name}-fly.png`));
+  }
+
+  if (bow) {
+    const poses = bow.poses.map((pose) => poseArms(stand, width, height, bow, pose));
+    await writeStrip([...poses, stand], width, height, path.join(assets, `${name}-bow.png`));
   }
 
   if (arms) {

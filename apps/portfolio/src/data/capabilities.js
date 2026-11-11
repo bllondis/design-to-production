@@ -28,7 +28,11 @@ const chapterStructure = [
         secondary: { href: "https://bllondis.github.io/DutchWaffle/" },
         visual: { src: "/work/dutchwaffle/app-flow.jpg", focus: "0.5 0.5" },
         character: "/assets/pixel-waffle.jpg?v=2",
-        motion: { kind: "bow", sprite: "/assets/pixel-waffle-walk.png" },
+        motion: {
+          kind: "bow",
+          sprite: "/assets/pixel-waffle-walk.png",
+          flourish: "/assets/pixel-waffle-bow.png",
+        },
       },
     ],
   },

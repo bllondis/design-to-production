@@ -26,9 +26,18 @@ export const Inset: Story = {
   args: { inset: true },
 };
 
-/** One door: a somersault out, a walk to the middle of the row, a bow, and back the same way. */
+/**
+ * One door: a somersault out, a walk to the middle of the row, and the full stage bow — a hop with arms up,
+ * a bow to each side, a deep one to the front — then back the same way.
+ */
 export const TakeABow: Story = {
-  args: { character: "assets/pixel-waffle.jpg", sprite: "assets/pixel-waffle-walk.png", route: "bow", leap: "flip" },
+  args: {
+    character: "assets/pixel-waffle.jpg",
+    sprite: "assets/pixel-waffle-walk.png",
+    flourish: "assets/pixel-waffle-bow.png",
+    route: "bow",
+    leap: "flip",
+  },
 };
 
 /** Only the character's door is a button; a click opens it and the walk begins. */

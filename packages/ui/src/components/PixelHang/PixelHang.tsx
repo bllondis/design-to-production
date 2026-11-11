@@ -10,7 +10,7 @@ type Phase = "home" | "greeting" | "climbing" | "hanging" | "asleep" | "waking" 
 export const hangTiming = {
   /** The door swings open and the character is seen at home. */
   greet: 700,
-  /** The climb, out over the sill or back in: very, very slow. */
+  /** The climb, out over the sill or back in: very, very slow. Out, the second arm takes the last quarter of it. */
   climb: 7600,
   /** Hanging there with its eyes open before they close. */
   doze: 1500,
@@ -34,7 +34,13 @@ export interface HangRig {
   hang: number;
 }
 
-const slothRig: HangRig = { shoulder: [0.389, 0.583], claws: [0.322, 0.789], wrist: 0.75, grip: 0.13, hang: 0.38 };
+export const slothRig: HangRig = {
+  shoulder: [0.389, 0.583],
+  claws: [0.322, 0.789],
+  wrist: 0.75,
+  grip: 0.13,
+  hang: 0.38,
+};
 
 const degrees = (radians: number) => (radians * 180) / Math.PI;
 const round = (value: number) => Math.round(value * 1000) / 1000;
@@ -62,16 +68,53 @@ const armAt = (rig: HangRig, lowered: number) => {
   return { turn: degrees(turn), lean: degrees(lean), stretch, slide: upper * (stretch - 1) * 100 };
 };
 
-// The whole climb as keyframes for the body and the four arm pieces, sampled finely enough to pass for exact.
-const climbFrames = (rig: HangRig) => {
+const smooth = (amount: number) => {
+  const held = Math.min(Math.max(amount, 0), 1);
+  return held * held * (3 - 2 * held);
+};
+
+// Climbing out, the share of the climb spent going down on one arm; the other arm comes up in what is left.
+const oneArmed = 0.74;
+// How far, in degrees, the body swings in under the one arm it hangs from.
+const sag = 7;
+
+/**
+ * The whole climb as keyframes for the body, its lean and the four arm pieces, sampled finely enough to pass for
+ * exact. Out, it lets itself down on its left arm, the right one at its side, then reaches up with the right
+ * and takes hold. In, read backwards, both arms work together.
+ */
+export const climbFrames = (rig: HangRig, direction: "out" | "in") => {
   const drop = 1 - rig.shoulder[1] + rig.hang;
+  const takesHold = 1 - rig.shoulder[1] - 0.04;
+  const hung = armAt(rig, drop);
   const steps = 64;
-  const frames = { body: [] as Keyframe[], upper: [[], []] as Keyframe[][], hand: [[], []] as Keyframe[][] };
+  const frames = {
+    body: [] as Keyframe[],
+    lean: [] as Keyframe[],
+    upper: [[], []] as Keyframe[][],
+    hand: [[], []] as Keyframe[][],
+  };
   for (let step = 0; step <= steps; step += 1) {
-    const lowered = (drop * (1 - Math.cos((Math.PI * step) / steps))) / 2;
-    const { turn, lean, stretch, slide } = armAt(rig, lowered);
+    const time = step / steps;
+    const down = direction === "out" ? Math.min(time / oneArmed, 1) : time;
+    const lowered = (drop * (1 - Math.cos(Math.PI * down))) / 2;
+    const first = armAt(rig, lowered);
+    const joining = smooth((time - oneArmed) / (1 - oneArmed));
+    const second =
+      direction === "in"
+        ? first
+        : {
+            ...first,
+            turn: first.lean + (hung.turn - first.lean) * joining,
+            stretch: 1 + (hung.stretch - 1) * joining,
+            slide: hung.slide * joining,
+          };
+    const tilt = direction === "in" ? 0 : sag * smooth((lowered - takesHold) / (drop - takesHold)) * (1 - joining);
+
     frames.body.push({ translate: `0 ${round(lowered * 100)}%` });
-    [1, -1].forEach((side, index) => {
+    frames.lean.push({ transform: `rotate(${round(tilt)}deg)` });
+    [first, second].forEach(({ turn, lean, stretch, slide }, index) => {
+      const side = index === 0 ? 1 : -1;
       const swing = `rotate(${round(side * turn)}deg)`;
       const straighten = `rotate(${round(-side * lean)}deg)`;
       frames.upper[index].push({ transform: `${swing} scaleY(${round(stretch)}) ${straighten}` });
@@ -103,8 +146,9 @@ export interface PixelHangProps {
 }
 
 /**
- * A pixel door and a character too slow to go anywhere. Open the door: it climbs out over the sill, very slowly,
- * until it hangs from the door's bottom edge by its claws, and falls asleep there; the door shuts above it.
+ * A pixel door and a character too slow to go anywhere. Open the door: it lets itself down over the sill on one
+ * arm, very slowly, reaches up with the other, and hangs from the door's bottom edge by its claws; there it falls
+ * asleep, and the door shuts above it.
  * Open the door again: it wakes and climbs back in, just as slowly. It needs a door's height of room below the door.
  * Under reduced motion nothing leaves and the door is a plain toggle.
  */
@@ -123,6 +167,7 @@ export function PixelHang({
   const timers = useRef<number[]>([]);
   const moves = useRef<Animation[]>([]);
   const body = useRef<HTMLSpanElement>(null);
+  const lean = useRef<HTMLSpanElement>(null);
   const upperLeft = useRef<HTMLSpanElement>(null);
   const handLeft = useRef<HTMLSpanElement>(null);
   const upperRight = useRef<HTMLSpanElement>(null);
@@ -141,9 +186,10 @@ export function PixelHang({
 
   // Plays the climb out, or the same climb backwards, and leaves every piece where it ends.
   const climb = (direction: "out" | "in") => {
-    const frames = climbFrames(rig);
+    const frames = climbFrames(rig, direction);
     const parts: [HTMLSpanElement | null, Keyframe[]][] = [
       [body.current, frames.body],
+      [lean.current, frames.lean],
       [upperLeft.current, frames.upper[0]],
       [handLeft.current, frames.hand[0]],
       [upperRight.current, frames.upper[1]],
@@ -214,6 +260,7 @@ export function PixelHang({
         {
           "--hang-shoulder-x": `${rig.shoulder[0] * 100}%`,
           "--hang-shoulder-y": `${rig.shoulder[1] * 100}%`,
+          "--hang-grip-x": `${rig.grip * 100}%`,
         } as CSSProperties
       }
     >
@@ -230,16 +277,18 @@ export function PixelHang({
       />
       <span className={styles.stage} aria-hidden="true">
         <span className={styles.swing}>
-          <span ref={body} className={styles.figure}>
-            <span ref={upperLeft} className={cx(styles.layer, styles.left, styles.upperLeft)} style={layer} />
-            <span ref={handLeft} className={cx(styles.layer, styles.left, styles.handLeft)} style={layer} />
-            <span ref={upperRight} className={cx(styles.layer, styles.right, styles.upperRight)} style={layer} />
-            <span ref={handRight} className={cx(styles.layer, styles.right, styles.handRight)} style={layer} />
-            <span className={cx(styles.layer, styles.body)} style={layer} />
-            <span className={styles.snore}>
-              <span>z</span>
-              <span>z</span>
-              <span>z</span>
+          <span ref={lean} className={styles.lean}>
+            <span ref={body} className={styles.figure}>
+              <span ref={upperLeft} className={cx(styles.layer, styles.left, styles.upperLeft)} style={layer} />
+              <span ref={handLeft} className={cx(styles.layer, styles.left, styles.handLeft)} style={layer} />
+              <span ref={upperRight} className={cx(styles.layer, styles.right, styles.upperRight)} style={layer} />
+              <span ref={handRight} className={cx(styles.layer, styles.right, styles.handRight)} style={layer} />
+              <span className={cx(styles.layer, styles.body)} style={layer} />
+              <span className={styles.snore}>
+                <span>z</span>
+                <span>z</span>
+                <span>z</span>
+              </span>
             </span>
           </span>
         </span>

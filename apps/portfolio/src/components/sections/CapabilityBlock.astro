@@ -26,7 +26,7 @@ import {
 
 type Motion =
   | { kind: "walk"; sprite: string }
-  | { kind: "bow"; sprite: string }
+  | { kind: "bow"; sprite: string; flourish?: string }
   | { kind: "fly"; walk: string; flight: string }
   | { kind: "burrow"; sprite: string }
   | { kind: "hang"; sprite: string };
@@ -82,6 +82,7 @@ const titleId = `${id}-title`;
         offset={flip}
         openLabel={openDoorLabel}
         closeLabel={closeDoorLabel}
+        flourish={motion.kind === "bow" ? motion.flourish : undefined}
       />
     ) : (
       <div slot="gutter">

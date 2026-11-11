@@ -375,7 +375,10 @@ const sections = [
               <code>sprite</code>: a four-frame walk strip, built by <code>npm run sprites -w portfolio</code>
             </li>
             <li>
-              <code>route="bow"</code>: one door, a walk to the middle of the row, a bow, and back
+              <code>route="bow"</code>: one door, a walk to the middle of the row, a stage bow, and back
+            </li>
+            <li>
+              <code>flourish</code>: a strip of arm poses for that bow
             </li>
             <li>
               <code>leap="flip"</code>: a somersault in and out of the door instead of a plain jump
@@ -458,7 +461,8 @@ const sections = [
           usage={`<PixelHang client:visible character="/assets/pixel-sloth.jpg" sprite="/assets/pixel-sloth-hang.png" />`}
         >
           <ul slot="notes">
-            <li>A PixelDoor whose character climbs out over the sill, very slowly, and hangs from the door</li>
+            <li>A PixelDoor whose character lets itself down over the sill on one arm, very slowly</li>
+            <li>Then it reaches up with the other arm and hangs from the door by both</li>
             <li>It falls asleep there, swaying, and the door shuts above it</li>
             <li>Open the door again: it wakes and climbs back in, just as slowly</li>
             <li>

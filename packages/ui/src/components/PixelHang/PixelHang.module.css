@@ -24,10 +24,16 @@
 }
 
 .swing,
+.lean,
 .figure,
 .layer {
   position: absolute;
   inset: 0;
+}
+
+/* Hanging by one arm, the body swings in under it: a turn about the point on the sill where those claws hold. */
+.lean {
+  transform-origin: var(--hang-grip-x) 100%;
 }
 
 /* The sill is the bottom edge of the stage: asleep, the character swings from it. */

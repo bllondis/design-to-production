@@ -25,8 +25,9 @@ export const walkTiming = {
   settle: 480,
   /** One full walk cycle, two steps. */
   cycle: 520,
-  /** A bow in the middle of the row, and the share of the full walk it takes to get there. */
-  bow: 1500,
+  /** The bow in the middle of the row — a hop, a bow to each side, a deep one to the front — and the share of
+   *  the full walk it takes to get there. */
+  bow: 3400,
   halfway: 0.46,
 };
 
@@ -47,6 +48,11 @@ export interface PixelWalkProps {
   route?: "across" | "bow";
   /** How the character leaves a door and enters one: a plain "jump" (default) or a somersault, "flip". */
   leap?: "jump" | "flip";
+  /**
+   * Arm poses for the bow, laid out like `sprite`: arms up, arms wide, one arm across the middle, standing.
+   * Without it the character bows with its arms where they are.
+   */
+  flourish?: string;
   /** Flap half a beat after neighbouring doors, so stacked doors don't move in unison. */
   offset?: boolean;
   /** Ignore page scrolling (specimens); hover and click still work. */
@@ -72,6 +78,7 @@ export function PixelWalk({
   ground = 0.936,
   route = "across",
   leap = "jump",
+  flourish,
   offset = false,
   still = false,
   inset = true,
@@ -181,9 +188,12 @@ export function PixelWalk({
       data-route={route}
       data-leap={leap}
       data-leg={leg}
+      data-flourish={flourish ? "" : undefined}
       style={
         {
           "--walk-ground": `${ground * 100}%`,
+          "--walk-sprite": `url(${sprite})`,
+          "--walk-flourish": flourish ? `url(${flourish})` : undefined,
           "--walk-leap": `${walkTiming.leap}ms`,
           "--walk-stroll": `${strollTime}ms`,
           "--walk-bow": `${walkTiming.bow}ms`,
@@ -210,7 +220,7 @@ export function PixelWalk({
       ))}
       <span className={styles.walker} aria-hidden="true">
         <span className={styles.hop}>
-          <span className={styles.sprite} style={{ backgroundImage: `url(${sprite})` }} />
+          <span className={styles.sprite} />
         </span>
       </span>
     </div>

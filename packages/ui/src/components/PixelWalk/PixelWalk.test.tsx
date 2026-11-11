@@ -101,6 +101,18 @@ describe("PixelWalk", () => {
     expect(container.firstElementChild).toHaveAttribute("data-leap", "flip");
   });
 
+  it("brings its arm poses to the bow when given a flourish", () => {
+    const { stage } = setup();
+    expect(stage).not.toHaveAttribute("data-flourish");
+    const { container } = render(
+      <PixelWalk character="/waffle.jpg" sprite="/waffle-walk.png" flourish="/waffle-bow.png" route="bow" still />,
+    );
+    const bowing = container.firstElementChild as HTMLElement;
+    expect(bowing).toHaveAttribute("data-flourish");
+    expect(bowing.style.getPropertyValue("--walk-sprite")).toBe("url(/waffle-walk.png)");
+    expect(bowing.style.getPropertyValue("--walk-flourish")).toBe("url(/waffle-bow.png)");
+  });
+
   it("on the bow route walks to the middle, bows and comes back through its one door", () => {
     vi.useFakeTimers();
     const { container } = render(
