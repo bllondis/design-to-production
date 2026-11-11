@@ -17,13 +17,14 @@ const pick = (count: number, seed: number, share: number, step: number): Set<num
  * Which letters of a heading render in the pixel face. The resting pick is deterministic, so the
  * server render and the hydrated one agree. On first view the share settles from ~60% to ~10%,
  * then a random letter flickers now and then while the heading stays on screen.
+ * Returns the letters showing now and the resting pick, which a heading uses to hold its layout still.
  */
 export const usePixelLetters = (
   ref: RefObject<HTMLElement | null>,
   text: string,
   letterCount: number,
   animate: boolean,
-): Set<number> => {
+): { pixels: Set<number>; resting: Set<number> } => {
   const seed = useMemo(() => seedFrom(text), [text]);
   const resting = useMemo(() => pick(letterCount, seed, restingShare, 1), [letterCount, seed]);
   const [pixels, setPixels] = useState(resting);
@@ -71,7 +72,7 @@ export const usePixelLetters = (
     };
   }, [ref, animate, letterCount, seed, resting]);
 
-  return pixels;
+  return { pixels, resting };
 };
 
 /** True while the page is scrolling, false ~150ms after it stops. Always false under reduced motion. */

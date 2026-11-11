@@ -40,13 +40,30 @@
   line-height: var(--font-line-height-snug);
 }
 
+/* A word is as wide as its resting letters, whatever is showing: the slot is measured, the letters lie over it. */
 .word {
+  position: relative;
+  display: inline-block;
   white-space: nowrap;
 }
 
+.slot {
+  visibility: hidden;
+  user-select: none;
+}
+
+.letters {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 50%;
+}
+
+/* No line height of its own, so a pixel letter cannot make its line any taller than the others. */
 .pixel {
   font-family: var(--font-family-pixel);
   font-size: 0.94em;
+  line-height: 0;
   letter-spacing: 0;
 }
 

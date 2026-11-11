@@ -1,4 +1,4 @@
-import { Fragment, useRef, type CSSProperties, type ReactNode } from "react";
+import { Fragment, useLayoutEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { cx } from "../../lib/cx";
 import { usePixelLetters } from "../../lib/hooks";
 import styles from "./Heading.module.css";
@@ -37,6 +37,11 @@ const byLine = (text: string, render: (line: string, lineIndex: number) => React
 /**
  * One component for every title. The visible text is split into letters for the pixel effect;
  * screen readers get the plain text once.
+ *
+ * Pixel letters are not as wide as the letters they replace, so while they come and go the lines would rewrap
+ * and the heading change height. Each word is therefore set twice: once unseen, with the resting letters, which
+ * is what the layout measures, and once on top of that with the letters showing now. If those are wider than
+ * the word's place, they are squeezed to fit rather than left to run into the next word.
  */
 export function Heading({
   text,
@@ -51,7 +56,21 @@ export function Heading({
   const ref = useRef<HTMLHeadingElement>(null);
   const spoken = text.replaceAll("-\n", "-").replaceAll("\n", " ");
   const letterCount = pixel ? [...text].filter(isLetter).length : 0;
-  const pixels = usePixelLetters(ref, text, letterCount, pixel && animate);
+  const { pixels, resting } = usePixelLetters(ref, text, letterCount, pixel && animate);
+  // How far past its place a word may reach before it is squeezed, in ems: a sliver of the space after it.
+  const overhang = 0.1;
+
+  useLayoutEffect(() => {
+    const heading = ref.current;
+    if (!heading || !pixel) return;
+    const spare = (parseFloat(getComputedStyle(heading).fontSize) || 0) * overhang;
+    heading.querySelectorAll<HTMLElement>(`.${styles.letters}`).forEach((letters) => {
+      const room = (letters.previousElementSibling as HTMLElement).offsetWidth + spare;
+      const wanted = letters.offsetWidth;
+      letters.style.transform = wanted > room ? `scaleX(${room / wanted})` : "";
+    });
+  }, [pixels, pixel]);
+
   const className = cx(styles.heading, styles[size], tone === "inverse" && styles.inverse);
   const style = measure ? ({ "--heading-measure": `${measure}ch` } as CSSProperties) : undefined;
 
@@ -63,25 +82,41 @@ export function Heading({
     );
   }
 
-  let letterIndex = 0;
+  // Where each word's letters begin in the run of letters the pixel pick counts through.
+  const lines: { word: string; first: number }[][] = [];
+  let counted = 0;
+  for (const line of text.split("\n")) {
+    const words = [];
+    for (const word of line.split(" ")) {
+      words.push({ word, first: counted });
+      counted += [...word].filter(isLetter).length;
+    }
+    lines.push(words);
+  }
+
+  const letters = (word: string, first: number, picked: Set<number>) => {
+    let index = first;
+    return [...word].map((character, characterIndex) => {
+      const pixelated = isLetter(character) && picked.has(index++);
+      return (
+        <span key={characterIndex} className={pixelated ? styles.pixel : undefined}>
+          {character}
+        </span>
+      );
+    });
+  };
 
   return (
     <Tag ref={ref} id={id} className={className} style={style}>
       <span className="visually-hidden">{spoken}</span>
       <span aria-hidden="true">
-        {byLine(text, (line) =>
-          line.split(" ").map((word, wordIndex) => (
+        {byLine(text, (_line, lineIndex) =>
+          lines[lineIndex].map(({ word, first }, wordIndex) => (
             <span key={`${word}-${wordIndex}`}>
               {wordIndex > 0 && " "}
               <span className={styles.word}>
-                {[...word].map((character, characterIndex) => {
-                  const index = isLetter(character) ? letterIndex++ : -1;
-                  return (
-                    <span key={characterIndex} className={index >= 0 && pixels.has(index) ? styles.pixel : undefined}>
-                      {character}
-                    </span>
-                  );
-                })}
+                <span className={styles.slot}>{letters(word, first, resting)}</span>
+                <span className={styles.letters}>{letters(word, first, pixels)}</span>
               </span>
             </span>
           )),
