@@ -10,9 +10,9 @@ const links = [
 ];
 
 const languages = [
-  { code: "en", label: "English", flag: "🇬🇧", href: "/", active: true },
-  { code: "nl", label: "Nederlands", flag: "🇳🇱", href: "/nl/" },
-  { code: "uk", label: "Українська", flag: "🇺🇦", href: "/uk/" },
+  { code: "en", label: "English", flag: "/flag-en.svg", href: "/", active: true },
+  { code: "nl", label: "Nederlands", flag: "/flag-nl.svg", href: "/nl/" },
+  { code: "uk", label: "Українська", flag: "/flag-uk.svg", href: "/uk/" },
 ];
 
 describe("MobileNav", () => {

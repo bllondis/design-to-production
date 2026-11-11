@@ -9,10 +9,11 @@ const localePaths = {
   nl: "/nl/",
 };
 
+// Flags are pixel drawings, not emoji: Windows has no flag emoji and shows the two letters instead.
 const languageOptions = [
-  { code: "en", shortLabel: "EN", label: "English", flag: "🇬🇧", href: localePaths.en },
-  { code: "nl", shortLabel: "NL", label: "Nederlands", flag: "🇳🇱", href: localePaths.nl },
-  { code: "uk", shortLabel: "UA", label: "Українська", flag: "🇺🇦", href: localePaths.uk },
+  { code: "en", shortLabel: "EN", label: "English", flag: "/assets/flag-en.svg", href: localePaths.en },
+  { code: "nl", shortLabel: "NL", label: "Nederlands", flag: "/assets/flag-nl.svg", href: localePaths.nl },
+  { code: "uk", shortLabel: "UA", label: "Українська", flag: "/assets/flag-uk.svg", href: localePaths.uk },
 ];
 
 const translations = {
@@ -121,7 +122,7 @@ const translations = {
     header: {
       identityLabel: "Тетяна Довгаленко, головна сторінка",
       navLabel: "Основна навігація",
-      nav: { cv: "Резюме" },
+      nav: { cv: "CV" },
       languageTrigger: "Змінити мову. Поточна мова: {label}",
       languageMenu: "Мови",
       menuOpen: "Відкрити меню",
@@ -180,7 +181,7 @@ const translations = {
         email: "Електронна пошта",
         linkedin: "LinkedIn",
         github: "GitHub",
-        cv: "Резюме",
+        cv: "CV",
         pdf: "PDF",
       },
       popup: {

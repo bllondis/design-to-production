@@ -9,9 +9,9 @@ const links = [
 ];
 
 const languages = [
-  { code: "en", label: "English", flag: "🇬🇧", href: "#", active: true },
-  { code: "nl", label: "Nederlands", flag: "🇳🇱", href: "#" },
-  { code: "uk", label: "Українська", flag: "🇺🇦", href: "#" },
+  { code: "en", label: "English", flag: "assets/flag-en.svg", href: "#", active: true },
+  { code: "nl", label: "Nederlands", flag: "assets/flag-nl.svg", href: "#" },
+  { code: "uk", label: "Українська", flag: "assets/flag-uk.svg", href: "#" },
 ];
 
 const meta = {

@@ -10,6 +10,7 @@ export interface MobileNavLink {
 export interface MobileNavLanguage {
   code: string;
   label: string;
+  /** Path to a small picture of the flag. Not an emoji: Windows has none for flags. */
   flag?: string;
   href: string;
   active?: boolean;
@@ -131,9 +132,7 @@ export function MobileNav({
                       aria-current={language.active ? "page" : undefined}
                       onClick={() => setOpen(false)}
                     >
-                      <span className={styles.languageFlag} aria-hidden="true">
-                        {language.flag}
-                      </span>
+                      {language.flag ? <img className={styles.languageFlag} src={language.flag} alt="" /> : <span />}
                       <span>{language.label}</span>
                       <span className={styles.languageMark} aria-hidden="true">
                         {language.active ? "●" : ""}

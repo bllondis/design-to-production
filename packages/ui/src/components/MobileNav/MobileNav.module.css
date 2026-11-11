@@ -165,8 +165,10 @@
 }
 
 .languageFlag {
-  font-family: system-ui, sans-serif;
-  line-height: 1;
+  display: block;
+  width: auto;
+  height: var(--font-size-body-s);
+  image-rendering: pixelated;
 }
 
 .languageMark {

@@ -80,9 +80,7 @@ const activeLanguage = languages.find((language) => language.active) ?? language
           aria-label={languageTrigger.replace("{label}", activeLanguage.label)}
         >
           <span>{activeLanguage.shortLabel}</span>
-          <span class="language-flag" aria-hidden="true">
-            {activeLanguage.flag}
-          </span>
+          <img class="language-flag" src={activeLanguage.flag} alt="" />
         </summary>
         <ul class="language-menu" aria-label={languageMenu}>
           {languages.map((language) => (
@@ -300,9 +298,10 @@ const activeLanguage = languages.find((language) => language.active) ?? language
   }
 
   .language-flag {
-    font-family: system-ui, sans-serif;
-    font-size: var(--font-size-body-s);
-    line-height: 1;
+    display: block;
+    width: auto;
+    height: var(--font-size-label-l);
+    image-rendering: pixelated;
   }
 
   .language-menu {
