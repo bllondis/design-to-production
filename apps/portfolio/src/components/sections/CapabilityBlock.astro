@@ -20,6 +20,7 @@ import {
   PixelDoor,
   PixelFlight,
   PixelHang,
+  PixelStage,
   PixelWalk,
   SkillGrid,
 } from "@tetiana/ui";
@@ -47,6 +48,7 @@ interface Props {
   skillsLabel?: string;
   openDoorLabel?: string;
   closeDoorLabel?: string;
+  doorHint?: string;
 }
 
 const {
@@ -65,6 +67,7 @@ const {
   skillsLabel = "What I bring",
   openDoorLabel = "Open the pixel door",
   closeDoorLabel = "Close the pixel door",
+  doorHint,
 } = Astro.props;
 const titleId = `${id}-title`;
 ---
@@ -79,10 +82,11 @@ const titleId = `${id}-title`;
         sprite={motion.sprite}
         route={motion.kind === "bow" ? "bow" : "across"}
         leap={motion.kind === "bow" ? "flip" : "jump"}
+        flourish={motion.kind === "bow" ? motion.flourish : undefined}
         offset={flip}
         openLabel={openDoorLabel}
         closeLabel={closeDoorLabel}
-        flourish={motion.kind === "bow" ? motion.flourish : undefined}
+        hint={doorHint}
       />
     ) : (
       <div slot="gutter">
@@ -129,6 +133,17 @@ const titleId = `${id}-title`;
       <Heading client:visible as="h3" id={titleId} size="display-4" measure={16} text={title} />
       <p class="capability-statement">{statement}</p>
     </div>
+    {motion && (
+      <PixelStage
+        slot="mobile"
+        client:visible
+        character={character}
+        motion={motion}
+        openLabel={openDoorLabel}
+        closeLabel={closeDoorLabel}
+        hint={doorHint}
+      />
+    )}
   </FrameRow>
   <FrameRow>
     <div class="capability-body">

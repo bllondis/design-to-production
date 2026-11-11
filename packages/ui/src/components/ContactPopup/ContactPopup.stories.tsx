@@ -26,7 +26,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A native popover with whole-row contact actions. Tooltips follow the pointer, appear on keyboard focus, and report copy feedback.",
+          "A native popover with whole-row contact actions. Pointer devices get following tooltips; touch screens get a bottom sheet with inline copy feedback.",
       },
     },
   },

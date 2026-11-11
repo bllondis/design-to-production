@@ -102,6 +102,9 @@ function ContactRow({ link, messages }: { link: ContactLink; messages: ContactPo
       <span id={tooltipId} role="tooltip" className={`${styles.tooltip} text-label-s`} data-status={status}>
         {copiesValue ? tooltip : messages.open}
       </span>
+      <span className={`${styles.touchFeedback} text-label-m`} data-touch-feedback aria-hidden="true">
+        {status === "copied" ? messages.copied : status === "failed" ? messages.failed : ""}
+      </span>
       <span className="visually-hidden" role="status">
         {status === "copied"
           ? withLabel(messages.copiedStatus, link.label)

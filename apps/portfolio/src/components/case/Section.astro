@@ -24,17 +24,23 @@ interface Props {
 }
 
 const { label, title, size = "heading-1", pixel = true, measure = 18, headingId, action } = Astro.props;
+const generatedHeadingId = `case-${`${label}-${title}`
+  .toLowerCase()
+  .normalize("NFKD")
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/(^-|-$)/g, "")}`;
+const resolvedHeadingId = headingId ?? generatedHeadingId;
 ---
 
-<div class="section">
+<div class="section" data-case-indexable={headingId ? undefined : ""} data-case-section={headingId ? undefined : label}>
   <FrameRow as="header">
     <div class="section-head">
       <div>
         <p class="section-label text-label-l">{label}</p>
         {pixel ? (
-          <Heading client:visible as="h2" id={headingId} size={size} measure={measure} text={title} />
+          <Heading client:visible as="h2" id={resolvedHeadingId} size={size} measure={measure} text={title} />
         ) : (
-          <Heading as="h2" id={headingId} size={size} pixel={false} measure={measure} text={title} />
+          <Heading as="h2" id={resolvedHeadingId} size={size} pixel={false} measure={measure} text={title} />
         )}
       </div>
       <div class="section-lead">

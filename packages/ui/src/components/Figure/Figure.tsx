@@ -17,16 +17,23 @@ export interface FigureProps {
 export function Figure({ src, alt, caption, width, height, zoom = true, layout = "inset" }: FigureProps) {
   return (
     <figure className={cx(styles.figure, styles[layout])}>
-      <img
-        className={cx(styles.image, zoom && styles.zoomable)}
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        loading="lazy"
-        decoding="async"
-        data-zoom={zoom ? "" : undefined}
-      />
+      <div className={styles.media}>
+        <img
+          className={cx(styles.image, zoom && styles.zoomable)}
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          loading="lazy"
+          decoding="async"
+          data-zoom={zoom ? "" : undefined}
+        />
+        {zoom && (
+          <button type="button" className={styles.zoomButton} data-zoom-trigger aria-label={`Open image: ${alt}`}>
+            <span aria-hidden="true">↗</span>
+          </button>
+        )}
+      </div>
       {caption && <figcaption className={`${styles.caption} text-label-m`}>{caption}</figcaption>}
     </figure>
   );

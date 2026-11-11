@@ -35,4 +35,15 @@ describe("Lightbox", () => {
     await userEvent.click(screen.getByRole("button", { name: /Close/, hidden: true }));
     expect(dialog).not.toHaveAttribute("open");
   });
+
+  it("opens an image from its mobile zoom control", async () => {
+    render(
+      <>
+        <Figure src="/mobile.jpg" alt="Mobile screen" />
+        <Lightbox />
+      </>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Open image: Mobile screen" }));
+    expect(screen.getByRole("dialog", { hidden: true })).toHaveAccessibleName("Image 1 of 1: Mobile screen");
+  });
 });

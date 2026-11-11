@@ -2,6 +2,10 @@
   margin: 0;
 }
 
+.media {
+  position: relative;
+}
+
 .inset {
   padding: var(--space-xl) var(--space-inset-inline);
 }
@@ -22,6 +26,10 @@
   border-color: var(--color-border-default);
 }
 
+.zoomButton {
+  display: none;
+}
+
 .caption {
   max-width: 60ch;
   margin-top: var(--space-s);
@@ -33,5 +41,25 @@
 @media (max-width: 680px) {
   .inset {
     padding: var(--space-l) var(--space-m);
+  }
+
+  .zoomButton {
+    position: absolute;
+    right: var(--space-xs);
+    bottom: var(--space-xs);
+    display: inline-flex;
+    width: var(--mobile-nav-trigger-size);
+    height: var(--mobile-nav-trigger-size);
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-default);
+    background: var(--color-surface-page);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    font-size: var(--font-size-body-m);
+  }
+
+  .zoomButton:active {
+    background: var(--color-surface-glow);
   }
 }

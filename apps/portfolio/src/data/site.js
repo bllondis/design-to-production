@@ -22,7 +22,12 @@ export const primaryNav = [
   { label: "LinkedIn", href: person.linkedin, external: true },
 ];
 
-export const projectHomeAction = { label: "Home", href: "/#top" };
+export const projectHomeAction = {
+  label: "Home",
+  mobileLabel: "←",
+  ariaLabel: "Back to home",
+  href: "/#top",
+};
 
 export const footerColumns = [
   {

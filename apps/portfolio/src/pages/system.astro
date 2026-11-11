@@ -15,6 +15,7 @@ import {
   PixelDoor,
   PixelFlight,
   PixelHang,
+  PixelStage,
   PixelWalk,
   SignalField,
   SkillGrid,
@@ -485,6 +486,26 @@ const sections = [
         </Specimen>
 
         <Specimen
+          name="PixelStage"
+          file="@tetiana/ui · PixelStage"
+          usage={`<PixelStage character="/assets/pixel-cat.jpg" motion={{ kind: "walk", sprite: "/assets/pixel-cat-walk.png" }} hint="Tap a door" />`}
+        >
+          <ul slot="notes">
+            <li>Touch-first rail for the same characters when frame gutters collapse below 980px</li>
+            <li>Reserves its own height, so doors and motion never cover capability copy</li>
+            <li>Reuses walk, bow, burrow, hang and flight motion; the pigeon stays on perches inside the rail</li>
+            <li>Scroll flapping is disabled; the character moves only after a deliberate tap</li>
+            <li>An optional one-time hint makes the first door discoverable, then disappears after interaction</li>
+          </ul>
+          <PixelStage
+            client:visible
+            character="/assets/pixel-cat.jpg"
+            motion={{ kind: "walk", sprite: "/assets/pixel-cat-walk.png" }}
+            hint="Tap a door"
+          />
+        </Specimen>
+
+        <Specimen
           name="AsciiVisual"
           file="@tetiana/ui · AsciiVisual"
           usage={`<AsciiVisual src="/assets/bookit-floorplan.jpg" focus="0.6 0.55" caption="BookIT / Floorplan editor" />`}
@@ -540,7 +561,7 @@ const sections = [
           file="@tetiana/ui · SkillGrid"
           usage={`<SkillGrid items={["Domain modelling", "Information architecture", …]} />`}
         >
-          <p slot="notes">Three columns, two at medium width, a list on narrow screens. Cells invert on hover.</p>
+          <p slot="notes">Three columns, then two compact columns on narrow screens. Cells invert on hover.</p>
           <div class="grid-demo">
             <SkillGrid items={["Domain modelling", "Information architecture", "Role-based workflows"]} />
           </div>
@@ -554,6 +575,7 @@ const sections = [
           <ul slot="notes">
             <li>The complete row is the action: email copies, external destinations open in a new tab.</li>
             <li>A compact tooltip follows the pointer and remains available on keyboard focus.</li>
+            <li>On touch screens it becomes a bottom sheet with stacked details and inline copy feedback.</li>
             <li>
               Copy feedback changes from <code>Copy</code> to <code>Copied</code> or an error state.
             </li>
@@ -574,6 +596,13 @@ const sections = [
                 </dd>
               </div>
               <div>
+                <dt>SiteHeader + MobileNav</dt>
+                <dd>
+                  Language options move into a focus-managed mobile sheet; the sticky header hides on downward scroll
+                  and returns on upward scroll. Case pages keep a compact back arrow and reading-progress line.
+                </dd>
+              </div>
+              <div>
                 <dt>CapabilityChapter</dt>
                 <dd>Tile + chapter title + intro; groups capability blocks.</dd>
               </div>
@@ -591,7 +620,8 @@ const sections = [
                   summary, tags, StatRow and AsciiVisual cover); the body composes Section, Shot, Shots, Video,
                   Research, More, Cards, Principle, Contrast, Terms, Tags, Steps, Checks and Note (an aside, or{" "}
                   <code>variant="notice"</code> for a framed alert about the demo). Built on Figure, Lightbox, StatRow,
-                  InfoCard, TermGrid, TagList, Clip, StepList, Checklist and MediaRow from @tetiana/ui.
+                  InfoCard, TermGrid, TagList, Clip, StepList, Checklist and MediaRow from @tetiana/ui. Mobile cases add
+                  a collapsible section index, scroll-snap screenshot sequences and explicit zoom and copy controls.
                 </dd>
               </div>
               <div>

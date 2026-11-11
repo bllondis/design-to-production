@@ -47,3 +47,27 @@ test("contact-popup @visual", async ({ page }, testInfo) => {
   if (testInfo.project.name === "desktop") await dialog.getByRole("button", { name: "Copy Email" }).hover();
   await expect(dialog).toHaveScreenshot("contact-popup.png", { animations: "disabled" });
 });
+
+test("mobile-menu @visual", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The compact navigation is only shown on narrow screens.");
+  await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
+  await page.getByRole("button", { name: "Open menu" }).click();
+  await expect(page).toHaveScreenshot("mobile-menu.png", { animations: "disabled" });
+});
+
+test("case-mobile-index @visual", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The case index is only shown on narrow screens.");
+  await page.goto("/work/design-to-production/");
+  const index = page.getByRole("navigation", { name: "In this case" });
+  await index.getByText("In this case").click();
+  await expect(index).toHaveScreenshot("case-mobile-index.png", { animations: "disabled" });
+});
+
+test("case-mobile-gallery @visual", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The swipe gallery is only shown on narrow screens.");
+  await page.goto("/work/design-to-production/");
+  const gallery = page.locator(".shots").first();
+  await gallery.scrollIntoViewIfNeeded();
+  await expect(gallery).toHaveScreenshot("case-mobile-gallery.png", { animations: "disabled" });
+});

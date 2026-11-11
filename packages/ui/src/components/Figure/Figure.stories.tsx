@@ -28,3 +28,8 @@ export const WithLightbox: Story = {
     </>
   ),
 };
+
+export const MobileZoom: Story = {
+  ...WithLightbox,
+  parameters: { viewport: { defaultViewport: "mobile2" } },
+};

@@ -22,7 +22,11 @@ export function Lightbox() {
 
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
-      const target = (event.target as HTMLElement | null)?.closest<HTMLImageElement>("img[data-zoom]");
+      const eventTarget = event.target as HTMLElement | null;
+      const button = eventTarget?.closest<HTMLElement>("[data-zoom-trigger]");
+      const target =
+        eventTarget?.closest<HTMLImageElement>("img[data-zoom]") ??
+        button?.parentElement?.querySelector<HTMLImageElement>("img[data-zoom]");
       if (!target) return;
       const images = [...document.querySelectorAll<HTMLImageElement>("img[data-zoom]")];
       setShots(images.map((image) => ({ src: image.currentSrc || image.src, alt: image.alt })));

@@ -1,0 +1,131 @@
+---
+/** Mobile-only disclosure populated from the case Section headings rendered below it. */
+interface Props {
+  label?: string;
+}
+
+const { label = "In this case" } = Astro.props;
+---
+
+<nav class="index" aria-label={label} data-case-index hidden>
+  <details>
+    <summary class="text-label-l">
+      <span>{label}</span>
+      <span class="mark" aria-hidden="true">
+        +
+      </span>
+    </summary>
+    <ol data-case-index-list></ol>
+  </details>
+</nav>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-case-index]").forEach((index) => {
+    const caseRoot = index.closest("main");
+    const list = index.querySelector<HTMLOListElement>("[data-case-index-list]");
+    const disclosure = index.querySelector<HTMLDetailsElement>("details");
+    if (!caseRoot || !list) return;
+
+    const sections = caseRoot.querySelectorAll<HTMLElement>("[data-case-indexable]");
+    sections.forEach((section, position) => {
+      const heading = section.querySelector<HTMLHeadingElement>("h2[id]");
+      if (!heading) return;
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      const number = document.createElement("span");
+      const text = document.createElement("span");
+      item.className = "case-index-item";
+      link.className = "case-index-link";
+      number.className = "case-index-number";
+      text.className = "case-index-text";
+      number.textContent = String(position + 1).padStart(2, "0");
+      number.setAttribute("aria-hidden", "true");
+      text.textContent = section.dataset.caseSection || heading.textContent || "Section";
+      link.href = `#${heading.id}`;
+      link.append(number, text);
+      link.addEventListener("click", () => disclosure?.removeAttribute("open"));
+      item.append(link);
+      list.append(item);
+    });
+
+    if (list.children.length) index.removeAttribute("hidden");
+  });
+</script>
+
+<style>
+  .index {
+    display: none;
+  }
+
+  @media (max-width: 680px) {
+    .index {
+      display: block;
+      border-bottom: 1px solid var(--color-border-default);
+    }
+
+    summary {
+      display: flex;
+      min-height: var(--mobile-nav-item-min-height);
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--space-m);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mark {
+      color: var(--color-accent-default);
+      font-size: var(--font-size-body-l);
+      transition: transform var(--motion-duration-hover) var(--motion-easing-standard);
+    }
+
+    details[open] .mark {
+      transform: rotate(45deg);
+    }
+
+    ol {
+      padding: 0;
+      margin: 0;
+      border-top: 1px solid var(--color-border-default);
+      list-style: none;
+    }
+
+    :global(.case-index-item + .case-index-item) {
+      border-top: 1px solid var(--color-border-subtle);
+    }
+
+    :global(.case-index-link) {
+      display: grid;
+      min-height: var(--mobile-nav-item-min-height);
+      grid-template-columns: 2ch 1fr;
+      align-items: center;
+      gap: var(--space-s);
+      padding: var(--space-s) var(--space-m);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-body-s);
+      line-height: var(--font-line-height-relaxed);
+      text-decoration: none;
+    }
+
+    :global(.case-index-number) {
+      color: var(--color-accent-default);
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-label-l);
+    }
+
+    :global(.case-index-link:active) {
+      background: var(--color-surface-glow);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mark {
+      transition: none;
+    }
+  }
+</style>

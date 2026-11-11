@@ -37,6 +37,8 @@ const content = getHomeContent(locale);
     languages={content.languages}
     languageTrigger={content.header.languageTrigger}
     languageMenu={content.header.languageMenu}
+    menuOpen={content.header.menuOpen}
+    menuClose={content.header.menuClose}
   />
   <main id="main">
     <Hero role={content.hero.role} title={content.hero.title} />
@@ -58,6 +60,7 @@ const content = getHomeContent(locale);
               skillsLabel={content.work.skillsLabel}
               openDoorLabel={content.work.openDoor}
               closeDoorLabel={content.work.closeDoor}
+              doorHint={chapterIndex === 0 && blockIndex === 0 ? content.work.doorHint : undefined}
             />
           ))}
         </CapabilityChapter>

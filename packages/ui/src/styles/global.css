@@ -13,6 +13,15 @@
     --space-page: 0.75rem;
     --layout-header-height: 4.5rem;
   }
+
+  .text-label-m,
+  .text-label-s {
+    font-size: var(--font-size-label-l);
+  }
+
+  html {
+    scroll-padding-top: calc(var(--layout-header-height) + var(--space-m));
+  }
 }
 
 *,

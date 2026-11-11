@@ -5,11 +5,14 @@
  * flush  sit on the top edge instead of var(--space-page) below it (the home hero)
  */
 import { person, primaryNav } from "../../data/site.js";
+import { MobileNav } from "@tetiana/ui";
 
 interface HeaderLink {
   label: string;
   href: string;
   external?: boolean;
+  ariaLabel?: string;
+  mobileLabel?: string;
 }
 
 interface LanguageOption {
@@ -31,6 +34,9 @@ interface Props {
   languages?: LanguageOption[];
   languageTrigger?: string;
   languageMenu?: string;
+  menuOpen?: string;
+  menuClose?: string;
+  readingProgress?: boolean;
 }
 
 const {
@@ -43,18 +49,28 @@ const {
   languages = [],
   languageTrigger = "Change language. Current language: {label}",
   languageMenu = "Languages",
+  menuOpen = "Open menu",
+  menuClose = "Close menu",
+  readingProgress = false,
 } = Astro.props;
 const activeLanguage = languages.find((language) => language.active) ?? languages[0];
 ---
 
-<header class:list={["header", { "header--flush": flush }]}>
+<header class:list={["header", { "header--flush": flush }]} data-reading-progress={readingProgress ? "" : undefined}>
   <a class="identity" href={homeHref} aria-label={identityLabel}>
     {person.name}
   </a>
   <div class="header-actions">
     {homeAction && (
-      <a class="home-action text-label-l" href={homeAction.href}>
-        {homeAction.label}
+      <a class="home-action text-label-l" href={homeAction.href} aria-label={homeAction.ariaLabel ?? homeAction.label}>
+        <span class="home-action-label" aria-hidden={homeAction.ariaLabel ? "true" : undefined}>
+          {homeAction.label}
+        </span>
+        {homeAction.mobileLabel && (
+          <span class="home-action-mobile" aria-hidden="true">
+            {homeAction.mobileLabel}
+          </span>
+        )}
       </a>
     )}
     {activeLanguage && (
@@ -99,7 +115,21 @@ const activeLanguage = languages.find((language) => language.active) ?? language
         </a>
       ))}
     </nav>
+    <MobileNav
+      client:load
+      links={navItems}
+      languages={languages}
+      languageLabel={languageMenu}
+      label={navLabel}
+      openLabel={menuOpen}
+      closeLabel={menuClose}
+    />
   </div>
+  {readingProgress && (
+    <span class="reading-progress" aria-hidden="true">
+      <span></span>
+    </span>
+  )}
 </header>
 
 <script>
@@ -120,10 +150,44 @@ const activeLanguage = languages.find((language) => language.active) ?? language
       if (!switcher.contains(event.target as Node)) switcher.removeAttribute("open");
     });
   });
+
+  const siteHeader = document.querySelector<HTMLElement>("body > header");
+  const narrowScreen = window.matchMedia("(max-width: 680px)");
+  let previousScroll = window.scrollY;
+  let scrollFrame = 0;
+
+  const updateMobileHeader = () => {
+    scrollFrame = 0;
+    if (!siteHeader || !narrowScreen.matches) return;
+    const currentScroll = window.scrollY;
+    const delta = currentScroll - previousScroll;
+    const menuOpen = document.body.hasAttribute("data-mobile-nav-open");
+    const nearTop = currentScroll < 24;
+
+    if (nearTop || menuOpen || delta < -8) siteHeader.classList.remove("header--hidden");
+    else if (delta > 8 && currentScroll > siteHeader.offsetHeight) siteHeader.classList.add("header--hidden");
+
+    if (siteHeader.hasAttribute("data-reading-progress")) {
+      const range = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+      siteHeader.style.setProperty("--reading-progress", `${Math.min(currentScroll / range, 1)}`);
+    }
+    previousScroll = currentScroll;
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!scrollFrame) scrollFrame = window.requestAnimationFrame(updateMobileHeader);
+    },
+    { passive: true },
+  );
+  updateMobileHeader();
 </script>
 
 <style>
   .header {
+    --site-header-top: var(--space-page);
+
     position: absolute;
     top: var(--space-page);
     left: var(--space-page);
@@ -141,19 +205,27 @@ const activeLanguage = languages.find((language) => language.active) ?? language
   }
 
   .header--flush {
+    --site-header-top: 0px;
+
     top: 0;
   }
 
   .identity {
+    min-width: 0;
     font-size: clamp(1.1rem, 2vw, 1.65rem);
     letter-spacing: var(--font-tracking-tight);
     text-decoration: none;
+    white-space: nowrap;
   }
 
   .header-actions {
     display: flex;
     align-items: center;
     gap: var(--space-l);
+  }
+
+  .reading-progress {
+    display: none;
   }
 
   .nav {
@@ -209,6 +281,10 @@ const activeLanguage = languages.find((language) => language.active) ?? language
 
   .home-action {
     text-decoration: none;
+  }
+
+  .home-action-mobile {
+    display: none;
   }
 
   .language-trigger::-webkit-details-marker {
@@ -285,8 +361,18 @@ const activeLanguage = languages.find((language) => language.active) ?? language
 
   @media (max-width: 680px) {
     .header {
+      --site-header-top: env(safe-area-inset-top, 0px);
+
+      position: fixed;
+      top: var(--site-header-top);
+      z-index: 5;
       gap: var(--space-s);
       padding: 0 0.85rem;
+      transition: top var(--motion-duration-fade) var(--motion-easing-standard);
+    }
+
+    .header--hidden {
+      top: calc(var(--layout-header-height) * -1);
     }
 
     .identity {
@@ -298,21 +384,54 @@ const activeLanguage = languages.find((language) => language.active) ?? language
     }
 
     .nav {
-      gap: 0.85rem;
-    }
-
-    .nav a:not(:first-child):not(:last-child) {
       display: none;
     }
 
-    .nav a {
-      font-size: var(--font-size-label-m);
+    .language-switcher {
+      display: none;
     }
 
-    .home-action,
-    .language-trigger {
+    .home-action {
+      min-width: var(--mobile-nav-trigger-size);
+      min-height: var(--mobile-nav-trigger-size);
+      justify-content: center;
       padding: 0 var(--space-2xs);
-      font-size: var(--font-size-label-m);
+      font-size: var(--font-size-body-l);
+      line-height: 1;
+    }
+
+    .home-action-label {
+      display: none;
+    }
+
+    .home-action-mobile {
+      display: inline;
+    }
+
+    .reading-progress {
+      position: absolute;
+      right: -1px;
+      bottom: -1px;
+      left: -1px;
+      display: block;
+      height: 2px;
+      overflow: hidden;
+      background: var(--color-border-subtle);
+    }
+
+    .reading-progress span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: var(--color-accent-default);
+      transform: scaleX(var(--reading-progress, 0));
+      transform-origin: left;
+    }
+  }
+
+  @media (max-width: 680px) and (prefers-reduced-motion: reduce) {
+    .header {
+      transition: none;
     }
   }
 </style>

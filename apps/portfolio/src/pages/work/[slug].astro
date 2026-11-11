@@ -7,6 +7,7 @@ import SiteFooter from "../../components/sections/SiteFooter.astro";
 import SiteHeader from "../../components/sections/SiteHeader.astro";
 import { projectHomeAction } from "../../data/site.js";
 import CaseHero from "../../components/case/CaseHero.astro";
+import CaseIndex from "../../components/case/CaseIndex.astro";
 import CaseNext from "../../components/case/CaseNext.astro";
 import Cards from "../../components/case/Cards.astro";
 import Checks from "../../components/case/Checks.astro";
@@ -69,10 +70,11 @@ const components = {
   description={data.summary[0]}
   path={`/work/${entry.id}/`}
 >
-  <SiteHeader homeAction={projectHomeAction} />
+  <SiteHeader homeAction={projectHomeAction} readingProgress />
   <main id="main" class="case">
     <Frame aria-labelledby="case-title">
       <CaseHero {...data} />
+      <CaseIndex />
       <Content components={components} />
       {next.id !== entry.id && (
         <CaseNext next={{ title: next.data.title, client: next.data.client, href: `/work/${next.id}/` }} />

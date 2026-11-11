@@ -130,7 +130,38 @@ const {
 
   @media (max-width: 680px) {
     .steps li {
-      padding: var(--space-m);
+      position: relative;
+      gap: var(--space-2xs);
+      padding: var(--space-m) var(--space-m) var(--space-m) calc(var(--space-m) + var(--space-xl));
+      border-bottom: 1px solid var(--color-border-subtle);
+      background-image: none;
+    }
+
+    .steps li:last-child {
+      border-bottom: 0;
+    }
+
+    .steps li::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: calc(var(--space-m) + var(--space-2xs));
+      width: 1px;
+      background: var(--color-border-default);
+      content: "";
+    }
+
+    .step-name {
+      gap: var(--space-s);
+    }
+
+    .step-name span {
+      position: absolute;
+      left: var(--space-m);
+      z-index: 1;
+      min-width: auto;
+      padding: var(--space-3xs) 0;
+      background: var(--color-surface-page);
     }
 
     .step-detail {
