@@ -81,7 +81,7 @@
 }
 
 .hang[data-phase="asleep"] .swing {
-  animation: hang-sway 4600ms ease-in-out infinite;
+  animation: hang-sway var(--hang-sway) ease-in-out infinite;
 }
 
 @keyframes hang-sway {
@@ -119,15 +119,15 @@
 }
 
 .hang[data-phase="asleep"] .snore span {
-  animation: hang-snore 3600ms linear infinite;
+  animation: hang-snore var(--hang-snore) linear infinite;
 }
 
 .hang[data-phase="asleep"] .snore span:nth-child(2) {
-  animation-delay: 1200ms;
+  animation-delay: calc(var(--hang-snore) / 3);
 }
 
 .hang[data-phase="asleep"] .snore span:nth-child(3) {
-  animation-delay: 2400ms;
+  animation-delay: calc(var(--hang-snore) * 2 / 3);
 }
 
 @keyframes hang-snore {

@@ -35,6 +35,24 @@ export const Open: Story = {
   args: { initialState: "open", character: "assets/pixel-girl.jpg" },
 };
 
+/** Hung on the right, for a right-hand gutter: the leaf, the light and the beam all mirror. */
+export const HingedRight: Story = {
+  args: { hinge: "right", initialState: "peek" },
+};
+
+/** Nobody home: the door opens onto the empty dark. PixelWalk and the other characters use it while theirs is out. */
+export const Vacant: Story = {
+  args: { vacant: true, initialState: "open" },
+};
+
+/** Nothing to open: no hover, no click, and hidden from assistive tech. */
+export const Disabled: Story = {
+  args: { disabled: true, vacant: true },
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelector("button")).toBeDisabled();
+  },
+};
+
 /** Clicking toggles the door and keeps the accessible name in sync. */
 export const ClickToOpen: Story = {
   play: async ({ canvas }) => {

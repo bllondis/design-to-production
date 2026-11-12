@@ -22,6 +22,9 @@ export const burrowTiming = {
   fall: 460,
   /** The character is seen back home before the door closes. */
   settle: 480,
+  /** One twist from side to side as it works its way in, and one sway of its top once planted. */
+  twist: 700,
+  sway: 3400,
 };
 
 export interface PixelBurrowProps {
@@ -124,6 +127,8 @@ export function PixelBurrow({
           "--burrow-rise": `${burrowTiming.rise}ms`,
           "--burrow-kick": `${burrowTiming.kick}ms`,
           "--burrow-fall": `${burrowTiming.fall}ms`,
+          "--burrow-twist": `${burrowTiming.twist}ms`,
+          "--burrow-sway": `${burrowTiming.sway}ms`,
         } as CSSProperties
       }
     >

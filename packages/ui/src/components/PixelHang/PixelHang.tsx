@@ -18,6 +18,9 @@ export const hangTiming = {
   wake: 1400,
   /** The character is seen back home before the door closes. */
   settle: 480,
+  /** One swing to and fro while it sleeps, and the time one snored z takes to drift away. */
+  sway: 4600,
+  snore: 3600,
 };
 
 /** Where a character's arms are, as shares of its square frame measured from the top left. */
@@ -261,6 +264,8 @@ export function PixelHang({
           "--hang-shoulder-x": `${rig.shoulder[0] * 100}%`,
           "--hang-shoulder-y": `${rig.shoulder[1] * 100}%`,
           "--hang-grip-x": `${rig.grip * 100}%`,
+          "--hang-sway": `${hangTiming.sway}ms`,
+          "--hang-snore": `${hangTiming.snore}ms`,
         } as CSSProperties
       }
     >

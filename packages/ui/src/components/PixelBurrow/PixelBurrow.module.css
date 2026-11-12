@@ -122,7 +122,7 @@
 }
 
 .burrow[data-phase="sinking"] .sprite {
-  animation: burrow-twist 700ms ease-in-out infinite;
+  animation: burrow-twist var(--burrow-twist) ease-in-out infinite;
 }
 
 @keyframes burrow-sink {
@@ -153,7 +153,7 @@
 
 .burrow[data-phase="planted"] .sprite {
   transform-origin: 50% var(--burrow-eyes);
-  animation: burrow-sway 3400ms ease-in-out infinite;
+  animation: burrow-sway var(--burrow-sway) ease-in-out infinite;
 }
 
 @keyframes burrow-sway {

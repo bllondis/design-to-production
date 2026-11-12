@@ -31,7 +31,7 @@ Components may only use semantic and component tokens, never primitives or raw h
 
 **A component library with its own contract**
 
-`@tetiana/ui` – React + TypeScript components, each with a CSS module, a Storybook story and tests: `Button`, `Heading`, `Tile`, `PixelDoor`, `AsciiVisual`, `SignalField`, `SkillGrid`, `ContactPopup`, `StatRow`, `Lightbox`, `Figure`, `StepList` and more. Variants are props, not copies.
+`@tetiana/ui` – React + TypeScript components, each with a CSS module, a Storybook story and tests: `Button`, `Heading`, `Tile`, `PixelDoor` and the characters that come out of it (`PixelWalk`, `PixelFlight`, `PixelBurrow`, `PixelHang`, `PixelStage`), `AsciiVisual`, `SignalField`, `SkillGrid`, `ContactPopup`, `MobileNav`, `StatRow`, `Lightbox`, `Figure`, `StepList` and more. Variants are props, not copies.
 
 **Documented twice** – in Storybook, and on a live `/system` page inside the site itself, where every block is shown with its variants, states and usage code.
 
