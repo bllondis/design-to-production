@@ -5,7 +5,7 @@ import { PixelDoor } from "./PixelDoor";
 const meta = {
   title: "Components/PixelDoor",
   component: PixelDoor,
-  args: { character: "assets/pixel-cat.jpg", still: true, inset: false, hint: "Tap a door" },
+  args: { character: "assets/pixel-cat.jpg", still: true, inset: false },
   argTypes: {
     initialState: { control: "inline-radio", options: ["closed", "peek", "open"] },
     character: {

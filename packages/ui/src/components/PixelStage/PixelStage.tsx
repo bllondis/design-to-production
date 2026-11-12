@@ -16,16 +16,14 @@ export interface PixelStageProps {
   motion: PixelStageMotion;
   openLabel?: string;
   closeLabel?: string;
-  /** Tooltip passed to each door and shown after the first tap on it. */
-  hint?: string;
 }
 
 /**
  * A compact, touch-first rail for the portfolio characters when frame gutters collapse.
  * It reserves its own space, so a moving character never covers the section copy.
  */
-export function PixelStage({ character, motion, openLabel, closeLabel, hint }: PixelStageProps) {
-  const shared = { character, inset: false, openLabel, closeLabel, hint };
+export function PixelStage({ character, motion, openLabel, closeLabel }: PixelStageProps) {
+  const shared = { character, inset: false, openLabel, closeLabel };
 
   return (
     <div className={styles.stage} data-pixel-stage data-motion={motion.kind}>

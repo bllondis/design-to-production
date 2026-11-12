@@ -1,12 +1,12 @@
 import { expect, test, type Locator } from "@playwright/test";
 
-/** Opens a door as a visitor would: on a touch screen the first tap shows the hint, and the second opens it. */
+/** Opens a door as a visitor would: one tap on touch, one click with a mouse. */
 async function knock(door: Locator) {
   if (test.info().project.name === "mobile") {
     await door.tap();
-    await expect(door).toHaveClass(/armed/);
+  } else {
+    await door.click();
   }
-  await door.click();
 }
 
 test("every capability has a door that opens to its character", async ({ page }) => {
@@ -494,30 +494,19 @@ test("each mobile hero statement stays on one line in every locale", async ({ pa
   }
 });
 
-test("a mouse never sees the door hint, and a first tap on a touch screen shows it", async ({ page }, testInfo) => {
+test("the first mobile tap opens a door without an intermediate tooltip", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The one-tap interaction is verified on a touch viewport.");
   for (const locale of [
-    { path: "/", hint: "Tap a door" },
-    { path: "/uk/", hint: "Торкніться дверцят" },
-    { path: "/nl/", hint: "Tik op een deur" },
+    { path: "/", open: "Open the pixel door", close: "Close the pixel door" },
+    { path: "/uk/", open: "Відкрити піксельні дверцята", close: "Закрити піксельні дверцята" },
+    { path: "/nl/", open: "Pixeldeur openen", close: "Pixeldeur sluiten" },
   ]) {
     await page.goto(locale.path);
-    const doors = page.locator("main button:enabled:visible").filter({ has: page.locator("[data-door-hint]") });
-    await expect(doors).toHaveCount(5);
-
-    for (const door of await doors.all()) {
-      const hint = door.getByText(locale.hint, { exact: true });
-      await door.scrollIntoViewIfNeeded();
-      if (testInfo.project.name === "mobile") {
-        await door.tap();
-        await expect(hint).toBeVisible();
-        await page.locator("#hero-title").tap();
-      } else {
-        await door.hover();
-        // Hover still sets the door ajar; it just doesn't prompt.
-        await expect(door.locator("img")).toHaveCount(1);
-      }
-      await expect(hint).toBeHidden();
-    }
+    await expect(page.locator("[data-door-hint]")).toHaveCount(0);
+    const door = page.getByRole("button", { name: locale.open }).first();
+    await door.scrollIntoViewIfNeeded();
+    await door.tap();
+    await expect(page.getByRole("button", { name: locale.close })).toHaveAttribute("aria-pressed", "true");
   }
 });
 

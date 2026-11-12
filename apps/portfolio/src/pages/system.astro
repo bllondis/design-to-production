@@ -348,14 +348,11 @@ const sections = [
         <Specimen
           name="PixelDoor"
           file="@tetiana/ui · PixelDoor"
-          usage={`<PixelDoor client:visible character="/assets/pixel-cat.jpg" hint="Tap a door" offset />`}
+          usage={`<PixelDoor client:visible character="/assets/pixel-cat.jpg" offset />`}
         >
           <ul slot="notes">
             <li>States: closed, peek (hover, or flapping while the page scrolls), open (click)</li>
-            <li>
-              On a touch screen the first tap stands in for hover: the hint shows and the door flaps; the second opens
-              it
-            </li>
+            <li>On a touch screen the first tap opens the door and releases its character immediately</li>
             <li>Ajar doors leak warm light: in the gap, a faint beam to the side, a sliver below</li>
             <li>
               <code>offset</code>: flap half a beat later than neighbours
@@ -369,13 +366,10 @@ const sections = [
             <li>
               <code>vacant</code>, <code>disabled</code>, <code>open</code>: for a parent that moves the character
             </li>
-            <li>
-              <code>hint</code>: a visual-only prompt for touch screens, shown after the first tap; never on mouse hover
-            </li>
           </ul>
           <figure class="door-demo">
             <div class="gutter-demo">
-              <PixelDoor client:visible character="/assets/pixel-cat.jpg" still inset={false} hint="Tap a door" />
+              <PixelDoor client:visible character="/assets/pixel-cat.jpg" still inset={false} />
             </div>
             <figcaption class="text-label-s">Closed</figcaption>
           </figure>
@@ -526,20 +520,18 @@ const sections = [
         <Specimen
           name="PixelStage"
           file="@tetiana/ui · PixelStage"
-          usage={`<PixelStage character="/assets/pixel-cat.jpg" motion={{ kind: "walk", sprite: "/assets/pixel-cat-walk.png" }} hint="Tap a door" />`}
+          usage={`<PixelStage character="/assets/pixel-cat.jpg" motion={{ kind: "walk", sprite: "/assets/pixel-cat-walk.png" }} />`}
         >
           <ul slot="notes">
             <li>Touch-first rail for the same characters when frame gutters collapse below 980px</li>
             <li>Reserves its own height, so doors and motion never cover capability copy</li>
             <li>Reuses walk, bow, burrow and hang motion; the pigeon leaves the rail to fly across page perches</li>
-            <li>Doors flap while the page scrolls; the first tap shows the hint, the second lets the character out</li>
-            <li>An optional tooltip appears above an enabled door after the first tap</li>
+            <li>Doors flap while the page scrolls; the first tap lets the character out</li>
           </ul>
           <PixelStage
             client:visible
             character="/assets/pixel-cat.jpg"
             motion={{ kind: "walk", sprite: "/assets/pixel-cat-walk.png" }}
-            hint="Tap a door"
           />
         </Specimen>
 

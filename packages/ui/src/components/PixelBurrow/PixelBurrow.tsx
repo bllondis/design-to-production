@@ -48,8 +48,6 @@ export interface PixelBurrowProps {
   /** Accessible labels for the closed and the open door. */
   openLabel?: string;
   closeLabel?: string;
-  /** Short visual prompt revealed on a touch screen after the first tap on the door. */
-  hint?: string;
 }
 
 /**
@@ -69,7 +67,6 @@ export function PixelBurrow({
   inset = true,
   openLabel,
   closeLabel,
-  hint,
 }: PixelBurrowProps) {
   const [phase, setPhase] = useState<Phase>("home");
   const [open, setOpen] = useState(false);
@@ -145,7 +142,6 @@ export function PixelBurrow({
         onToggle={toggle}
         openLabel={openLabel}
         closeLabel={closeLabel}
-        hint={hint}
       />
       <span className={styles.plot} aria-hidden="true">
         <span className={styles.mover}>

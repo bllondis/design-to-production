@@ -54,10 +54,4 @@ describe("PixelStage", () => {
     );
     expect(screen.getByRole("button", { name: "Відкрити дверцята" })).toBeInTheDocument();
   });
-
-  it("passes its hint to each door so only the enabled one can reveal it", () => {
-    render(<PixelStage character="/cat.jpg" motion={{ kind: "walk", sprite: "/cat-walk.png" }} hint="Tap a door" />);
-    expect(screen.getAllByText("Tap a door")).toHaveLength(2);
-    expect(screen.getAllByText("Tap a door")[0].closest("[data-door-hint]")).toHaveAttribute("aria-hidden", "true");
-  });
 });

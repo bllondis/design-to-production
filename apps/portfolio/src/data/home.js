@@ -44,7 +44,6 @@ const translations = {
       skillsLabel: "What I bring",
       openDoor: "Open the pixel door",
       closeDoor: "Close the pixel door",
-      doorHint: "Tap a door",
     },
     method: {
       label: "Working method / System to interface",
@@ -138,7 +137,6 @@ const translations = {
       skillsLabel: "Що я вмію",
       openDoor: "Відкрити піксельні дверцята",
       closeDoor: "Закрити піксельні дверцята",
-      doorHint: "Торкніться дверцят",
     },
     method: {
       label: "Метод роботи / Від системи до інтерфейсу",
@@ -236,7 +234,6 @@ const translations = {
       skillsLabel: "Wat ik meebreng",
       openDoor: "Pixeldeur openen",
       closeDoor: "Pixeldeur sluiten",
-      doorHint: "Tik op een deur",
     },
     method: {
       label: "Werkwijze / Van systeem naar interface",

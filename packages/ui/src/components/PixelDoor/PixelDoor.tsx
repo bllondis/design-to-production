@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { cx } from "../../lib/cx";
 import { useScrollActivity } from "../../lib/hooks";
 import styles from "./PixelDoor.module.css";
@@ -29,14 +29,12 @@ export interface PixelDoorProps {
   /** Accessible labels for the closed and open states. */
   openLabel?: string;
   closeLabel?: string;
-  /** Short visual prompt for touch screens, revealed once the first tap has armed the door; a mouse never sees it. */
-  hint?: string;
 }
 
 /**
  * A dark pixel-art door hiding a character.
  * closed → peek (hover, or flapping while the page scrolls) → open (click). Ajar doors leak warm light.
- * On a touch screen the first tap stands in for hover (hint and flapping), and the second opens the door.
+ * A mouse can preview the ajar state on hover; a touch or click opens the door immediately.
  */
 export function PixelDoor({
   character,
@@ -51,30 +49,14 @@ export function PixelDoor({
   onToggle,
   openLabel = "Open the pixel door",
   closeLabel = "Close the pixel door",
-  hint,
 }: PixelDoorProps) {
   const [ownOpen, setOwnOpen] = useState(initialState === "open");
   const open = controlledOpen ?? ownOpen;
   // A disabled door has nobody to let out (the empty one across a walk), so it stays shut while the page scrolls.
   const scrolling = useScrollActivity(!still && !disabled);
-  // A touch screen has no hover, so the first tap on a closed door stands in for it: the hint shows and the door
-  // rattles. The next tap opens it; a tap anywhere else lets it rest again.
-  const [armed, setArmed] = useState(false);
-  const pointer = useRef("");
-  const ref = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!armed) return;
-    const rest = (event: PointerEvent) => {
-      if (!ref.current?.contains(event.target as Node)) setArmed(false);
-    };
-    document.addEventListener("pointerdown", rest);
-    return () => document.removeEventListener("pointerdown", rest);
-  }, [armed]);
 
   return (
     <button
-      ref={ref}
       type="button"
       className={cx(
         styles.door,
@@ -82,26 +64,13 @@ export function PixelDoor({
         offset && styles.offset,
         hinge === "right" && styles.hingeRight,
         initialState === "peek" && styles.peek,
-        (scrolling || armed) && styles.flapping,
-        armed && styles.armed,
+        scrolling && styles.flapping,
       )}
       aria-pressed={open}
       aria-hidden={disabled || undefined}
       disabled={disabled}
       aria-label={open ? closeLabel : openLabel}
-      onPointerDown={(event) => {
-        pointer.current = event.pointerType;
-      }}
       onClick={() => {
-        // A finger, or any pointer on a screen that cannot hover; the keyboard opens the door straight away.
-        const touch =
-          pointer.current === "touch" || (pointer.current !== "" && window.matchMedia("(hover: none)").matches);
-        pointer.current = "";
-        if (touch && !open && !armed) {
-          setArmed(true);
-          return;
-        }
-        setArmed(false);
         setOwnOpen((value) => !value);
         onToggle?.();
       }}
@@ -109,11 +78,6 @@ export function PixelDoor({
       {!vacant && <img src={character} alt="" width={360} height={360} loading="lazy" />}
       <span className={styles.floor} aria-hidden="true" />
       <span className={styles.leaf} aria-hidden="true" />
-      {hint && (
-        <span className={`${styles.hint} text-label-s`} data-door-hint aria-hidden="true">
-          <span className={styles.hintBubble}>{hint}</span>
-        </span>
-      )}
     </button>
   );
 }

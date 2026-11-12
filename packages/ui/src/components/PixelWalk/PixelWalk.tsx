@@ -62,8 +62,6 @@ export interface PixelWalkProps {
   /** Accessible labels for a closed and an open door. */
   openLabel?: string;
   closeLabel?: string;
-  /** Short visual prompt revealed on a touch screen after the first tap on an enabled door. */
-  hint?: string;
 }
 
 /**
@@ -86,7 +84,6 @@ export function PixelWalk({
   inset = true,
   openLabel,
   closeLabel,
-  hint,
 }: PixelWalkProps) {
   const [home, setHome] = useState<Side>("start");
   const [phase, setPhase] = useState<Phase>("home");
@@ -218,7 +215,6 @@ export function PixelWalk({
             onToggle={() => toggle(side)}
             openLabel={openLabel}
             closeLabel={closeLabel}
-            hint={hint}
           />
         </div>
       ))}

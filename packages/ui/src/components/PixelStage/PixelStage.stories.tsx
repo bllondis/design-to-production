@@ -7,7 +7,6 @@ const meta = {
   args: {
     character: "/assets/pixel-cat.jpg",
     motion: { kind: "walk", sprite: "/assets/pixel-cat-walk.png" },
-    hint: "Tap a door",
   },
   decorators: [
     (Story) => (
@@ -18,7 +17,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The touch-first character rail used when frame gutters collapse. Its optional hint appears above an enabled door after the first tap on it; the pigeon still flies between perches across the page.",
+          "The touch-first character rail used when frame gutters collapse. A door opens and releases its character on the first tap; the pigeon still flies between perches across the page.",
       },
     },
   },
