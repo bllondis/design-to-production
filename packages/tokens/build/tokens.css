@@ -15,7 +15,7 @@
   --door-light-opacity: 0.35; /** A restrained hint of warm light while the door is ajar. */
   --mobile-nav-trigger-size: 3rem; /** Square touch target for the compact navigation trigger. */
   --mobile-nav-item-min-height: 3.75rem; /** Minimum touch-friendly height of a link in the compact navigation panel. */
-  --hero-mobile-title-cap: 9.3cqi; /** Maximum title size relative to the narrow light hero card, keeping each authored statement on one line. */
+  --hero-mobile-title-cap: 8.9cqi; /** Maximum title size relative to the narrow light hero card, keeping each authored statement on one line, with room for fonts that render a few percent wider (Linux CI). */
   --footer-dock-size: 3rem;
   --footer-dock-glyph-size: 1.75rem;
   --footer-dock-surface-radius: 0.375rem;

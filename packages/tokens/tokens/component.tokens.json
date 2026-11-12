@@ -72,8 +72,8 @@
   "hero": {
     "mobile-title-cap": {
       "$type": "dimension",
-      "$value": "9.3cqi",
-      "$description": "Maximum title size relative to the narrow light hero card, keeping each authored statement on one line."
+      "$value": "8.9cqi",
+      "$description": "Maximum title size relative to the narrow light hero card, keeping each authored statement on one line, with room for fonts that render a few percent wider (Linux CI)."
     }
   },
   "footer-dock": {
