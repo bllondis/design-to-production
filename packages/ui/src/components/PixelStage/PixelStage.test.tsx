@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { PixelStage } from "./PixelStage";
 
@@ -33,16 +32,15 @@ describe("PixelStage", () => {
     expect(walk?.style.getPropertyValue("--walk-flourish")).toBe("url(/waffle-bow.png)");
   });
 
-  it("scopes the flying character to perches inside its rail", () => {
+  it("lets the flying character use the page perches without adding a shelf to its rail", () => {
     const { container } = render(
       <PixelStage
         character="/pigeon.jpg"
         motion={{ kind: "fly", walk: "/pigeon-walk.png", flight: "/pigeon-fly.png" }}
       />,
     );
-    const perches = container.querySelectorAll("[data-pixel-stage-perch]");
-    expect(perches).toHaveLength(2);
-    expect(perches[0].getAttribute("data-pixel-stage-perch")).toBe(perches[1].getAttribute("data-pixel-stage-perch"));
+    expect(container.querySelector("[data-pixel-stage-perch]")).not.toBeInTheDocument();
+    expect(container.querySelector('[data-pixel-stage][data-motion="fly"]')).toBeInTheDocument();
   });
 
   it("passes localised labels to a single-door motion", () => {
@@ -57,10 +55,9 @@ describe("PixelStage", () => {
     expect(screen.getByRole("button", { name: "Відкрити дверцята" })).toBeInTheDocument();
   });
 
-  it("removes its one-time hint after the first door interaction", async () => {
+  it("passes its hint to each door so only the enabled one can reveal it", () => {
     render(<PixelStage character="/cat.jpg" motion={{ kind: "walk", sprite: "/cat-walk.png" }} hint="Tap a door" />);
-    expect(screen.getByText("Tap a door")).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: "Open the pixel door" }));
-    expect(screen.queryByText("Tap a door")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Tap a door")).toHaveLength(2);
+    expect(screen.getAllByText("Tap a door")[0].closest("[data-door-hint]")).toHaveAttribute("aria-hidden", "true");
   });
 });

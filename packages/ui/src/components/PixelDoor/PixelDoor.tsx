@@ -29,6 +29,8 @@ export interface PixelDoorProps {
   /** Accessible labels for the closed and open states. */
   openLabel?: string;
   closeLabel?: string;
+  /** Short visual prompt revealed whenever this enabled door is hovered or pressed. */
+  hint?: string;
 }
 
 /**
@@ -48,6 +50,7 @@ export function PixelDoor({
   onToggle,
   openLabel = "Open the pixel door",
   closeLabel = "Close the pixel door",
+  hint,
 }: PixelDoorProps) {
   const [ownOpen, setOwnOpen] = useState(initialState === "open");
   const open = controlledOpen ?? ownOpen;
@@ -76,6 +79,11 @@ export function PixelDoor({
       {!vacant && <img src={character} alt="" width={360} height={360} loading="lazy" />}
       <span className={styles.floor} aria-hidden="true" />
       <span className={styles.leaf} aria-hidden="true" />
+      {hint && (
+        <span className={`${styles.hint} text-label-s`} data-door-hint aria-hidden="true">
+          <span className={styles.hintBubble}>{hint}</span>
+        </span>
+      )}
     </button>
   );
 }

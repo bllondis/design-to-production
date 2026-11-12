@@ -10,13 +10,14 @@ interface Props {
   id: string;
   number: string;
   title: string;
+  mobileTitle?: string;
   intro: string;
   projects: { label: string; href: string }[];
   first?: boolean;
   label?: string;
 }
 
-const { id, number, title, intro, projects, first = false, label = "Capability" } = Astro.props;
+const { id, number, title, mobileTitle, intro, projects, first = false, label = "Capability" } = Astro.props;
 const titleId = `${id}-title`;
 ---
 
@@ -28,7 +29,7 @@ const titleId = `${id}-title`;
     <div class="chapter-head">
       <div>
         <p class="chapter-kicker text-label-l">{label}</p>
-        <Heading client:visible id={titleId} size="display-2" measure={9.5} text={title} />
+        <Heading client:visible id={titleId} size="display-2" measure={9.5} text={title} mobileText={mobileTitle} />
       </div>
       <div class="chapter-intro">
         <p>{intro}</p>

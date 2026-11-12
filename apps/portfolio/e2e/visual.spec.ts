@@ -32,6 +32,10 @@ for (const region of regions) {
     await page.evaluate(() => document.fonts.ready);
     // Tall element shots are stitched, which can catch the off-screen skip link; it isn't part of the design.
     await page.addStyleTag({ content: ".skip-link { display: none !important; }" });
+    // The mobile dock is fixed to the viewport. Keep component snapshots isolated; it has its own footer snapshot.
+    if (region.name !== "footer") {
+      await page.addStyleTag({ content: ".mobile-footer { display: none !important; }" });
+    }
     const target = page.locator(region.locator);
     await target.scrollIntoViewIfNeeded();
     await page.waitForTimeout(600);
@@ -42,6 +46,7 @@ for (const region of regions) {
 test("contact-popup @visual", async ({ page }, testInfo) => {
   await page.goto("/");
   await page.evaluate(() => document.fonts.ready);
+  await page.addStyleTag({ content: ".mobile-footer { display: none !important; }" });
   await page.getByRole("button", { name: "Get in touch" }).click();
   const dialog = page.getByRole("dialog", { name: "Get in touch" });
   if (testInfo.project.name === "desktop") await dialog.getByRole("button", { name: "Copy Email" }).hover();
@@ -59,6 +64,7 @@ test("mobile-menu @visual", async ({ page }, testInfo) => {
 test("case-mobile-index @visual", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "mobile", "The case index is only shown on narrow screens.");
   await page.goto("/work/design-to-production/");
+  await page.addStyleTag({ content: ".mobile-footer { display: none !important; }" });
   const index = page.getByRole("navigation", { name: "In this case" });
   await index.getByText("In this case").click();
   await expect(index).toHaveScreenshot("case-mobile-index.png", { animations: "disabled" });
@@ -67,7 +73,17 @@ test("case-mobile-index @visual", async ({ page }, testInfo) => {
 test("case-mobile-gallery @visual", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "mobile", "The swipe gallery is only shown on narrow screens.");
   await page.goto("/work/design-to-production/");
+  await page.addStyleTag({ content: ".mobile-footer { display: none !important; }" });
   const gallery = page.locator(".shots").first();
   await gallery.scrollIntoViewIfNeeded();
   await expect(gallery).toHaveScreenshot("case-mobile-gallery.png", { animations: "disabled" });
+});
+
+test("pigeon-mobile-rail @visual", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The compact pigeon rail is only shown on narrow screens.");
+  await page.goto("/");
+  await page.addStyleTag({ content: ".mobile-footer { display: none !important; }" });
+  const rail = page.locator("article[aria-labelledby='mature-title'] [data-pixel-stage]");
+  await rail.scrollIntoViewIfNeeded();
+  await expect(rail).toHaveScreenshot("pigeon-mobile-rail.png", { animations: "disabled" });
 });

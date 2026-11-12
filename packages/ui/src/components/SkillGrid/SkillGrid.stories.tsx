@@ -4,7 +4,15 @@ import { SkillGrid } from "./SkillGrid";
 const meta = {
   title: "Components/SkillGrid",
   component: SkillGrid,
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component:
+          "A responsive capability grid: three columns at wide widths, two below 980px and compact rows below 680px. Pointer hover inverts a cell; on touch layouts each row reveals once with a soft token-driven glow and respects reduced motion.",
+      },
+    },
+  },
   args: {
     items: [
       "Domain modelling",

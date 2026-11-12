@@ -39,6 +39,11 @@ const durations = byPrefix("motion", "duration");
 const easings = byPrefix("motion", "easing");
 const tracking = byPrefix("font", "tracking");
 const lineHeights = byPrefix("font", "line-height");
+const componentTokens = tokens.filter((token) => token.tier === "component");
+const componentTokenGroups = [...new Set(componentTokens.map((token) => token.path[0]))].map((group) => ({
+  group,
+  tokens: componentTokens.filter((token) => token.path[0] === group),
+}));
 
 // Storybook is built into /storybook for the live site; while developing it runs on its own server.
 const storybookUrl = import.meta.env.DEV ? "http://localhost:6006/" : "/storybook/";
@@ -116,6 +121,23 @@ const sections = [
               <small>Primitives · Semantic · Component</small>
             </li>
           </ol>
+        </FrameRow>
+        <FrameRow>
+          <div class="token-table">
+            <p class="text-label-m token-group">Component decisions</p>
+            {componentTokenGroups.map(({ group, tokens: groupTokens }) => (
+              <div class="component-token-group">
+                <p class="text-label-s">{group}</p>
+                {groupTokens.map((token) => (
+                  <div class="token-line token-line--plain">
+                    <code>{cssVar(token)}</code>
+                    <span class="token-ref">{token.reference ?? token.value}</span>
+                    <span class="token-note">{token.description}</span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </FrameRow>
       </DocSection>
 
@@ -301,6 +323,9 @@ const sections = [
               <code>tone</code>: default, inverse
             </li>
             <li>
+              <code>mobileText</code>: the same wording with explicit narrow-screen line breaks
+            </li>
+            <li>
               <code>pixel</code>: on by default; a few letters swap into Pixelify Sans, settle in on first view, then
               flicker now and then; Unicode letters are supported across all site languages
             </li>
@@ -323,7 +348,7 @@ const sections = [
         <Specimen
           name="PixelDoor"
           file="@tetiana/ui · PixelDoor"
-          usage={`<PixelDoor client:visible character="/assets/pixel-cat.jpg" offset />`}
+          usage={`<PixelDoor client:visible character="/assets/pixel-cat.jpg" hint="Tap a door" offset />`}
         >
           <ul slot="notes">
             <li>States: closed, peek (hover, or flapping while the page scrolls), open (click)</li>
@@ -340,10 +365,13 @@ const sections = [
             <li>
               <code>vacant</code>, <code>disabled</code>, <code>open</code>: for a parent that moves the character
             </li>
+            <li>
+              <code>hint</code>: a visual-only prompt shown every time an enabled door is hovered or pressed
+            </li>
           </ul>
           <figure class="door-demo">
             <div class="gutter-demo">
-              <PixelDoor client:visible character="/assets/pixel-cat.jpg" still inset={false} />
+              <PixelDoor client:visible character="/assets/pixel-cat.jpg" still inset={false} hint="Tap a door" />
             </div>
             <figcaption class="text-label-s">Closed</figcaption>
           </figure>
@@ -499,9 +527,9 @@ const sections = [
           <ul slot="notes">
             <li>Touch-first rail for the same characters when frame gutters collapse below 980px</li>
             <li>Reserves its own height, so doors and motion never cover capability copy</li>
-            <li>Reuses walk, bow, burrow, hang and flight motion; the pigeon stays on perches inside the rail</li>
+            <li>Reuses walk, bow, burrow and hang motion; the pigeon leaves the rail to fly across page perches</li>
             <li>Scroll flapping is disabled; the character moves only after a deliberate tap</li>
-            <li>An optional one-time hint makes the first door discoverable, then disappears after interaction</li>
+            <li>An optional tooltip appears above any enabled door while it is hovered or pressed</li>
           </ul>
           <PixelStage
             client:visible
@@ -567,9 +595,15 @@ const sections = [
           file="@tetiana/ui · SkillGrid"
           usage={`<SkillGrid items={["Domain modelling", "Information architecture", …]} />`}
         >
-          <p slot="notes">Three columns, then two compact columns on narrow screens. Cells invert on hover.</p>
+          <p slot="notes">
+            Three columns, then two compact columns on narrow screens. Pointer hover inverts a cell; each mobile row
+            reveals once with a soft glow when it enters the reading area.
+          </p>
           <div class="grid-demo">
-            <SkillGrid items={["Domain modelling", "Information architecture", "Role-based workflows"]} />
+            <SkillGrid
+              client:visible
+              items={["Domain modelling", "Information architecture", "Role-based workflows"]}
+            />
           </div>
         </Specimen>
 
@@ -633,6 +667,15 @@ const sections = [
               <div>
                 <dt>ContactBand</dt>
                 <dd>Inverse band with a light SignalField, heading-1 and a dark Button that opens ContactPopup.</dd>
+              </div>
+              <div>
+                <dt>SiteFooter + mobile dock</dt>
+                <dd>
+                  Four desktop link columns collapse below 680px into a translucent floating dock with colour,
+                  dimensional icons for email, LinkedIn, GitHub, CV and back to top. It stays out of the hero and open
+                  overlays, hides while scrolling down, returns while scrolling up, and remains visible around contact
+                  and footer content. Its visual decisions live in <code>footer-dock.*</code> component tokens.
+                </dd>
               </div>
             </dl>
           </div>
@@ -755,6 +798,15 @@ const sections = [
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-2xl);
+  }
+
+  .component-token-group + .component-token-group {
+    margin-top: var(--space-xl);
+  }
+
+  .component-token-group > .text-label-s {
+    margin: 0 0 var(--space-2xs);
+    color: var(--color-text-secondary);
   }
 
   .token-line {

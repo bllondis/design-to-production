@@ -8,6 +8,8 @@ export type HeadingSize = "display-1" | "display-2" | "display-3" | "display-4" 
 export interface HeadingProps {
   /** The title. A "\n" forces a line break; screen readers hear it as a space. */
   text: string;
+  /** The same wording with narrow-screen-only line breaks. */
+  mobileText?: string;
   /** Semantic tag: choose it for the document outline, not for looks. */
   as?: "h1" | "h2" | "h3" | "h4";
   /** Visual step from the type scale: display-1 hero · display-2 chapter · display-3 editorial · display-4 capability · heading-1 band. */
@@ -45,6 +47,7 @@ const byLine = (text: string, render: (line: string, lineIndex: number) => React
  */
 export function Heading({
   text,
+  mobileText,
   as: Tag = "h2",
   size,
   tone = "default",
@@ -69,29 +72,30 @@ export function Heading({
       const wanted = letters.offsetWidth;
       letters.style.transform = wanted > room ? `scaleX(${room / wanted})` : "";
     });
-  }, [pixels, pixel]);
+  }, [pixels, pixel, mobileText]);
 
-  const className = cx(styles.heading, styles[size], tone === "inverse" && styles.inverse);
+  const className = cx(styles.heading, styles[size], !pixel && styles.plain, tone === "inverse" && styles.inverse);
   const style = measure ? ({ "--heading-measure": `${measure}ch` } as CSSProperties) : undefined;
 
   if (!pixel) {
+    if (mobileText) {
+      return (
+        <Tag ref={ref} id={id} className={className} style={style} aria-label={spoken}>
+          <span className={styles.desktopText} aria-hidden="true">
+            {byLine(text, (line) => line)}
+          </span>
+          <span className={styles.mobileText} aria-hidden="true">
+            {byLine(mobileText, (line) => line)}
+          </span>
+        </Tag>
+      );
+    }
+
     return (
       <Tag ref={ref} id={id} className={className} style={style} aria-label={text.includes("\n") ? spoken : undefined}>
         {byLine(text, (line) => line)}
       </Tag>
     );
-  }
-
-  // Where each word's letters begin in the run of letters the pixel pick counts through.
-  const lines: { word: string; first: number }[][] = [];
-  let counted = 0;
-  for (const line of text.split("\n")) {
-    const words = [];
-    for (const word of line.split(" ")) {
-      words.push({ word, first: counted });
-      counted += [...word].filter(isLetter).length;
-    }
-    lines.push(words);
   }
 
   const letters = (word: string, first: number, picked: Set<number>) => {
@@ -106,21 +110,38 @@ export function Heading({
     });
   };
 
+  const pixelText = (displayText: string) => {
+    // Where each word's letters begin in the run of letters the pixel pick counts through.
+    const lines: { word: string; first: number }[][] = [];
+    let counted = 0;
+    for (const line of displayText.split("\n")) {
+      const words = [];
+      for (const word of line.split(" ")) {
+        words.push({ word, first: counted });
+        counted += [...word].filter(isLetter).length;
+      }
+      lines.push(words);
+    }
+
+    return byLine(displayText, (_line, lineIndex) =>
+      lines[lineIndex].map(({ word, first }, wordIndex) => (
+        <span key={`${word}-${wordIndex}`}>
+          {wordIndex > 0 && " "}
+          <span className={styles.word}>
+            <span className={styles.slot}>{letters(word, first, resting)}</span>
+            <span className={styles.letters}>{letters(word, first, pixels)}</span>
+          </span>
+        </span>
+      )),
+    );
+  };
+
   return (
     <Tag ref={ref} id={id} className={className} style={style}>
       <span className="visually-hidden">{spoken}</span>
       <span aria-hidden="true">
-        {byLine(text, (_line, lineIndex) =>
-          lines[lineIndex].map(({ word, first }, wordIndex) => (
-            <span key={`${word}-${wordIndex}`}>
-              {wordIndex > 0 && " "}
-              <span className={styles.word}>
-                <span className={styles.slot}>{letters(word, first, resting)}</span>
-                <span className={styles.letters}>{letters(word, first, pixels)}</span>
-              </span>
-            </span>
-          )),
-        )}
+        <span className={mobileText ? styles.desktopText : undefined}>{pixelText(text)}</span>
+        {mobileText && <span className={styles.mobileText}>{pixelText(mobileText)}</span>}
       </span>
     </Tag>
   );

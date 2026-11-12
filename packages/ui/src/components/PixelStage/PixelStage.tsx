@@ -1,4 +1,3 @@
-import { useId, useState } from "react";
 import { PixelBurrow } from "../PixelBurrow/PixelBurrow";
 import { PixelFlight } from "../PixelFlight/PixelFlight";
 import { PixelHang } from "../PixelHang/PixelHang";
@@ -17,7 +16,7 @@ export interface PixelStageProps {
   motion: PixelStageMotion;
   openLabel?: string;
   closeLabel?: string;
-  /** One-time touch hint. It disappears after the first interaction with the rail. */
+  /** Tooltip passed to each door and shown while that door is hovered or pressed. */
   hint?: string;
 }
 
@@ -26,27 +25,10 @@ export interface PixelStageProps {
  * It reserves its own space, so a moving character never covers the section copy.
  */
 export function PixelStage({ character, motion, openLabel, closeLabel, hint }: PixelStageProps) {
-  const perchId = useId().replaceAll(":", "");
-  const [interacted, setInteracted] = useState(false);
-  const perchSelector = `[data-pixel-stage-perch="${perchId}"]`;
-  const shared = { character, still: true, inset: false, openLabel, closeLabel };
+  const shared = { character, still: true, inset: false, openLabel, closeLabel, hint };
 
   return (
-    <div
-      className={styles.stage}
-      data-pixel-stage
-      data-motion={motion.kind}
-      data-interacted={interacted ? "" : undefined}
-      onPointerDownCapture={() => setInteracted(true)}
-      onKeyDownCapture={(event) => {
-        if (event.key === "Enter" || event.key === " ") setInteracted(true);
-      }}
-    >
-      {hint && !interacted && (
-        <span className={`${styles.hint} text-label-m`} aria-hidden="true">
-          {hint}
-        </span>
-      )}
+    <div className={styles.stage} data-pixel-stage data-motion={motion.kind}>
       {motion.kind === "walk" || motion.kind === "bow" ? (
         <PixelWalk
           {...shared}
@@ -58,19 +40,13 @@ export function PixelStage({ character, motion, openLabel, closeLabel, hint }: P
       ) : (
         <div className={styles.cell}>
           {motion.kind === "fly" ? (
-            <PixelFlight {...shared} walk={motion.walk} flight={motion.flight} perches={perchSelector} />
+            <PixelFlight {...shared} walk={motion.walk} flight={motion.flight} />
           ) : motion.kind === "burrow" ? (
             <PixelBurrow {...shared} sprite={motion.sprite} />
           ) : (
             <PixelHang {...shared} sprite={motion.sprite} />
           )}
         </div>
-      )}
-      {motion.kind === "fly" && (
-        <>
-          <span className={styles.flightShelf} data-pixel-stage-perch={perchId} aria-hidden="true" />
-          <span className={styles.floor} data-pixel-stage-perch={perchId} aria-hidden="true" />
-        </>
       )}
     </div>
   );

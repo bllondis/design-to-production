@@ -79,6 +79,8 @@ export interface PixelFlightProps {
   /** Accessible labels for the closed and the open door. */
   openLabel?: string;
   closeLabel?: string;
+  /** Short visual prompt revealed while the door is hovered or pressed. */
+  hint?: string;
 }
 
 /**
@@ -100,6 +102,7 @@ export function PixelFlight({
   inset = true,
   openLabel,
   closeLabel,
+  hint,
 }: PixelFlightProps) {
   const [phase, setPhase] = useState<Phase>("home");
   const [mode, setMode] = useState<Mode>("perch");
@@ -380,6 +383,7 @@ export function PixelFlight({
         onToggle={toggle}
         openLabel={openLabel}
         closeLabel={closeLabel}
+        hint={hint}
       />
       {phase !== "home" &&
         createPortal(

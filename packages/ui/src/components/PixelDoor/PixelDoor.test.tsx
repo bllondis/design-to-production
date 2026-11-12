@@ -27,6 +27,12 @@ describe("PixelDoor", () => {
     expect(door).toHaveAccessibleName("Закрити");
   });
 
+  it("renders a visual-only hover hint without changing its accessible name", () => {
+    render(<PixelDoor character="/cat.jpg" still hint="Tap a door" />);
+    expect(screen.getByText("Tap a door").closest("[data-door-hint]")).toHaveAttribute("aria-hidden", "true");
+    expect(screen.getByRole("button")).toHaveAccessibleName("Open the pixel door");
+  });
+
   it("shows nobody when vacant", () => {
     const { container } = render(<PixelDoor character="/cat.jpg" still vacant />);
     expect(container.querySelector("img")).toBeNull();

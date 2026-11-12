@@ -18,7 +18,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The touch-first character rail used when frame gutters collapse. It reuses each character's existing motion component without covering copy.",
+          "The touch-first character rail used when frame gutters collapse. Its optional hint appears above whichever enabled door is hovered or pressed; the pigeon still flies between perches across the page.",
       },
     },
   },

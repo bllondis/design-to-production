@@ -48,6 +48,7 @@ const content = getHomeContent(locale);
           id={chapter.id}
           number={chapter.number}
           title={chapter.title}
+          mobileTitle={chapter.mobileTitle}
           intro={chapter.intro}
           projects={chapter.projects}
           first={chapterIndex === 0}
@@ -60,7 +61,7 @@ const content = getHomeContent(locale);
               skillsLabel={content.work.skillsLabel}
               openDoorLabel={content.work.openDoor}
               closeDoorLabel={content.work.closeDoor}
-              doorHint={chapterIndex === 0 && blockIndex === 0 ? content.work.doorHint : undefined}
+              doorHint={content.work.doorHint}
             />
           ))}
         </CapabilityChapter>

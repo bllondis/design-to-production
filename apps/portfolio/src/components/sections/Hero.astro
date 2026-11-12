@@ -114,5 +114,12 @@ const {
       margin-left: 0;
       padding: var(--space-l);
     }
+
+    .hero-card :global(h1) {
+      /* Every authored statement remains one line in all locales; the type follows the card width. */
+      font-size: min(var(--font-size-display-4), var(--hero-mobile-title-cap));
+      overflow-wrap: normal;
+      white-space: nowrap;
+    }
   }
 </style>

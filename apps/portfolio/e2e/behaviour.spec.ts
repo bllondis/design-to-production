@@ -8,6 +8,7 @@ test("every capability has a door that opens to its character", async ({ page })
 
   const first = doors.first();
   await first.scrollIntoViewIfNeeded();
+  await expect(first).toHaveCSS("cursor", "pointer");
   await first.click();
   await expect(page.getByRole("button", { name: "Close the pixel door" })).toHaveAttribute("aria-pressed", "true");
 });
@@ -23,6 +24,7 @@ test("the cat walks from its door to the one across the row", async ({ page }) =
   await expect(doors.first().locator("img")).toHaveCount(1);
   await expect(doors.last().locator("img")).toHaveCount(0);
   await expect(doors.last()).toBeDisabled();
+  await expect(doors.last()).toHaveCSS("cursor", "default");
 
   await doors.first().scrollIntoViewIfNeeded();
   await doors.first().click();
@@ -44,6 +46,7 @@ test("the pigeon leaves its door, and flies home when the door is opened again",
   const door = home.getByRole("button");
   const bird = page.locator("body > span[data-mode]");
   await expect(bird).toHaveCount(0);
+  if (test.info().project.name === "mobile") await expect(row.locator("[data-pixel-stage-perch]")).toHaveCount(0);
 
   await door.scrollIntoViewIfNeeded();
   await door.click();
@@ -208,6 +211,126 @@ test("the page never scrolls sideways", async ({ page }) => {
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
+test("visible text stays inside every narrow page block", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The narrow-column wrapping is mobile-only.");
+
+  const routes = [
+    "/",
+    "/uk/",
+    "/nl/",
+    "/work/design-to-production/",
+    "/work/timeflow/",
+    "/work/dutchwaffle/",
+    "/work/docustream/",
+    "/work/bookit/",
+    "/work/ted-design-system/",
+    "/system/",
+  ];
+
+  for (const width of [319, 375]) {
+    await page.setViewportSize({ width, height: 812 });
+
+    for (const path of routes) {
+      await page.goto(path);
+      await page.evaluate(async () => document.fonts.ready);
+
+      const audit = await page.evaluate(() => {
+        const visible = (element: Element) => {
+          const style = getComputedStyle(element);
+          const rect = element.getBoundingClientRect();
+          return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 && rect.height > 0;
+        };
+        const elements = [
+          ...document.querySelectorAll("h1, h2, h3, h4, h5, h6, p, li, dt, dd, figcaption, a, button, span"),
+        ]
+          .filter(visible)
+          .filter((element) => (element as HTMLElement).innerText.trim());
+
+        return {
+          page: document.documentElement.scrollWidth - innerWidth,
+          elements: elements
+            .filter((element) => {
+              const overflow = getComputedStyle(element).overflowX;
+              return !["hidden", "clip"].includes(overflow) && element.scrollWidth > element.clientWidth + 1;
+            })
+            .map((element) => ({
+              tag: element.tagName,
+              text: (element as HTMLElement).innerText.trim().replace(/\s+/g, " ").slice(0, 120),
+              clientWidth: element.clientWidth,
+              scrollWidth: element.scrollWidth,
+            })),
+        };
+      });
+
+      expect(audit.page, `${path} at ${width}px has horizontal page overflow`).toBeLessThanOrEqual(0);
+      expect(audit.elements, `${path} at ${width}px has overflowing text`).toEqual([]);
+    }
+  }
+});
+
+test("mobile skill rows glow only when they enter the reading area", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The scroll reveal is mobile-only.");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/nl/");
+  const cell = page.locator("[data-skill-grid] li").first();
+  await expect(cell).not.toHaveAttribute("data-revealed", "true");
+  await cell.scrollIntoViewIfNeeded();
+  await expect(cell).toHaveAttribute("data-revealed", "true");
+  const animation = await cell.evaluate((element) => getComputedStyle(element, "::before").animationName);
+  expect(animation).toContain("skill-reveal-glow");
+});
+
+test("skill cells do not present a false hover state at mobile width", async ({ page }) => {
+  await page.setViewportSize({ width: 319, height: 909 });
+  await page.goto("/nl/");
+  const cell = page.locator("[data-skill-grid] li").nth(3);
+  await cell.scrollIntoViewIfNeeded();
+  await cell.hover();
+  await expect(cell).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(cell).toHaveCSS("color", "rgb(244, 245, 240)");
+});
+
+test("the mobile footer presents a scroll-aware icon dock", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The icon dock is mobile-only.");
+  await page.goto("/");
+  const footer = page.locator("body > footer");
+  const mobileFooter = footer.locator(".mobile-footer");
+  const dock = footer.locator(".mobile-dock");
+  await expect(dock.locator("a")).toHaveCount(5);
+  await expect(dock.locator("a span")).toHaveCount(0);
+  await expect(mobileFooter).toHaveCSS("position", "fixed");
+  await expect(mobileFooter).toHaveAttribute("data-visible", "false");
+  await expect(mobileFooter).toHaveAttribute("inert", "");
+  await expect(dock.locator("svg")).toHaveCount(5);
+  await expect(footer.getByRole("link", { name: "Design to Production" })).toBeHidden();
+  await expect(footer.getByRole("link", { name: "Design Systems" })).toBeHidden();
+
+  await page.evaluate(() => {
+    document.documentElement.style.scrollBehavior = "auto";
+    window.scrollTo(0, window.innerHeight * 2);
+  });
+  await page.evaluate(
+    () => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))),
+  );
+  await expect(mobileFooter).toHaveAttribute("data-visible", "false");
+  await page.evaluate(() => window.scrollBy(0, -window.innerHeight * 0.3));
+  await expect(mobileFooter).toHaveAttribute("data-visible", "true");
+  await expect(mobileFooter).not.toHaveAttribute("inert", "");
+
+  for (const name of ["Email", "LinkedIn", "GitHub", "CV", "Back to top"]) {
+    await expect(dock.getByRole("link", { name, exact: true })).toBeVisible();
+  }
+
+  await page.evaluate(() => window.scrollBy(0, window.innerHeight * 0.3));
+  await expect(mobileFooter).toHaveAttribute("data-visible", "false");
+
+  await page.locator("#contact").scrollIntoViewIfNeeded();
+  await expect(mobileFooter).toHaveAttribute("data-visible", "true");
+  await dock.getByRole("link", { name: "Back to top" }).click();
+  await expect(page).toHaveURL(/\/#top$/);
+  await expect(mobileFooter).toHaveAttribute("data-visible", "false");
+});
+
 test("method steps highlight on hover instead of scroll", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name === "mobile", "Touch layouts do not expose hover states.");
   await page.goto("/");
@@ -307,14 +430,53 @@ test("the mobile hero reveals its message within a short first viewport", async 
   expect(hero?.height ?? 667).toBeLessThan(667);
 });
 
-test("the first mobile character rail explains the door interaction", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "mobile", "The compact character rail is mobile-only.");
-  await page.goto("/");
-  const hint = page.getByText("Tap a door", { exact: true });
-  await hint.scrollIntoViewIfNeeded();
-  await expect(hint).toBeVisible();
-  await hint.locator("..").getByRole("button", { name: "Open the pixel door" }).click();
-  await expect(hint).toHaveCount(0);
+test("each mobile hero statement stays on one line in every locale", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The compact hero is mobile-only.");
+  await page.setViewportSize({ width: 319, height: 812 });
+
+  for (const path of ["/", "/uk/", "/nl/"]) {
+    await page.goto(path);
+    await page.evaluate(async () => document.fonts.ready);
+    const metrics = await page.locator("#hero-title").evaluate((heading) => {
+      const style = getComputedStyle(heading);
+      return {
+        authoredLines: (heading as HTMLElement).innerText.trim().split("\n").length,
+        renderedLines: heading.getBoundingClientRect().height / Number.parseFloat(style.lineHeight),
+        clientWidth: heading.clientWidth,
+        scrollWidth: heading.scrollWidth,
+      };
+    });
+
+    expect(metrics.authoredLines, path).toBe(3);
+    expect(metrics.renderedLines, path).toBeLessThan(3.1);
+    expect(metrics.scrollWidth, path).toBeLessThanOrEqual(metrics.clientWidth);
+  }
+});
+
+test("every capability door shows its localised hint only while it is hovered", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "A mouse is required to exercise hover.");
+
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: 812 });
+
+    for (const locale of [
+      { path: "/", hint: "Tap a door" },
+      { path: "/uk/", hint: "Торкніться дверцят" },
+      { path: "/nl/", hint: "Tik op een deur" },
+    ]) {
+      await page.goto(locale.path);
+      const doors = page.locator("main button:enabled:visible").filter({ has: page.locator("[data-door-hint]") });
+      await expect(doors).toHaveCount(5);
+
+      for (const door of await doors.all()) {
+        const hint = door.getByText(locale.hint, { exact: true });
+        await door.hover();
+        await expect(hint).toBeVisible();
+        await page.mouse.move(200, 0);
+        await expect(hint).toBeHidden();
+      }
+    }
+  }
 });
 
 for (const locale of [
@@ -399,12 +561,22 @@ for (const locale of [
   });
 }
 
-test("localised anchors and case links resolve from nested language routes", async ({ page }) => {
+test("localised anchors and case links resolve from nested language routes", async ({ page }, testInfo) => {
   await page.goto("/uk/");
-  const work = page.locator("body > footer").getByRole("link", { name: "Роботи" }).first();
-  await expect(work).toHaveAttribute("href", "/uk/#work");
-  await work.click();
-  await expect(page).toHaveURL(/\/uk\/#work$/);
+  const footer = page.locator("body > footer");
+  if (testInfo.project.name === "mobile") {
+    await footer.scrollIntoViewIfNeeded();
+    await expect(footer.locator(".mobile-footer")).toHaveAttribute("data-visible", "true");
+    const top = footer.getByRole("link", { name: "На початок сторінки" });
+    await expect(top).toHaveAttribute("href", "/uk/#top");
+    await top.click();
+    await expect(page).toHaveURL(/\/uk\/#top$/);
+  } else {
+    const work = footer.getByRole("link", { name: "Роботи" }).first();
+    await expect(work).toHaveAttribute("href", "/uk/#work");
+    await work.click();
+    await expect(page).toHaveURL(/\/uk\/#work$/);
+  }
 
   await page.getByRole("link", { name: "Переглянути кейс DocuStream" }).click();
   await expect(page).toHaveURL(/\/work\/docustream\/$/);

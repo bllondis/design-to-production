@@ -5,7 +5,7 @@ import { PixelDoor } from "./PixelDoor";
 const meta = {
   title: "Components/PixelDoor",
   component: PixelDoor,
-  args: { character: "assets/pixel-cat.jpg", still: true, inset: false },
+  args: { character: "assets/pixel-cat.jpg", still: true, inset: false, hint: "Tap a door" },
   argTypes: {
     initialState: { control: "inline-radio", options: ["closed", "peek", "open"] },
     character: {
@@ -15,7 +15,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div style={{ padding: "1rem 8rem 3rem 0" }}>
+      <div style={{ padding: "3rem 8rem 3rem 0" }}>
         <div style={{ width: "7rem" }}>{Story()}</div>
       </div>
     ),

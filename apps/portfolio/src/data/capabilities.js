@@ -71,7 +71,7 @@ const chapterCopy = {
           title: "Design Systems",
           statement: "One product language, from Figma to production.",
           body: "I turn repeated product patterns into reusable foundations, components, and implementation rules, then review the built interface for design-code parity.",
-          proof: "160 tokens · 24 components · 145 tests",
+          proof: "200+ tokens · 24 components · automated QA",
           action: "See it in the design system",
           caption: "Storybook / colour roles from tokens.json",
           skills: [
@@ -169,9 +169,10 @@ const chapterCopy = {
       blocks: [
         {
           title: "Дизайн-системи",
+          mobileTitle: "Дизайн-\nсистеми",
           statement: "Єдина мова продукту, від Figma до продакшену.",
           body: "Я перетворюю повторювані рішення на спільну основу, компоненти й правила реалізації. Потім перевіряю, чи відповідає готовий інтерфейс дизайну.",
-          proof: "160 токенів · 24 компоненти · 145 тестів",
+          proof: "Понад 200 токенів · 24 компоненти · автоматизований QA",
           action: "Переглянути дизайн-систему",
           caption: "Storybook / Ролі кольорів із tokens.json",
           skills: [
@@ -243,6 +244,7 @@ const chapterCopy = {
         },
         {
           title: "Розвиток корпоративних продуктів",
+          mobileTitle: "Розвиток\nкорпоратив-\nних продуктів",
           statement: "Нові можливості у знайомому інтерфейсі.",
           body: "Я додаю можливості до продуктів, які вже працюють із великими обсягами операційних даних. Нові функції вписуються у звичну логіку продукту й те, як люди вже ним користуються.",
           proof: "Понад 200 тис. користувачів · понад 1 200 локацій",
@@ -269,9 +271,10 @@ const chapterCopy = {
       blocks: [
         {
           title: "Designsystemen",
+          mobileTitle: "Design-\nsystemen",
           statement: "Eén producttaal, van Figma tot productie.",
           body: "Ik vertaal terugkerende patronen naar herbruikbare bouwstenen, componenten en implementatieregels. Daarna controleer ik of de gebouwde interface overeenkomt met het ontwerp.",
-          proof: "160 tokens · 24 componenten · 145 tests",
+          proof: "200+ tokens · 24 componenten · geautomatiseerde QA",
           action: "Bekijk het designsysteem",
           caption: "Storybook / Kleurrollen uit tokens.json",
           skills: [
@@ -321,12 +324,14 @@ const chapterCopy = {
     },
     {
       title: "Productdesign",
+      mobileTitle: "Product-\ndesign",
       intro:
         "Ik maak complexe bedrijfsprocessen begrijpelijk voor gebruikers, of het product nu vanaf nul begint of al door honderdduizenden mensen wordt gebruikt.",
       projects: ["DocuStream", "BookIT"],
       blocks: [
         {
           title: "Nieuwe bedrijfssoftware",
+          mobileTitle: "Nieuwe\nbedrijfs-\nsoftware",
           statement: "Complexe systemen die vanaf dag één te begrijpen zijn.",
           body: "Ik vertaal domeinregels naar informatiearchitectuur, workflows per rol en begeleiding waarmee mensen belangrijke taken met vertrouwen kunnen uitvoeren.",
           proof: "Meer dan 100 documenttypen · 6 rollen",
@@ -343,6 +348,7 @@ const chapterCopy = {
         },
         {
           title: "Bestaande bedrijfssoftware uitbreiden",
+          mobileTitle: "Bestaande\nbedrijfs-\nsoftware\nuitbreiden",
           statement: "Nieuwe functies in een vertrouwde producttaal.",
           body: "Ik voeg functies toe aan bestaande producten die met grote hoeveelheden operationele data werken. De uitbreiding sluit aan op hoe gebruikers het product begrijpen, welke interacties ze kennen en welke taal ze gewend zijn.",
           proof: "Meer dan 200.000 gebruikers · meer dan 1.200 locaties",
@@ -369,6 +375,7 @@ const hydrateChapters = (localeCopy) =>
       id: sharedChapter.id,
       number: sharedChapter.number,
       title: chapter.title,
+      ...(chapter.mobileTitle ? { mobileTitle: chapter.mobileTitle } : {}),
       intro: chapter.intro,
       projects: chapter.projects.map((label, projectIndex) => ({
         ...sharedChapter.projects[projectIndex],
@@ -379,6 +386,7 @@ const hydrateChapters = (localeCopy) =>
         return {
           id: sharedBlock.id,
           title: block.title,
+          ...(block.mobileTitle ? { mobileTitle: block.mobileTitle } : {}),
           statement: block.statement,
           body: block.body,
           proof: block.proof,

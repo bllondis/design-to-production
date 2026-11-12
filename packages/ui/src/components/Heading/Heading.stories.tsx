@@ -30,6 +30,16 @@ export const Ukrainian: Story = {
   },
 };
 
+export const ResponsiveBreaks: Story = {
+  args: {
+    text: "Bestaande bedrijfssoftware uitbreiden",
+    mobileText: "Bestaande\nbedrijfs-\nsoftware\nuitbreiden",
+    size: "display-4",
+    as: "h3",
+    measure: 16,
+  },
+};
+
 export const WithoutPixels: Story = {
   args: {
     text: "Make the model clear before making the screen polished.",

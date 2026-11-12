@@ -1,9 +1,14 @@
 .heading {
+  min-width: 0;
   max-width: var(--heading-measure, none);
   margin: 0;
   font-family: var(--font-family-sans);
   font-weight: var(--font-weight-regular);
   text-wrap: balance;
+}
+
+.plain {
+  overflow-wrap: anywhere;
 }
 
 .inverse {
@@ -59,6 +64,10 @@
   transform-origin: 0 50%;
 }
 
+.mobileText {
+  display: none;
+}
+
 /* No line height of its own, so a pixel letter cannot make its line any taller than the others. */
 .pixel {
   font-family: var(--font-family-pixel);
@@ -68,6 +77,18 @@
 }
 
 @media (max-width: 680px) {
+  .heading {
+    max-width: min(var(--heading-measure, 100%), 100%);
+  }
+
+  .desktopText {
+    display: none;
+  }
+
+  .mobileText {
+    display: inline;
+  }
+
   .display-1 {
     max-width: 9.2ch;
     font-size: clamp(3.5rem, 17vw, 5.5rem);

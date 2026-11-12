@@ -85,6 +85,19 @@ describe("Heading", () => {
     expect(screen.getByRole("heading", { name: "Дизайн-інженерія з ШІ" })).toBeInTheDocument();
   });
 
+  it("supports narrower visual line breaks without changing the accessible title", () => {
+    const { container } = render(
+      <Heading
+        as="h3"
+        size="display-4"
+        text="Bestaande bedrijfssoftware uitbreiden"
+        mobileText={"Bestaande\nbedrijfs-\nsoftware\nuitbreiden"}
+      />,
+    );
+    expect(screen.getByRole("heading", { name: "Bestaande bedrijfssoftware uitbreiden" })).toBeInTheDocument();
+    expect(container.querySelectorAll(".mobileText br")).toHaveLength(3);
+  });
+
   it("sets the measure as a custom property", () => {
     render(<Heading size="display-4" text="Design Systems" measure={16} />);
     expect(screen.getByRole("heading").style.getPropertyValue("--heading-measure")).toBe("16ch");
