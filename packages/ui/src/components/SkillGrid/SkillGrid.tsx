@@ -1,69 +1,59 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./SkillGrid.module.css";
+
+// Wider screens invert a hovered cell instead, and reduced motion plays nothing that would clear the flag.
+const narrow = "(max-width: 680px)";
+const stillMotion = "(prefers-reduced-motion: reduce)";
 
 export interface SkillGridProps {
   items: string[];
   label?: string;
 }
 
-/** A labelled grid of skills: three columns, two at medium width, a list on narrow screens. */
+/**
+ * A labelled grid of skills: three columns, two at medium width and on narrow screens.
+ * On narrow screens a cell that is hovered or touched lights up and its words rise into place.
+ */
 export function SkillGrid({ items, label = "What I bring" }: SkillGridProps) {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [revealed, setRevealed] = useState<Set<number>>(() => new Set());
+  const listRef = useRef<HTMLUListElement>(null);
+  const [lit, setLit] = useState<Set<number>>(() => new Set());
+  const light = (index: number) => {
+    if (!window.matchMedia(narrow).matches || window.matchMedia(stillMotion).matches) return;
+    setLit((current) => (current.has(index) ? current : new Set(current).add(index)));
+  };
 
+  // The glow plays once through; when the words have settled the cell can light again on the next hover or touch.
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-
-    const cells = [...root.querySelectorAll<HTMLElement>("[data-skill-cell]")];
-    const reveal = (indexes: number[]) => {
-      if (!indexes.length) return;
-      setRevealed((current) => {
+    const list = listRef.current;
+    if (!list) return;
+    const settle = (event: AnimationEvent) => {
+      const cell = event.target as HTMLElement;
+      if (event.pseudoElement || !cell.dataset.skillIndex) return;
+      const index = Number(cell.dataset.skillIndex);
+      setLit((current) => {
+        if (!current.has(index)) return current;
         const next = new Set(current);
-        indexes.forEach((index) => next.add(index));
+        next.delete(index);
         return next;
       });
     };
-
-    if (!window.matchMedia("(max-width: 680px)").matches || !("IntersectionObserver" in window)) {
-      reveal(cells.map((_, index) => index));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const indexes: number[] = [];
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const cell = entry.target as HTMLElement;
-          indexes.push(Number(cell.dataset.skillIndex));
-          observer.unobserve(cell);
-        });
-        reveal(indexes);
-      },
-      {
-        // Reveal a row well inside the viewport, rather than when the component merely starts hydrating.
-        rootMargin: "0px 0px -35% 0px",
-        threshold: 0.15,
-      },
-    );
-
-    cells.forEach((cell) => observer.observe(cell));
-    return () => observer.disconnect();
+    list.addEventListener("animationend", settle);
+    return () => list.removeEventListener("animationend", settle);
   }, []);
 
   return (
-    <div ref={rootRef} className={styles.root} data-skill-grid>
+    <div className={styles.root} data-skill-grid>
       <p className={`${styles.label} text-label-l`}>{label}</p>
-      <ul className={styles.list}>
+      <ul ref={listRef} className={styles.list}>
         {items.map((item, index) => (
           <li
             key={item}
             className={styles.item}
             data-skill-cell
             data-skill-index={index}
-            data-revealed={revealed.has(index) ? "true" : undefined}
-            style={{ "--skill-reveal-order": index % 2 } as CSSProperties}
+            data-lit={lit.has(index) ? "true" : undefined}
+            onPointerEnter={() => light(index)}
+            onPointerDown={() => light(index)}
           >
             {item}
           </li>

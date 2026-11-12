@@ -25,7 +25,7 @@ export interface PixelStageProps {
  * It reserves its own space, so a moving character never covers the section copy.
  */
 export function PixelStage({ character, motion, openLabel, closeLabel, hint }: PixelStageProps) {
-  const shared = { character, still: true, inset: false, openLabel, closeLabel, hint };
+  const shared = { character, inset: false, openLabel, closeLabel, hint };
 
   return (
     <div className={styles.stage} data-pixel-stage data-motion={motion.kind}>

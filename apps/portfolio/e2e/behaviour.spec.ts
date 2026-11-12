@@ -1,4 +1,13 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
+
+/** Opens a door as a visitor would: on a touch screen the first tap shows the hint, and the second opens it. */
+async function knock(door: Locator) {
+  if (test.info().project.name === "mobile") {
+    await door.tap();
+    await expect(door).toHaveClass(/armed/);
+  }
+  await door.click();
+}
 
 test("every capability has a door that opens to its character", async ({ page }) => {
   await page.goto("/");
@@ -9,7 +18,7 @@ test("every capability has a door that opens to its character", async ({ page })
   const first = doors.first();
   await first.scrollIntoViewIfNeeded();
   await expect(first).toHaveCSS("cursor", "pointer");
-  await first.click();
+  await knock(first);
   await expect(page.getByRole("button", { name: "Close the pixel door" })).toHaveAttribute("aria-pressed", "true");
 });
 
@@ -27,7 +36,7 @@ test("the cat walks from its door to the one across the row", async ({ page }) =
   await expect(doors.last()).toHaveCSS("cursor", "default");
 
   await doors.first().scrollIntoViewIfNeeded();
-  await doors.first().click();
+  await knock(doors.first());
   await expect(stage).toHaveAttribute("data-phase", "strolling");
   await expect(stage).toHaveAttribute("data-phase", "home", { timeout: 10_000 });
   await expect(stage).toHaveAttribute("data-from", "end");
@@ -49,14 +58,14 @@ test("the pigeon leaves its door, and flies home when the door is opened again",
   if (test.info().project.name === "mobile") await expect(row.locator("[data-pixel-stage-perch]")).toHaveCount(0);
 
   await door.scrollIntoViewIfNeeded();
-  await door.click();
+  await knock(door);
   await expect(home).toHaveAttribute("data-phase", "out");
   await expect(bird).toBeVisible();
   // The door shuts behind it, empty.
   await expect(door).toHaveAttribute("aria-pressed", "false");
   await expect(door.locator("img")).toHaveCount(0);
 
-  await door.click();
+  await knock(door);
   await expect(home).toHaveAttribute("data-phase", "home", { timeout: 10_000 });
   await expect(bird).toHaveCount(0);
   await expect(door).toHaveAttribute("aria-pressed", "false");
@@ -72,12 +81,12 @@ test("the beet plants itself under its door, and comes back when the door is ope
   const door = home.getByRole("button");
 
   await door.scrollIntoViewIfNeeded();
-  await door.click();
+  await knock(door);
   await expect(home).toHaveAttribute("data-phase", "planted", { timeout: 10_000 });
   await expect(door).toHaveAttribute("aria-pressed", "false");
   await expect(door.locator("img")).toHaveCount(0);
 
-  await door.click();
+  await knock(door);
   await expect(home).toHaveAttribute("data-phase", "home", { timeout: 10_000 });
   await expect(door.locator("img")).toHaveCount(1);
 });
@@ -91,14 +100,14 @@ test("the sloth climbs out of its door and falls asleep hanging from it", async 
   const door = home.getByRole("button");
 
   await door.scrollIntoViewIfNeeded();
-  await door.click();
+  await knock(door);
   await expect(home).toHaveAttribute("data-phase", "climbing");
   // It is in no hurry.
   await expect(home).toHaveAttribute("data-phase", "asleep", { timeout: 15_000 });
   await expect(door).toHaveAttribute("aria-pressed", "false");
   await expect(door.locator("img")).toHaveCount(0);
 
-  await door.click();
+  await knock(door);
   await expect(home).toHaveAttribute("data-phase", "waking");
   await expect(door).toHaveAttribute("aria-pressed", "true");
 });
@@ -268,16 +277,19 @@ test("visible text stays inside every narrow page block", async ({ page }, testI
   }
 });
 
-test("mobile skill rows glow only when they enter the reading area", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "mobile", "The scroll reveal is mobile-only.");
+test("a mobile skill cell glows and its words rise when it is touched", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The touch glow is mobile-only.");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/nl/");
-  const cell = page.locator("[data-skill-grid] li").first();
-  await expect(cell).not.toHaveAttribute("data-revealed", "true");
+  const cell = page.locator("[data-skill-grid] li").nth(2);
   await cell.scrollIntoViewIfNeeded();
-  await expect(cell).toHaveAttribute("data-revealed", "true");
+  await expect(cell).not.toHaveAttribute("data-lit", "true");
+  await cell.tap();
+  await expect(cell).toHaveAttribute("data-lit", "true");
   const animation = await cell.evaluate((element) => getComputedStyle(element, "::before").animationName);
   expect(animation).toContain("skill-reveal-glow");
+  // It plays once through, and can play again on the next touch.
+  await expect(cell).not.toHaveAttribute("data-lit", "true", { timeout: 5_000 });
 });
 
 test("skill cells do not present a false hover state at mobile width", async ({ page }) => {

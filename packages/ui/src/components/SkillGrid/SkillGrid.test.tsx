@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { SkillGrid } from "./SkillGrid";
 
@@ -12,16 +12,14 @@ describe("SkillGrid", () => {
     ]);
   });
 
-  it("reveals every cell immediately outside the narrow layout", async () => {
+  it("leaves cells unlit on wider screens, where hover inverts them instead", () => {
     render(<SkillGrid items={["Ideas", "Positive energy"]} />);
-    const cells = screen.getAllByRole("listitem");
-
-    await waitFor(() => expect(cells.every((cell) => cell.dataset.revealed === "true")).toBe(true));
-    expect(cells.map((item) => item.style.getPropertyValue("--skill-reveal-order"))).toEqual(["0", "1"]);
+    const [first] = screen.getAllByRole("listitem");
+    fireEvent.pointerOver(first);
+    expect(first).not.toHaveAttribute("data-lit");
   });
 
-  it("reveals only the mobile cells that enter the reading area", () => {
-    const originalObserver = window.IntersectionObserver;
+  it("lights a narrow cell while it is hovered or touched, once through", () => {
     const media = vi.spyOn(window, "matchMedia").mockImplementation(
       (query) =>
         ({
@@ -31,34 +29,18 @@ describe("SkillGrid", () => {
           removeEventListener: vi.fn(),
         }) as unknown as MediaQueryList,
     );
-    let reveal: IntersectionObserverCallback | undefined;
-    const unobserve = vi.fn();
-    window.IntersectionObserver = class {
-      constructor(callback: IntersectionObserverCallback) {
-        reveal = callback;
-      }
-      observe() {}
-      unobserve = unobserve;
-      disconnect() {}
-    } as unknown as typeof IntersectionObserver;
 
     render(<SkillGrid items={["Ideas", "Positive energy"]} />);
     const [first, second] = screen.getAllByRole("listitem");
-    expect(first).not.toHaveAttribute("data-revealed");
-    expect(second).not.toHaveAttribute("data-revealed");
+    expect(first).not.toHaveAttribute("data-lit");
 
-    act(() => {
-      reveal?.(
-        [{ isIntersecting: true, target: first } as unknown as IntersectionObserverEntry],
-        {} as IntersectionObserver,
-      );
-    });
+    fireEvent.pointerOver(first);
+    expect(first).toHaveAttribute("data-lit", "true");
+    expect(second).not.toHaveAttribute("data-lit");
 
-    expect(first).toHaveAttribute("data-revealed", "true");
-    expect(second).not.toHaveAttribute("data-revealed");
-    expect(unobserve).toHaveBeenCalledWith(first);
+    fireEvent.animationEnd(first);
+    expect(first).not.toHaveAttribute("data-lit");
 
-    window.IntersectionObserver = originalObserver;
     media.mockRestore();
   });
 });

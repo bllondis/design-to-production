@@ -156,10 +156,9 @@
     "reveal-glow": {
       "$type": "color",
       "$value": "{color.border.subtle}",
-      "$description": "Delicate light that passes through a skill while it is revealed on touch layouts."
+      "$description": "Delicate light that passes through a skill when it is hovered or touched on narrow layouts."
     },
     "reveal-offset": { "$type": "dimension", "$value": "{space.2xs}" },
-    "reveal-stagger": { "$type": "duration", "$value": "{duration.fast}" },
     "font-size": { "$type": "dimension", "$value": "clamp(1.05rem, 1.45vw, 1.35rem)" },
     "min-height": { "$type": "dimension", "$value": "clamp(8rem, 11vw, 10.5rem)" }
   }

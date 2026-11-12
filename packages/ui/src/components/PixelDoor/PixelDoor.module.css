@@ -44,10 +44,21 @@
   background: var(--color-surface-raised);
 }
 
-.door:enabled:is(:hover, :active) .hint {
+/* Armed: the first tap on a touch screen, which stands in for hover. */
+.door:enabled:active .hint,
+.armed .hint {
   opacity: 1;
   visibility: visible;
   transition-delay: 0s;
+}
+
+/* Only a real pointer hovers: a touch screen leaves :hover stuck on the last door tapped. */
+@media (hover: hover) {
+  .door:enabled:hover .hint {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
 }
 
 /* Hung on the right: the whole door mirrors, and the character is turned back the right way round. */
@@ -133,21 +144,29 @@
 }
 
 /* Peek: hover, or the forced documentation state. :where keeps the weight of these rules, so open still wins. */
-.door:where(:enabled):hover:not([aria-pressed="true"])::before,
-.door:where(:enabled):hover:not([aria-pressed="true"])::after,
-.door:where(:enabled):hover:not([aria-pressed="true"]) .floor,
 .peek::before,
 .peek::after,
 .peek .floor {
   opacity: var(--door-light-opacity);
 }
 
-.door:where(:enabled):hover .leaf,
 .peek .leaf {
   transform: rotateY(-18deg);
 }
 
-/* Flapping while the page scrolls (class added by pixel-door.js). */
+@media (hover: hover) {
+  .door:where(:enabled):hover:not([aria-pressed="true"])::before,
+  .door:where(:enabled):hover:not([aria-pressed="true"])::after,
+  .door:where(:enabled):hover:not([aria-pressed="true"]) .floor {
+    opacity: var(--door-light-opacity);
+  }
+
+  .door:where(:enabled):hover .leaf {
+    transform: rotateY(-18deg);
+  }
+}
+
+/* Flapping while the page scrolls, or while a touch tap has armed the door. */
 .door.flapping:not([aria-pressed="true"]) .leaf {
   animation: door-flap var(--motion-duration-flap) ease-in-out infinite;
 }
@@ -200,5 +219,23 @@
 @media (prefers-reduced-motion: reduce) {
   .hint {
     transition: none;
+  }
+
+  /* An armed door holds still, ajar, instead of flapping. */
+  .door.armed.flapping:not([aria-pressed="true"]) .leaf,
+  .door.armed.flapping:not([aria-pressed="true"])::before,
+  .door.armed.flapping:not([aria-pressed="true"])::after,
+  .door.armed.flapping:not([aria-pressed="true"]) .floor {
+    animation: none;
+  }
+
+  .door.armed.flapping:not([aria-pressed="true"]) .leaf {
+    transform: rotateY(-18deg);
+  }
+
+  .door.armed.flapping:not([aria-pressed="true"])::before,
+  .door.armed.flapping:not([aria-pressed="true"])::after,
+  .door.armed.flapping:not([aria-pressed="true"]) .floor {
+    opacity: var(--door-light-opacity);
   }
 }

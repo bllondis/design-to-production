@@ -352,6 +352,10 @@ const sections = [
         >
           <ul slot="notes">
             <li>States: closed, peek (hover, or flapping while the page scrolls), open (click)</li>
+            <li>
+              On a touch screen the first tap stands in for hover: the hint shows and the door flaps; the second opens
+              it
+            </li>
             <li>Ajar doors leak warm light: in the gap, a faint beam to the side, a sliver below</li>
             <li>
               <code>offset</code>: flap half a beat later than neighbours
@@ -528,8 +532,8 @@ const sections = [
             <li>Touch-first rail for the same characters when frame gutters collapse below 980px</li>
             <li>Reserves its own height, so doors and motion never cover capability copy</li>
             <li>Reuses walk, bow, burrow and hang motion; the pigeon leaves the rail to fly across page perches</li>
-            <li>Scroll flapping is disabled; the character moves only after a deliberate tap</li>
-            <li>An optional tooltip appears above any enabled door while it is hovered or pressed</li>
+            <li>Doors flap while the page scrolls; the first tap shows the hint, the second lets the character out</li>
+            <li>An optional tooltip appears above any enabled door while it is hovered, pressed or tapped once</li>
           </ul>
           <PixelStage
             client:visible
@@ -596,8 +600,8 @@ const sections = [
           usage={`<SkillGrid items={["Domain modelling", "Information architecture", …]} />`}
         >
           <p slot="notes">
-            Three columns, then two compact columns on narrow screens. Pointer hover inverts a cell; each mobile row
-            reveals once with a soft glow when it enters the reading area.
+            Three columns, then two compact columns on narrow screens. Pointer hover inverts a cell; on narrow screens a
+            hovered or touched cell plays a soft glow once and its words rise into place.
           </p>
           <div class="grid-demo">
             <SkillGrid

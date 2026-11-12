@@ -125,7 +125,6 @@
   --tag-padding-inline: var(--space-xs);
   --tag-gap: var(--space-2xs); /** Space between tags in a list. */
   --skill-reveal-offset: var(--space-2xs);
-  --skill-reveal-stagger: var(--duration-fast);
   --color-surface-page: var(--color-ink-950); /** Default dark page and section background. */
   --color-surface-raised: var(--color-ink-900);
   --color-surface-inverse: var(--color-paper-50); /** Light bands: hero card, contact band, hovered skill. */
@@ -203,5 +202,5 @@
   --skill-border: var(--color-border-default);
   --skill-bg-hover: var(--color-surface-inverse);
   --skill-fg-hover: var(--color-text-inverse);
-  --skill-reveal-glow: var(--color-border-subtle); /** Delicate light that passes through a skill while it is revealed on touch layouts. */
+  --skill-reveal-glow: var(--color-border-subtle); /** Delicate light that passes through a skill when it is hovered or touched on narrow layouts. */
 }

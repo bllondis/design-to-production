@@ -59,6 +59,36 @@ describe("PixelDoor", () => {
     expect(door).toHaveAttribute("aria-pressed", "false");
   });
 
+  it("treats the first tap on a touch screen as hover, and the second as a click", () => {
+    const onToggle = vi.fn();
+    render(<PixelDoor character="/cat.jpg" still hint="Tap a door" onToggle={onToggle} />);
+    const door = screen.getByRole("button");
+    const tap = () => {
+      fireEvent.pointerDown(door, { pointerType: "touch" });
+      fireEvent.click(door);
+    };
+
+    tap();
+    expect(door).toHaveClass("armed", "flapping");
+    expect(door).toHaveAttribute("aria-pressed", "false");
+    expect(onToggle).not.toHaveBeenCalled();
+
+    tap();
+    expect(door).not.toHaveClass("armed");
+    expect(door).toHaveAttribute("aria-pressed", "true");
+    expect(onToggle).toHaveBeenCalledOnce();
+  });
+
+  it("rests an armed door when the page is touched elsewhere", () => {
+    render(<PixelDoor character="/cat.jpg" still />);
+    const door = screen.getByRole("button");
+    fireEvent.pointerDown(door, { pointerType: "touch" });
+    fireEvent.click(door);
+    expect(door).toHaveClass("armed");
+    fireEvent.pointerDown(document.body, { pointerType: "touch" });
+    expect(door).not.toHaveClass("armed");
+  });
+
   it("flaps while the page scrolls and settles after", () => {
     vi.useFakeTimers();
     render(<PixelDoor character="/cat.jpg" />);

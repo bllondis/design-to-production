@@ -136,19 +136,18 @@
     border-top: 1px solid var(--skill-border);
   }
 
-  .item[data-revealed="true"] {
-    animation: skill-reveal-text var(--motion-duration-reveal) var(--motion-easing-standard) backwards;
-    animation-delay: calc(var(--skill-reveal-order) * var(--skill-reveal-stagger));
+  /* Lit by hover or touch: the glow passes through and the words rise into place, once per touch. */
+  .item[data-lit="true"] {
+    animation: skill-reveal-text var(--motion-duration-reveal) var(--motion-easing-standard);
   }
 
-  .item[data-revealed="true"]::before {
-    animation: skill-reveal-glow var(--motion-duration-reveal) var(--motion-easing-standard) backwards;
-    animation-delay: calc(var(--skill-reveal-order) * var(--skill-reveal-stagger));
+  .item[data-lit="true"]::before {
+    animation: skill-reveal-glow var(--motion-duration-reveal) var(--motion-easing-standard);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .item[data-revealed="true"],
-    .item[data-revealed="true"]::before {
+    .item[data-lit="true"],
+    .item[data-lit="true"]::before {
       animation: none;
     }
   }
