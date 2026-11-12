@@ -291,19 +291,34 @@ test("visible text stays inside every narrow page block", async ({ page }, testI
   }
 });
 
-test("a mobile skill cell glows and its words rise when it is touched", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "mobile", "The touch glow is mobile-only.");
+test("a mobile skill grid reveals in both scroll directions", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "The scroll reveal is mobile-only.");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/nl/");
-  const cell = page.locator("[data-skill-grid] li").nth(2);
-  await cell.scrollIntoViewIfNeeded();
-  await expect(cell).not.toHaveAttribute("data-lit", "true");
-  await cell.tap();
-  await expect(cell).toHaveAttribute("data-lit", "true");
-  const animation = await cell.evaluate((element) => getComputedStyle(element, "::before").animationName);
-  expect(animation).toContain("skill-reveal-glow");
-  // It plays once through, and can play again on the next touch.
-  await expect(cell).not.toHaveAttribute("data-lit", "true", { timeout: 5_000 });
+  const grid = page.locator("[data-skill-grid]").first();
+  const list = grid.locator("ul");
+  const cell = list.locator("li").nth(2);
+
+  await grid.scrollIntoViewIfNeeded();
+  await expect(list).toHaveAttribute("data-revealing", "true");
+  await expect(list).toHaveAttribute("data-reveal-direction", "forward");
+  const animation = await cell.evaluate((element) => ({
+    borderCell: getComputedStyle(element).animationName,
+    glow: getComputedStyle(element, "::before").animationName,
+    text: getComputedStyle(element.firstElementChild as HTMLElement).animationName,
+  }));
+  expect(animation.borderCell).toBe("none");
+  expect(animation.glow).toContain("skill-reveal-glow");
+  expect(animation.text).toContain("skill-reveal-text");
+
+  await grid.evaluate((element) => {
+    window.scrollTo(0, element.getBoundingClientRect().bottom + window.scrollY + window.innerHeight);
+  });
+  await expect(list).not.toHaveAttribute("data-revealing", "true");
+
+  await grid.scrollIntoViewIfNeeded();
+  await expect(list).toHaveAttribute("data-revealing", "true");
+  await expect(list).toHaveAttribute("data-reveal-direction", "reverse");
 });
 
 test("skill cells do not present a false hover state at mobile width", async ({ page }) => {

@@ -9,7 +9,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A responsive capability grid: three columns at wide widths, two below 980px and compact rows below 680px. Pointer hover inverts a cell; on touch layouts each row reveals once with a soft token-driven glow and respects reduced motion.",
+          "A responsive capability grid: three columns at wide widths, two below 980px and compact rows below 680px. Pointer hover inverts a cell on larger screens; on narrow screens the rows reveal in scroll direction whenever the grid re-enters the viewport. Reduced motion stays static.",
       },
     },
   },

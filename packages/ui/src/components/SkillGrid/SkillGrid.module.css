@@ -26,6 +26,10 @@
   line-height: var(--font-line-height-compact);
 }
 
+.text {
+  display: block;
+}
+
 .item::before {
   position: absolute;
   z-index: -1;
@@ -136,18 +140,28 @@
     border-top: 1px solid var(--skill-border);
   }
 
-  /* Lit by hover or touch: the glow passes through and the words rise into place, once per touch. */
-  .item[data-lit="true"] {
-    animation: skill-reveal-text var(--motion-duration-reveal) var(--motion-easing-standard);
+  /* The sequence replays whenever the grid re-enters the viewport from either scroll direction. */
+  .list[data-revealing="true"] .text {
+    animation: skill-reveal-text var(--skill-reveal-duration) var(--motion-easing-standard) both;
   }
 
-  .item[data-lit="true"]::before {
-    animation: skill-reveal-glow var(--motion-duration-reveal) var(--motion-easing-standard);
+  .list[data-revealing="true"] .item::before {
+    animation: skill-reveal-glow var(--skill-reveal-duration) var(--motion-easing-standard) both;
+  }
+
+  .list[data-reveal-direction="forward"] .text,
+  .list[data-reveal-direction="forward"] .item::before {
+    animation-delay: calc(var(--skill-index) * var(--skill-reveal-stagger));
+  }
+
+  .list[data-reveal-direction="reverse"] .text,
+  .list[data-reveal-direction="reverse"] .item::before {
+    animation-delay: calc(var(--skill-reverse-index) * var(--skill-reveal-stagger));
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .item[data-lit="true"],
-    .item[data-lit="true"]::before {
+    .list[data-revealing="true"] .text,
+    .list[data-revealing="true"] .item::before {
       animation: none;
     }
   }

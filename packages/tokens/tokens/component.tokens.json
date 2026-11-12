@@ -161,9 +161,19 @@
     "reveal-glow": {
       "$type": "color",
       "$value": "{color.border.subtle}",
-      "$description": "Delicate light that passes through a skill when it is hovered or touched on narrow layouts."
+      "$description": "Delicate light that passes through each skill as the grid enters the viewport on narrow layouts."
     },
     "reveal-offset": { "$type": "dimension", "$value": "{space.2xs}" },
+    "reveal-duration": {
+      "$type": "duration",
+      "$value": "1650ms",
+      "$description": "Duration of the text rise and glow within one mobile skill cell."
+    },
+    "reveal-stagger": {
+      "$type": "duration",
+      "$value": "120ms",
+      "$description": "Delay between adjacent skill cells in the mobile scroll reveal."
+    },
     "font-size": { "$type": "dimension", "$value": "clamp(1.05rem, 1.45vw, 1.35rem)" },
     "min-height": { "$type": "dimension", "$value": "clamp(8rem, 11vw, 10.5rem)" }
   }

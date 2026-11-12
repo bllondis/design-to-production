@@ -42,6 +42,8 @@
   --pixel-stage-height: clamp(7.5rem, 22vw, 10rem); /** Reserved mobile and tablet rail for a door and its character animation. */
   --pixel-stage-door-size: clamp(3.75rem, 12vw, 5.5rem); /** Touch-friendly door size inside the compact character rail. */
   --tag-padding-block: 0.55rem;
+  --skill-reveal-duration: 1.65s; /** Duration of the text rise and glow within one mobile skill cell. */
+  --skill-reveal-stagger: 0.12s; /** Delay between adjacent skill cells in the mobile scroll reveal. */
   --skill-font-size: clamp(1.05rem, 1.45vw, 1.35rem);
   --skill-min-height: clamp(8rem, 11vw, 10.5rem);
   --color-ink-400: #9ca1a4;
@@ -203,5 +205,5 @@
   --skill-border: var(--color-border-default);
   --skill-bg-hover: var(--color-surface-inverse);
   --skill-fg-hover: var(--color-text-inverse);
-  --skill-reveal-glow: var(--color-border-subtle); /** Delicate light that passes through a skill when it is hovered or touched on narrow layouts. */
+  --skill-reveal-glow: var(--color-border-subtle); /** Delicate light that passes through each skill as the grid enters the viewport on narrow layouts. */
 }

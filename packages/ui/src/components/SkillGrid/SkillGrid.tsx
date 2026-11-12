@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import styles from "./SkillGrid.module.css";
 
-// Wider screens invert a hovered cell instead, and reduced motion plays nothing that would clear the flag.
 const narrow = "(max-width: 680px)";
 const stillMotion = "(prefers-reduced-motion: reduce)";
+type RevealDirection = "forward" | "reverse";
 
 export interface SkillGridProps {
   items: string[];
@@ -11,51 +11,93 @@ export interface SkillGridProps {
 }
 
 /**
- * A labelled grid of skills: three columns, two at medium width and on narrow screens.
- * On narrow screens a cell that is hovered or touched lights up and its words rise into place.
+ * A labelled grid of skills: three columns at wide widths and two below 980px.
+ * On narrow screens its cells reveal in sequence whenever the grid re-enters the viewport.
  */
 export function SkillGrid({ items, label = "What I bring" }: SkillGridProps) {
   const listRef = useRef<HTMLUListElement>(null);
-  const [lit, setLit] = useState<Set<number>>(() => new Set());
-  const light = (index: number) => {
-    if (!window.matchMedia(narrow).matches || window.matchMedia(stillMotion).matches) return;
-    setLit((current) => (current.has(index) ? current : new Set(current).add(index)));
-  };
+  const [revealing, setRevealing] = useState(false);
+  const [direction, setDirection] = useState<RevealDirection>("forward");
 
-  // The glow plays once through; when the words have settled the cell can light again on the next hover or touch.
   useEffect(() => {
     const list = listRef.current;
     if (!list) return;
-    const settle = (event: AnimationEvent) => {
-      const cell = event.target as HTMLElement;
-      if (event.pseudoElement || !cell.dataset.skillIndex) return;
-      const index = Number(cell.dataset.skillIndex);
-      setLit((current) => {
-        if (!current.has(index)) return current;
-        const next = new Set(current);
-        next.delete(index);
-        return next;
-      });
+
+    const narrowQuery = window.matchMedia(narrow);
+    const motionQuery = window.matchMedia(stillMotion);
+    let observer: IntersectionObserver | undefined;
+    let listeningForScroll = false;
+    let lastScrollY = window.scrollY;
+    let scrollDirection: RevealDirection = "forward";
+
+    const readDirection = () => {
+      const nextScrollY = window.scrollY;
+      if (nextScrollY > lastScrollY) scrollDirection = "forward";
+      if (nextScrollY < lastScrollY) scrollDirection = "reverse";
+      lastScrollY = nextScrollY;
     };
-    list.addEventListener("animationend", settle);
-    return () => list.removeEventListener("animationend", settle);
+
+    const stop = () => {
+      observer?.disconnect();
+      observer = undefined;
+      if (listeningForScroll) window.removeEventListener("scroll", readDirection);
+      listeningForScroll = false;
+    };
+
+    const observe = () => {
+      stop();
+      setRevealing(false);
+      if (!narrowQuery.matches || motionQuery.matches) return;
+
+      lastScrollY = window.scrollY;
+      window.addEventListener("scroll", readDirection, { passive: true });
+      listeningForScroll = true;
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setDirection(scrollDirection);
+            setRevealing(true);
+          } else {
+            setRevealing(false);
+          }
+        },
+        { threshold: 0.18 },
+      );
+      observer.observe(list);
+    };
+
+    observe();
+    narrowQuery.addEventListener("change", observe);
+    motionQuery.addEventListener("change", observe);
+    return () => {
+      stop();
+      narrowQuery.removeEventListener("change", observe);
+      motionQuery.removeEventListener("change", observe);
+    };
   }, []);
 
   return (
     <div className={styles.root} data-skill-grid>
       <p className={`${styles.label} text-label-l`}>{label}</p>
-      <ul ref={listRef} className={styles.list}>
+      <ul
+        ref={listRef}
+        className={styles.list}
+        data-revealing={revealing ? "true" : undefined}
+        data-reveal-direction={direction}
+      >
         {items.map((item, index) => (
           <li
             key={item}
             className={styles.item}
             data-skill-cell
-            data-skill-index={index}
-            data-lit={lit.has(index) ? "true" : undefined}
-            onPointerEnter={() => light(index)}
-            onPointerDown={() => light(index)}
+            style={
+              {
+                "--skill-index": index,
+                "--skill-reverse-index": items.length - 1 - index,
+              } as CSSProperties
+            }
           >
-            {item}
+            <span className={styles.text}>{item}</span>
           </li>
         ))}
       </ul>

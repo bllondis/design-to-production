@@ -1,8 +1,13 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { SkillGrid } from "./SkillGrid";
 
 describe("SkillGrid", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
   it("lists every skill under its label", () => {
     render(<SkillGrid items={["Domain modelling", "Information architecture"]} />);
     expect(screen.getByText("What I bring")).toBeInTheDocument();
@@ -12,15 +17,13 @@ describe("SkillGrid", () => {
     ]);
   });
 
-  it("leaves cells unlit on wider screens, where hover inverts them instead", () => {
+  it("leaves the sequence inactive on wider screens, where CSS hover inverts cells instead", () => {
     render(<SkillGrid items={["Ideas", "Positive energy"]} />);
-    const [first] = screen.getAllByRole("listitem");
-    fireEvent.pointerOver(first);
-    expect(first).not.toHaveAttribute("data-lit");
+    expect(screen.getByRole("list")).not.toHaveAttribute("data-revealing");
   });
 
-  it("lights a narrow cell while it is hovered or touched, once through", () => {
-    const media = vi.spyOn(window, "matchMedia").mockImplementation(
+  it("replays the narrow reveal in the direction the grid enters the viewport", () => {
+    vi.spyOn(window, "matchMedia").mockImplementation(
       (query) =>
         ({
           matches: query === "(max-width: 680px)",
@@ -29,18 +32,39 @@ describe("SkillGrid", () => {
           removeEventListener: vi.fn(),
         }) as unknown as MediaQueryList,
     );
+    let scrollY = 100;
+    vi.spyOn(window, "scrollY", "get").mockImplementation(() => scrollY);
+    let notify: IntersectionObserverCallback = () => undefined;
+    const disconnect = vi.fn();
+    class MockIntersectionObserver {
+      readonly root = null;
+      readonly rootMargin = "";
+      readonly thresholds = [];
+      readonly disconnect = disconnect;
+      readonly observe = vi.fn();
+      readonly unobserve = vi.fn();
+      readonly takeRecords = vi.fn(() => []);
+
+      constructor(callback: IntersectionObserverCallback) {
+        notify = callback;
+      }
+    }
+    vi.stubGlobal("IntersectionObserver", MockIntersectionObserver);
 
     render(<SkillGrid items={["Ideas", "Positive energy"]} />);
-    const [first, second] = screen.getAllByRole("listitem");
-    expect(first).not.toHaveAttribute("data-lit");
+    const list = screen.getByRole("list");
 
-    fireEvent.pointerOver(first);
-    expect(first).toHaveAttribute("data-lit", "true");
-    expect(second).not.toHaveAttribute("data-lit");
+    act(() => notify([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver));
+    expect(list).toHaveAttribute("data-revealing", "true");
+    expect(list).toHaveAttribute("data-reveal-direction", "forward");
 
-    fireEvent.animationEnd(first);
-    expect(first).not.toHaveAttribute("data-lit");
+    act(() => notify([{ isIntersecting: false } as IntersectionObserverEntry], {} as IntersectionObserver));
+    expect(list).not.toHaveAttribute("data-revealing");
 
-    media.mockRestore();
+    scrollY = 20;
+    fireEvent.scroll(window);
+    act(() => notify([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver));
+    expect(list).toHaveAttribute("data-revealing", "true");
+    expect(list).toHaveAttribute("data-reveal-direction", "reverse");
   });
 });
