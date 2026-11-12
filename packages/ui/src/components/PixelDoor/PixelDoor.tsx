@@ -55,7 +55,8 @@ export function PixelDoor({
 }: PixelDoorProps) {
   const [ownOpen, setOwnOpen] = useState(initialState === "open");
   const open = controlledOpen ?? ownOpen;
-  const scrolling = useScrollActivity(!still);
+  // A disabled door has nobody to let out (the empty one across a walk), so it stays shut while the page scrolls.
+  const scrolling = useScrollActivity(!still && !disabled);
   // A touch screen has no hover, so the first tap on a closed door stands in for it: the hint shows and the door
   // rattles. The next tap opens it; a tap anywhere else lets it rest again.
   const [armed, setArmed] = useState(false);

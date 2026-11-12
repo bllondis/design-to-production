@@ -103,6 +103,14 @@ describe("PixelDoor", () => {
     expect(door).not.toHaveClass("flapping");
   });
 
+  it("stays shut while the page scrolls when disabled", () => {
+    const { container } = render(<PixelDoor character="/cat.jpg" disabled />);
+    act(() => {
+      fireEvent.scroll(window);
+    });
+    expect(container.querySelector("button")).not.toHaveClass("flapping");
+  });
+
   it("ignores scrolling when still", () => {
     render(<PixelDoor character="/cat.jpg" still />);
     act(() => {

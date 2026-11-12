@@ -36,6 +36,20 @@ test("the cat walks from its door to the one across the row", async ({ page }) =
   await expect(doors.last()).toHaveCSS("cursor", "default");
 
   await doors.first().scrollIntoViewIfNeeded();
+  // Only the door with the cat behind it flaps while the page scrolls; the empty one across stays shut.
+  const flapped = await stage.evaluate(async (element) => {
+    const [home, across] = [...element.querySelectorAll("button")];
+    const seen = { home: false, across: false };
+    for (let step = 0; step < 20; step += 1) {
+      window.scrollBy(0, step % 2 ? 4 : -4);
+      await new Promise((resolve) => setTimeout(resolve, 30));
+      seen.home ||= /flapping/.test(home.className);
+      seen.across ||= /flapping/.test(across.className);
+    }
+    return seen;
+  });
+  expect(flapped).toEqual({ home: true, across: false });
+
   await knock(doors.first());
   await expect(stage).toHaveAttribute("data-phase", "strolling");
   await expect(stage).toHaveAttribute("data-phase", "home", { timeout: 10_000 });
