@@ -46,4 +46,14 @@ describe("Button", () => {
     );
     expect(screen.getByRole("link").querySelector("[aria-hidden='true']")).toBeNull();
   });
+
+  it("keeps a text link's underline whole by setting the icon off with a no-break space", () => {
+    render(
+      <Button href="/demo/" variant="text">
+        Try it in the browser
+      </Button>,
+    );
+    const link = screen.getByRole("link");
+    expect(link.textContent).toBe("Try it in the browser\u00a0↗");
+  });
 });

@@ -27,9 +27,12 @@ export type ButtonProps = {
 /** A link styled as an action, or a button when it opens a popover. Hover inverts the fill. */
 export function Button({ children, variant = "light", size = "m", icon = "↗", ...target }: ButtonProps) {
   const className = cx(styles.button, styles[variant], styles[size]);
+  // A text link is underlined, and an underline runs under text but not under margins: the icon is set off by a
+  // no-break space, so the line stays whole and the icon never wraps onto a line of its own.
   const content = (
     <>
       {children}
+      {icon && variant === "text" && " "}
       {icon && <span aria-hidden="true">{icon}</span>}
     </>
   );

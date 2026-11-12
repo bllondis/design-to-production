@@ -59,10 +59,6 @@
   text-underline-offset: 0.3rem;
 }
 
-.text span {
-  margin-left: 0.3em;
-}
-
 .text:hover {
   color: var(--button-text-fg-hover);
 }
