@@ -465,28 +465,29 @@ test("each mobile hero statement stays on one line in every locale", async ({ pa
   }
 });
 
-test("every capability door shows its localised hint only while it is hovered", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop", "A mouse is required to exercise hover.");
+test("a mouse never sees the door hint, and a first tap on a touch screen shows it", async ({ page }, testInfo) => {
+  for (const locale of [
+    { path: "/", hint: "Tap a door" },
+    { path: "/uk/", hint: "Торкніться дверцят" },
+    { path: "/nl/", hint: "Tik op een deur" },
+  ]) {
+    await page.goto(locale.path);
+    const doors = page.locator("main button:enabled:visible").filter({ has: page.locator("[data-door-hint]") });
+    await expect(doors).toHaveCount(5);
 
-  for (const width of [390, 1440]) {
-    await page.setViewportSize({ width, height: 812 });
-
-    for (const locale of [
-      { path: "/", hint: "Tap a door" },
-      { path: "/uk/", hint: "Торкніться дверцят" },
-      { path: "/nl/", hint: "Tik op een deur" },
-    ]) {
-      await page.goto(locale.path);
-      const doors = page.locator("main button:enabled:visible").filter({ has: page.locator("[data-door-hint]") });
-      await expect(doors).toHaveCount(5);
-
-      for (const door of await doors.all()) {
-        const hint = door.getByText(locale.hint, { exact: true });
-        await door.hover();
+    for (const door of await doors.all()) {
+      const hint = door.getByText(locale.hint, { exact: true });
+      await door.scrollIntoViewIfNeeded();
+      if (testInfo.project.name === "mobile") {
+        await door.tap();
         await expect(hint).toBeVisible();
-        await page.mouse.move(200, 0);
-        await expect(hint).toBeHidden();
+        await page.locator("#hero-title").tap();
+      } else {
+        await door.hover();
+        // Hover still sets the door ajar; it just doesn't prompt.
+        await expect(door.locator("img")).toHaveCount(1);
       }
+      await expect(hint).toBeHidden();
     }
   }
 });

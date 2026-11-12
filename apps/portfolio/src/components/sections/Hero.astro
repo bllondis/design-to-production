@@ -67,20 +67,24 @@ const {
     pointer-events: none;
   }
 
+  /* The card is as wide as the longest title of any locale (the Dutch one) plus its padding, so that title has even
+     space on both sides and every locale gets the same card. Should a font render wider, the card grows with its
+     line rather than letting it spill; it never reaches past the right-hand gutter. */
   .hero-card {
+    --hero-card-padding: clamp(2rem, 4vw, 4rem);
+
     align-self: end;
-    width: min(68%, 55rem);
+    width: max-content;
+    min-width: calc(var(--hero-title-measure) * var(--font-size-display-4) + 2 * var(--hero-card-padding));
+    max-width: calc(100% - 2 * var(--layout-gutter));
     margin: 0 0 0 var(--layout-gutter);
-    padding: clamp(2rem, 4vw, 4rem);
-    container-type: inline-size;
+    padding: var(--hero-card-padding);
     background: var(--color-surface-inverse);
     color: var(--color-text-inverse);
   }
 
-  /* The headline keeps its three set lines: no wrapping inside them. Where the card is too narrow for the longest
-     line (about 9.2em), the size follows the card width instead. */
+  /* The headline keeps its three set lines: no wrapping inside them. */
   .hero-card :global(h1) {
-    font-size: min(var(--font-size-display-4), 10.8cqi);
     white-space: nowrap;
   }
 
@@ -97,12 +101,6 @@ const {
     background: var(--color-surface-page);
   }
 
-  @media (max-width: 980px) {
-    .hero-card {
-      width: 76%;
-    }
-  }
-
   @media (max-width: 680px) {
     .hero {
       min-height: clamp(34rem, 82svh, 40rem);
@@ -111,8 +109,11 @@ const {
 
     .hero-card {
       width: 91.667%;
+      min-width: 0;
+      max-width: none;
       margin-left: 0;
       padding: var(--space-l);
+      container-type: inline-size;
     }
 
     .hero-card :global(h1) {

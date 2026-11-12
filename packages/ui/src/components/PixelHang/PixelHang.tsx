@@ -146,7 +146,7 @@ export interface PixelHangProps {
   /** Accessible labels for the closed and the open door. */
   openLabel?: string;
   closeLabel?: string;
-  /** Short visual prompt revealed while the door is hovered or pressed. */
+  /** Short visual prompt revealed on a touch screen after the first tap on the door. */
   hint?: string;
 }
 

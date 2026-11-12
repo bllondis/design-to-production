@@ -70,6 +70,11 @@
     }
   },
   "hero": {
+    "title-measure": {
+      "$type": "number",
+      "$value": 10.45,
+      "$description": "Width of the longest hero line in ems: the Dutch \"Complexe B2B-producten\". The card is this wide in every locale, so the Dutch title has even side padding and shorter ones sit in the same card."
+    },
     "mobile-title-cap": {
       "$type": "dimension",
       "$value": "8.9cqi",

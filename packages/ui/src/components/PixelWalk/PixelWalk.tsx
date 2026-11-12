@@ -62,7 +62,7 @@ export interface PixelWalkProps {
   /** Accessible labels for a closed and an open door. */
   openLabel?: string;
   closeLabel?: string;
-  /** Short visual prompt revealed while an enabled door is hovered or pressed. */
+  /** Short visual prompt revealed on a touch screen after the first tap on an enabled door. */
   hint?: string;
 }
 

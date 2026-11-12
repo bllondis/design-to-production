@@ -16,7 +16,7 @@ export interface PixelStageProps {
   motion: PixelStageMotion;
   openLabel?: string;
   closeLabel?: string;
-  /** Tooltip passed to each door and shown while that door is hovered or pressed. */
+  /** Tooltip passed to each door and shown after the first tap on it. */
   hint?: string;
 }
 

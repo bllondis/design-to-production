@@ -44,21 +44,12 @@
   background: var(--color-surface-raised);
 }
 
-/* Armed: the first tap on a touch screen, which stands in for hover. */
-.door:enabled:active .hint,
+/* The hint is for touch screens only: it shows once the first tap has armed the door. A mouse needs no prompt, since
+   hovering already sets the door ajar. */
 .armed .hint {
   opacity: 1;
   visibility: visible;
   transition-delay: 0s;
-}
-
-/* Only a real pointer hovers: a touch screen leaves :hover stuck on the last door tapped. */
-@media (hover: hover) {
-  .door:enabled:hover .hint {
-    opacity: 1;
-    visibility: visible;
-    transition-delay: 0s;
-  }
 }
 
 /* Hung on the right: the whole door mirrors, and the character is turned back the right way round. */

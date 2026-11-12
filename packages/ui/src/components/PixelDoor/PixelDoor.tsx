@@ -29,7 +29,7 @@ export interface PixelDoorProps {
   /** Accessible labels for the closed and open states. */
   openLabel?: string;
   closeLabel?: string;
-  /** Short visual prompt revealed whenever this enabled door is hovered, pressed or tapped once on a touch screen. */
+  /** Short visual prompt for touch screens, revealed once the first tap has armed the door; a mouse never sees it. */
   hint?: string;
 }
 

@@ -370,7 +370,7 @@ const sections = [
               <code>vacant</code>, <code>disabled</code>, <code>open</code>: for a parent that moves the character
             </li>
             <li>
-              <code>hint</code>: a visual-only prompt shown every time an enabled door is hovered or pressed
+              <code>hint</code>: a visual-only prompt for touch screens, shown after the first tap; never on mouse hover
             </li>
           </ul>
           <figure class="door-demo">
@@ -533,7 +533,7 @@ const sections = [
             <li>Reserves its own height, so doors and motion never cover capability copy</li>
             <li>Reuses walk, bow, burrow and hang motion; the pigeon leaves the rail to fly across page perches</li>
             <li>Doors flap while the page scrolls; the first tap shows the hint, the second lets the character out</li>
-            <li>An optional tooltip appears above any enabled door while it is hovered, pressed or tapped once</li>
+            <li>An optional tooltip appears above an enabled door after the first tap</li>
           </ul>
           <PixelStage
             client:visible
